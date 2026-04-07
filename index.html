@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preselezione Candidato</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; padding: 20px; color: #333; }
+.container { max-width: 700px; margin: 0 auto; }
+.header { text-align: center; padding: 40px 20px; color: #fff; }
+.header h1 { font-size: 1.8rem; font-weight: 300; margin-bottom: 10px; letter-spacing: 1px; }
+.header .subtitle { font-size: 1rem; opacity: 0.9; font-weight: 300; }
+.form-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); margin-bottom: 20px; }
+.intro { background: #f8f9fa; border-left: 4px solid #d4af37; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; }
+.intro p { color: #555; line-height: 1.6; font-size: 0.95rem; }
+.question { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+.question:last-of-type { border-bottom: none; }
+.question-number { display: inline-block; background: #d4af37; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 600; font-size: 0.85rem; margin-right: 8px; }
+.question-text { font-size: 1rem; color: #1a1a2e; font-weight: 500; }
+.required { color: #e74c3c; }
+.options { margin-top: 15px; }
+.option { display: flex; align-items: flex-start; margin-bottom: 10px; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; background: #fafafa; }
+.option input { margin-right: 10px; margin-top: 2px; width: 18px; height: 18px; accent-color: #d4af37; }
+.option-label { flex: 1; font-size: 0.9rem; color: #444; }
+.checkbox-hint { font-size: 0.8rem; color: #888; margin: 5px 0 10px 35px; }
+.personal-info { background: #f0f4f8; padding: 20px; border-radius: 12px; margin-top: 25px; }
+.personal-info h3 { color: #1a1a2e; margin-bottom: 15px; font-size: 1rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; margin-bottom: 6px; color: #333; font-weight: 500; font-size: 0.85rem; }
+.form-group input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; }
+.privacy { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 8px; font-size: 0.8rem; color: #666; }
+.privacy input { margin-right: 8px; accent-color: #d4af37; }
+.submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%); color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+.footer { text-align: center; padding: 20px; color: rgba(255,255,255,0.6); font-size: 0.8rem; }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>PRESELEZIONE CANDIDATO</h1>
+<p class="subtitle">Collaborazione con struttura autorizzata Banca d'Italia</p>
+</div>
+<div class="form-card">
+<div class="intro">
+<p>Benvenuto nel processo di selezione. Questo breve questionario ci permette di valutare la compatibilità del tuo profilo con l'opportunità proposta. La compilazione richiede circa 3 minuti.</p>
+</div>
+<form action="/.netlify/functions/submit" method="POST" name="qualifierB" data-netlify="true">
+<input type="hidden" name="form-name" value="qualifierB">
+<div class="question">
+<span class="question-number">1</span>
+<span class="question-text">Ci descriva la sua attuale occupazione <span class="required">*</span></span>
+<div class="options">
+<label class="option"><input type="radio" name="q1" value="2.00" required> <span class="option-label">Lavoro dipendente (soddisfatto)</span></label>
+<label class="option"><input type="radio" name="q1" value="2.50"> <span class="option-label">Lavoro dipendente (insoddisfatto)</span></label>
+<label class="option"><input type="radio" name="q1" value="3.00"> <span class="option-label">Libero professionista</span></label>
+<label class="option"><input type="radio" name="q1" value="3.00"> <span class="option-label">Imprenditore / Attività propria</span></label>
+<label class="option"><input type="radio" name="q1" value="2.00"> <span class="option-label">Cerco lavoro / Stagista</span></label>
+<label class="option"><input type="radio" name="q1" value="2.50"> <span class="option-label">Pensionato</span></label>
+</div>
+</div>
+<div class="question">
+<span class="question-number">2</span>
+<span class="question-text">Se immagina la sua vita tra 5 anni... <span class="required">*</span></span>
+<div class="options">
+<label class="option"><input type="radio" name="q2" value="3.00" required> <span class="option-label">Ho un progetto chiaro e lavoro per realizzarlo</span></label>
+<label class="option"><input type="radio" name="q2" value="2.50"> <span class="option-label">Vorrei più libertà economica e temporale</span></label>
+<label class="option"><input type="radio" name="q2" value="2.00"> <span class="option-label">Cerco stabilità e sicurezza</span></label>
+<label class="option"><input type="radio" name="q2" value="1.00"> <span class="option-label">Non ho ancora idee chiare</span></label>
+</div>
+</div>
+<div class="question">
+<span class="question-number">3</span>
+<span class="question-text">Tempo libero disponibile? <span class="required">*</span></span>
+<div class="options">
+<label class="option"><input type="radio" name="q3" value="3.00" required> <span class="option-label">Sì, 10+ ore settimanali</span></label>
+<label class="option"><input type="radio" name="q3" value="2.50"> <span class="option-label">Sì, 5-10 ore settimanali</span></label>
+<label class="option"><input type="radio" name="q3" value="2.00"> <span class="option-label">Sì, 3-4 ore settimanali</span></label>
+<label class="option"><input type="radio" name="q3" value="0.50"> <span class="option-label">No, zero tempo disponibile</span></label>
+<label class="option"><input type="radio" name="q3" value="1.00"> <span class="option-label">Non lo so, dipende</span></label>
+</div>
+</div>
+<div class="question">
+<span class="question-number">4</span>
+<span class="question-text">Caratteristiche lavoro ideale? (seleziona tutte) <span class="required">*</span></span>
+<p class="checkbox-hint">Sarà calcolata la media delle selezioni</p>
+<div class="options">
+<label class="option"><input type="checkbox" name="q4" value="2.50"> <span class="option-label">Libertà di gestire i miei orari</span></label>
+<label class="option"><input type="checkbox" name="q4" value="2.50"> <span class="option-label">Potenziale di crescita economica illimitata</span></label>
+<label class="option"><input type="checkbox" name="q4" value="2.00"> <span class="option-label">Formazione professionale strutturata</span></label>
+<label class="option"><input type="checkbox" name="q4" value="1.50"> <span class="option-label">Lavorare in team con persone motivate</span></label>
+<label class="option"><input type="checkbox" name="q4" value="2.00"> <span class="option-label">Indipendenza da un capo</span></label>
+<label class="option"><input type="checkbox" name="q4" value="1.50"> <span class="option-label">Prodotto/servizio di qualità</span></label>
+</div>
+</div>
+<div class="question">
+<span class="question-number">5</span>
+<span class="question-text">Perché un'opportunità diversa? <span class="required">*</span></span>
+<div class="options">
+<label class="option"><input type="radio" name="q5" value="3.00" required> <span class="option-label">Voglio costruire qualcosa di mio</span></label>
+<label class="option"><input type="radio" name="q5" value="2.50"> <span class="option-label">Cerco libertà economica e temporale</span></label>
+<label class="option"><input type="radio" name="q5" value="2.00"> <span class="option-label">Non sono soddisfatto della situazione attuale</span></label>
+<label class="option"><input type="radio" name="q5" value="1.00"> <span class="option-label">Voglio solo informarmi</span></label>
+</div>
+</div>
+<div class="question">
+<span class="question-number">6</span>
+<span class="question-text">Ha deciso di avere successo? <span class="required">*</span></span>
+<div class="options">
+<label class="option"><input type="radio" name="q6" value="3.00" required> <span class="option-label">Sì, sono pronto a impegnarmi</span></label>
+<label class="option"><input type="radio" name="q6" value="2.50"> <span class="option-label">Sono molto motivato</span></label>
+<label class="option"><input type="radio" name="q6" value="1.50"> <span class="option-label">Sono curioso di capire</span></label>
+<label class="option"><input type="radio" name="q6" value="0.50"> <span class="option-label">Non ancora</span></label>
+</div>
+</div>
+<div class="personal-info">
+<h3>I tuoi dati di contatto</h3>
+<div class="form-row">
+<div class="form-group"><label>Nome *</label><input type="text" name="nome" placeholder="Il tuo nome" required></div>
+<div class="form-group"><label>Cognome *</label><input type="text" name="cognome" placeholder="Il tuo cognome" required></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Email *</label><input type="email" name="email" placeholder="tua@email.com" required></div>
+<div class="form-group"><label>Telefono *</label><input type="tel" name="telefono" placeholder="+39 3XX XXX XXXX" required></div>
+</div>
+<div class="form-group"><label>Città</label><input type="text" name="citta" placeholder="La tua città"></div>
+</div>
+<div class="privacy">
+<label><input type="checkbox" name="privacy" required> Dichiaro di aver letto l'informativa privacy e acconsento al trattamento dei dati personali ai sensi del GDPR.</label>
+</div>
+<button type="submit" class="submit-btn">INVIA CANDIDATURA</button>
+</form>
+</div>
+<div class="footer">
+<p>© 2026 - Processo di selezione professionale</p>
+</div>
+</div>
+</body>
+</html>
