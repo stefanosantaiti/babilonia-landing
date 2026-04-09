@@ -294,4 +294,14 @@ async function notifyTelegram(name, email, phone, date, time) {
 }
 
 // Inizializza
-document.addEventListener('DOMContentLoaded', loadSellers);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadSellers);
+} else {
+    loadSellers();
+}
+
+// Esporta funzioni globali
+window.goToStep = goToStep;
+window.selectDate = selectDate;
+window.selectTime = selectTime;
+window.confirmBooking = confirmBooking;
