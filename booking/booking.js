@@ -1,40 +1,60 @@
 // Widget Booking - Clienti BABILONIA
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/+esm';
+// Versione semplificata con fetch diretto
 
 const SUPABASE_URL = 'https://esgjushznmidzdhqsyyx.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentStep = 1;
 let selectedSeller = null;
 let selectedDate = null;
 let selectedSlot = null;
-let availableSlots = [];
 let sellers = [];
+let availableSlots = [];
+
+// Helper per chiamate Supabase
+async function supabaseFetch(table, query = '') {
+    const url = `${SUPABASE_URL}/rest/v1/${table}${query}`;
+    const response = await fetch(url, {
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+    });
+    return await response.json();
+}
 
 // Carica seller
 async function loadSellers() {
-    const { data, error } = await supabase
-        .from('sellers')
-        .select('*')
-        .eq('active', true);
-    
-    if (error) {
+    try {
+        console.log('Caricamento seller...');
+        const data = await supabaseFetch('sellers?select=*&active=eq.true');
+        console.log('Seller caricati:', data);
+        
+        sellers = data || [];
+        const select = document.getElementById('seller-select');
+        
+        if (!select) {
+            console.error('Select non trovato');
+            return;
+        }
+        
+        // Reset
+        select.innerHTML = '<option value="">-- Seleziona consulente --</option>';
+        
+        // Aggiungi seller
+        sellers.forEach(seller => {
+            const option = document.createElement('option');
+            option.value = seller.id;
+            option.textContent = seller.name;
+            select.appendChild(option);
+        });
+        
+        console.log(`Aggiunti ${sellers.length} seller`);
+        
+    } catch (error) {
         console.error('Errore caricamento seller:', error);
-        return;
+        alert('Errore caricamento. Ricarica la pagina.');
     }
-    
-    sellers = data;
-    const select = document.getElementById('seller-select');
-    select.innerHTML = '<option value="">-- Seleziona consulente --</option>';
-    
-    sellers.forEach(seller => {
-        const option = document.createElement('option');
-        option.value = seller.id;
-        option.textContent = seller.name;
-        select.appendChild(option);
-    });
 }
 
 // Carica slot disponibili
@@ -42,31 +62,25 @@ async function loadAvailableSlots() {
     const container = document.getElementById('calendar-container');
     container.innerHTML = '<div class="loading">Caricamento calendario...</div>';
     
-    const { data: slots, error } = await supabase
-        .from('slots')
-        .select('*')
-        .eq('seller_id', selectedSeller)
-        .eq('available', true')
-        .order('date', { ascending: true })
-        .order('time', { ascending: true });
-    
-    if (error) {
+    try {
+        const data = await supabaseFetch(`slots?select=*&seller_id=eq.${selectedSeller}&available=eq.true&order=date.asc,time.asc`);
+        availableSlots = data || [];
+        
+        if (availableSlots.length === 0) {
+            container.innerHTML = '<div class="loading">Nessuno slot disponibile. Il consulente deve generare slot.</div>';
+            return;
+        }
+        
+        renderCalendar();
+    } catch (error) {
+        console.error('Errore caricamento slot:', error);
         container.innerHTML = '<div class="loading">Errore caricamento</div>';
-        return;
     }
-    
-    availableSlots = slots || [];
-    renderCalendar();
 }
 
 // Render calendario
 function renderCalendar() {
     const container = document.getElementById('calendar-container');
-    
-    if (availableSlots.length === 0) {
-        container.innerHTML = '<div class="loading">Nessuno slot disponibile. Contatta il consulente.</div>';
-        return;
-    }
     
     // Raggruppa per data
     const byDate = {};
@@ -86,7 +100,7 @@ function renderCalendar() {
         const dayNum = date.getDate();
         
         html += `
-            <div class="calendar-day available" onclick="selectDate('${dateStr}')" data-date="${dateStr}">
+            <div class="calendar-day available" onclick="window.selectDate('${dateStr}')" data-date="${dateStr}">
                 <span class="day-name">${dayName}</span>
                 <span class="day-number">${dayNum}</span>
             </div>
@@ -136,7 +150,7 @@ function loadTimeSlots() {
     let html = '<div class="time-grid">';
     slots.forEach(slot => {
         html += `
-            <div class="time-slot" onclick="selectTime('${slot.id}', '${slot.time}')" data-slot="${slot.id}">
+            <div class="time-slot" onclick="window.selectTime('${slot.id}', '${slot.time}')" data-slot="${slot.id}">
                 ${slot.time}
             </div>
         `;
@@ -170,13 +184,13 @@ window.selectTime = function(slotId, time) {
 // Navigazione step
 window.goToStep = function(step) {
     // Validazioni
-    if (step === 2 && !document.getElementById('seller-select').value) {
-        alert('Seleziona un consulente');
-        return;
-    }
-    
-    if (step === 3) {
-        selectedSeller = parseInt(document.getElementById('seller-select').value);
+    if (step === 2) {
+        const sellerValue = document.getElementById('seller-select').value;
+        if (!sellerValue) {
+            alert('Seleziona un consulente');
+            return;
+        }
+        selectedSeller = parseInt(sellerValue);
         loadAvailableSlots();
     }
     
@@ -208,28 +222,17 @@ window.confirmBooking = async function() {
     btn.textContent = 'Conferma in corso...';
     
     try {
-        // Verifica slot ancora disponibile
-        const { data: slot, error: slotError } = await supabase
-            .from('slots')
-            .select('*')
-            .eq('id', selectedSlot)
-            .eq('available', true)
-            .single();
-        
-        if (slotError || !slot) {
-            alert('Slot non più disponibile. Riprova.');
-            btn.disabled = false;
-            btn.textContent = '✓ Conferma Appuntamento';
-            goToStep(3);
-            return;
-        }
-        
-        // Crea appuntamento
-        const appointmentId = `apt_${Date.now()}`;
-        const { error: aptError } = await supabase
-            .from('appointments')
-            .insert({
-                id: appointmentId,
+        // Crea appuntamento via API
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/appointments`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+                id: `apt_${Date.now()}`,
                 slot_id: selectedSlot,
                 seller_id: selectedSeller,
                 client_name: name,
@@ -237,18 +240,25 @@ window.confirmBooking = async function() {
                 client_phone: phone,
                 type: 'conoscitivo',
                 status: 'confirmed'
-            });
+            })
+        });
         
-        if (aptError) throw aptError;
+        if (!response.ok) throw new Error('Errore creazione appuntamento');
         
         // Aggiorna slot
-        await supabase
-            .from('slots')
-            .update({ available: false })
-            .eq('id', selectedSlot);
+        await fetch(`${SUPABASE_URL}/rest/v1/slots?id=eq.${selectedSlot}`, {
+            method: 'PATCH',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ available: false })
+        });
         
-        // Invia notifica Telegram (opzionale, via webhook)
-        await notifyTelegram(name, email, phone, selectedDate, slot.time);
+        // Notifica Telegram
+        await notifyTelegram(name, email, phone);
         
         goToStep(5);
         
@@ -261,47 +271,36 @@ window.confirmBooking = async function() {
 };
 
 // Notifica Telegram
-async function notifyTelegram(name, email, phone, date, time) {
+async function notifyTelegram(name, email, phone) {
     const seller = sellers.find(s => s.id == selectedSeller);
-    const dateObj = new Date(date + 'T00:00:00');
+    const dateObj = new Date(selectedDate + 'T00:00:00');
     const dateStr = dateObj.toLocaleDateString('it-IT', { day: 'numeric', month: 'long' });
+    const timeStr = document.getElementById('summary-time').textContent;
     
-    const message = `🔔 **NUOVO APPUNTAMENTO**
+    const message = `🔔 NUOVO APPUNTAMENTO
 
 👤 ${name}
 📧 ${email}
 📱 ${phone}
 
-📅 ${dateStr} alle ${time}
+📅 ${dateStr} alle ${timeStr}
 👨‍💼 Consulente: ${seller?.name || 'N/D'}
 
-🔗 Confermato via web`;
+✅ Confermato via web`;
 
-    // Notifica al bot (token esistente)
     try {
         await fetch(`https://api.telegram.org/bot8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 chat_id: '354943189',
-                text: message,
-                parse_mode: 'Markdown'
+                text: message
             })
         });
     } catch (e) {
-        console.log('Notifica Telegram opzionale fallita');
+        console.log('Notifica Telegram opzionale');
     }
 }
 
-// Inizializza
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadSellers);
-} else {
-    loadSellers();
-}
-
-// Esporta funzioni globali
-window.goToStep = goToStep;
-window.selectDate = selectDate;
-window.selectTime = selectTime;
-window.confirmBooking = confirmBooking;
+// Carica immediatamente
+loadSellers();
