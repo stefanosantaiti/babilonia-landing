@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BABILONIA - Social Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid #d4af37;
+            margin-bottom: 30px;
+        }
+        header h1 { font-size: 2rem; color: #d4af37; margin-bottom: 10px; }
+        header p { color: #aaa; font-size: 1rem; }
+        .stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px 30px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 150px;
+        }
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #d4af37;
+        }
+        .stat-card .label { color: #aaa; font-size: 0.9rem; margin-top: 5px; }
+        .post-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: transform 0.2s;
+        }
+        .post-card:hover { transform: translateY(-2px); }
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .post-id {
+            font-size: 0.85rem;
+            color: #888;
+            font-family: monospace;
+        }
+        .post-score {
+            background: #d4af37;
+            color: #1a1a2e;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .post-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .post-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .post-source {
+            color: #d4af37;
+            font-weight: 500;
+        }
+        .post-template {
+            background: rgba(212,175,55,0.2);
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+        .post-content {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        .post-hashtags {
+            color: #4a9eff;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .post-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-approve {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+        .btn-approve:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40,167,69,0.4);
+        }
+        .btn-edit {
+            background: rgba(212,175,55,0.2);
+            color: #d4af37;
+            border: 1px solid #d4af37;
+        }
+        .btn-edit:hover {
+            background: rgba(212,175,55,0.3);
+        }
+        .btn-reject {
+            background: rgba(220,53,69,0.2);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+        .btn-reject:hover {
+            background: rgba(220,53,69,0.3);
+        }
+        .btn-preview {
+            background: rgba(74,158,255,0.2);
+            color: #4a9eff;
+            border: 1px solid #4a9eff;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+        .empty-state h2 { margin-bottom: 15px; color: #d4af37; }
+        .edit-mode textarea {
+            width: 100%;
+            min-height: 200px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            padding: 15px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+        .edit-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #d4af37;
+        }
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .preview-content {
+            background: #fff;
+            color: #333;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .preview-header {
+            background: #1877f2;
+            color: white;
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .preview-body {
+            padding: 20px;
+        }
+        .preview-text {
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .close-preview {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎸 BABILONIA Social Dashboard</h1>
+            <p>Revisione e approvazione post social</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number" id="pending-count">-</div>
+                <div class="label">In Attesa</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="approved-count">-</div>
+                <div class="label">Approvati</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="published-count">-</div>
+                <div class="label">Pubblicati</div>
+            </div>
+        </div>
+
+        <div id="posts-container">
+            <div class="loading">Caricamento post...</div>
+        </div>
+    </div>
+
+    <div class="preview-modal" id="preview-modal">
+        <div class="preview-content">
+            <div class="preview-header">
+                <span>👤</span>
+                <span>Stefano Santaiti</span>
+            </div>
+            <div class="preview-body">
+                <div class="preview-text" id="preview-text"></div>
+                <div style="color: #1877f2; font-size: 0.9rem;">👍 ❤️ 😲 💬 🔄</div>
+            </div>
+        </div>
+        <button class="close-preview" onclick="closePreview()">×</button>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
