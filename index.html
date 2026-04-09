@@ -1,190 +1,324 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preselezione Candidato</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; padding: 20px; color: #333; }
-.container { max-width: 700px; margin: 0 auto; }
-.header { text-align: center; padding: 40px 20px; color: #fff; }
-.header h1 { font-size: 1.8rem; font-weight: 300; margin-bottom: 10px; letter-spacing: 1px; }
-.header .subtitle { font-size: 1rem; opacity: 0.9; font-weight: 300; }
-.form-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); margin-bottom: 20px; }
-.intro { background: #f8f9fa; border-left: 4px solid #d4af37; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; }
-.intro p { color: #555; line-height: 1.6; font-size: 0.95rem; }
-.question { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-.question:last-of-type { border-bottom: none; }
-.question-number { display: inline-block; background: #d4af37; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 600; font-size: 0.85rem; margin-right: 8px; }
-.question-text { font-size: 1rem; color: #1a1a2e; font-weight: 500; }
-.required { color: #e74c3c; }
-.options { margin-top: 15px; }
-.option { display: flex; align-items: flex-start; margin-bottom: 10px; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; background: #fafafa; }
-.option input { margin-right: 10px; margin-top: 2px; width: 18px; height: 18px; accent-color: #d4af37; }
-.option-label { flex: 1; font-size: 0.9rem; color: #444; }
-.checkbox-hint { font-size: 0.8rem; color: #888; margin: 5px 0 10px 35px; }
-.personal-info { background: #f0f4f8; padding: 20px; border-radius: 12px; margin-top: 25px; }
-.personal-info h3 { color: #1a1a2e; margin-bottom: 15px; font-size: 1rem; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
-.form-group { margin-bottom: 12px; }
-.form-group label { display: block; margin-bottom: 6px; color: #333; font-weight: 500; font-size: 0.85rem; }
-.form-group input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; }
-.privacy { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 8px; font-size: 0.8rem; color: #666; }
-.privacy input { margin-right: 8px; accent-color: #d4af37; }
-.submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%); color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-.footer { text-align: center; padding: 20px; color: rgba(255,255,255,0.6); font-size: 0.8rem; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRESELEZIONE CANDIDATO</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); min-height: 100vh; color: #ffffff; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px 0; }
+        .header { text-align: center; margin-bottom: 40px; padding: 20px; }
+        .header h1 { font-size: 1.8rem; font-weight: 700; color: #d4af37; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        .header p { font-size: 1rem; color: #a0a0a0; font-weight: 300; }
+        .form-container { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 30px 25px; margin-bottom: 20px; }
+        .section-title { font-size: 1.1rem; color: #d4af37; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; font-size: 0.95rem; font-weight: 500; margin-bottom: 10px; color: #ffffff; }
+        .form-group label .required { color: #d4af37; }
+        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="tel"] { width: 100%; padding: 14px 16px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; background: rgba(255, 255, 255, 0.08); color: #ffffff; font-size: 1rem; }
+        .form-group input::placeholder { color: rgba(255, 255, 255, 0.4); }
+        .question-block { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .question-block:last-child { border-bottom: none; }
+        .question-number { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #d4af37; color: #1a1a2e; border-radius: 50%; font-weight: 700; font-size: 0.85rem; margin-right: 10px; }
+        .question-text { font-size: 1rem; color: #ffffff; line-height: 1.5; display: block; margin-bottom: 15px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { display: flex; align-items: flex-start; padding: 12px 15px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; cursor: pointer; transition: all 0.3s ease; }
+        .option:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(212, 175, 55, 0.5); }
+        .option input { margin-right: 12px; margin-top: 3px; width: 18px; height: 18px; accent-color: #d4af37; }
+        .option-label { flex: 1; font-size: 0.9rem; color: rgba(255, 255, 255, 0.9); line-height: 1.4; }
+        .checkbox-hint { font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); margin: 5px 0 10px 30px; }
+        .progress-container { margin-bottom: 30px; }
+        .progress-bar { height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #d4af37, #f0d878); width: 0%; transition: width 0.3s ease; }
+        .progress-text { text-align: center; margin-top: 8px; font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); }
+        .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%); color: #1a1a2e; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; margin-top: 10px; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); }
+        .submit-btn:disabled { background: #666; cursor: not-allowed; transform: none; }
+        .result-box { margin-top: 30px; padding: 30px; border-radius: 12px; text-align: center; display: none; }
+        .result-box.hot { background: rgba(40, 167, 69, 0.2); border: 2px solid #28a745; }
+        .result-box.warm { background: rgba(255, 193, 7, 0.2); border: 2px solid #ffc107; }
+        .result-box.tepid { background: rgba(23, 162, 184, 0.2); border: 2px solid #17a2b8; }
+        .result-box.cold { background: rgba(220, 53, 69, 0.2); border: 2px solid #dc3545; }
+        .result-box h3 { font-size: 1.8rem; margin-bottom: 15px; }
+        .result-box p { margin-bottom: 20px; font-size: 1.1rem; line-height: 1.5; }
+        .booking-link { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%); color: #1a1a2e; border-radius: 10px; font-size: 1.1rem; font-weight: 700; text-decoration: none; text-transform: uppercase; transition: all 0.3s ease; }
+        .booking-link:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4); }
+        .secondary-btn { display: inline-block; padding: 14px 30px; background: transparent; color: #ffffff; border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 10px; font-size: 1rem; font-weight: 600; text-decoration: none; margin-top: 15px; cursor: pointer; transition: all 0.3s ease; }
+        .secondary-btn:hover { border-color: #d4af37; color: #d4af37; }
+        .footer { text-align: center; padding: 20px; color: rgba(255, 255, 255, 0.5); font-size: 0.8rem; }
+        .privacy-section { margin: 30px 0; padding: 20px; background: rgba(255, 255, 255, 0.03); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .privacy-text { font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); line-height: 1.5; margin-bottom: 15px; }
+        .privacy-checkbox { display: flex; align-items: flex-start; gap: 12px; }
+        .privacy-checkbox input { width: 20px; height: 20px; accent-color: #d4af37; margin-top: 2px; }
+        .privacy-checkbox label { font-size: 0.9rem; color: rgba(255, 255, 255, 0.8); line-height: 1.4; }
+        @media (max-width: 600px) { .container { padding: 10px; } .header h1 { font-size: 1.5rem; } .form-container { padding: 20px 15px; } }
+    </style>
 </head>
 <body>
-<div class="container">
-<div class="header">
-<h1>PRESELEZIONE CANDIDATO</h1>
-<p class="subtitle">Collaborazione con struttura autorizzata Banca d'Italia</p>
-</div>
-<div class="form-card">
-<div class="intro">
-<p>Benvenuto nel processo di selezione. Questo breve questionario ci permette di valutare la compatibilità del tuo profilo con l'opportunità proposta. La compilazione richiede circa 3 minuti.</p>
-</div>
-<form action="https://formspree.io/f/xeepdrqn" method="POST" name="qualifierB" data-netlify="true">
-<input type="hidden" name="form-name" value="qualifierB">
-<div class="question">
-<span class="question-number">1</span>
-<span class="question-text">Ci descriva la sua attuale occupazione <span class="required">*</span></span>
-<div class="options">
-<label class="option"><input type="radio" name="q1" value="2.00" required> <span class="option-label">Lavoro dipendente (soddisfatto)</span></label>
-<label class="option"><input type="radio" name="q1" value="2.50"> <span class="option-label">Lavoro dipendente (insoddisfatto)</span></label>
-<label class="option"><input type="radio" name="q1" value="3.00"> <span class="option-label">Libero professionista</span></label>
-<label class="option"><input type="radio" name="q1" value="3.00"> <span class="option-label">Imprenditore / Attività propria</span></label>
-<label class="option"><input type="radio" name="q1" value="2.00"> <span class="option-label">Cerco lavoro / Stagista</span></label>
-<label class="option"><input type="radio" name="q1" value="2.50"> <span class="option-label">Pensionato</span></label>
-</div>
-</div>
-<div class="question">
-<span class="question-number">2</span>
-<span class="question-text">Se immagina la sua vita tra 5 anni... <span class="required">*</span></span>
-<div class="options">
-<label class="option"><input type="radio" name="q2" value="3.00" required> <span class="option-label">Ho un progetto chiaro e lavoro per realizzarlo</span></label>
-<label class="option"><input type="radio" name="q2" value="2.50"> <span class="option-label">Vorrei più libertà economica e temporale</span></label>
-<label class="option"><input type="radio" name="q2" value="2.00"> <span class="option-label">Cerco stabilità e sicurezza</span></label>
-<label class="option"><input type="radio" name="q2" value="1.00"> <span class="option-label">Non ho ancora idee chiare</span></label>
-</div>
-</div>
-<div class="question">
-<span class="question-number">3</span>
-<span class="question-text">Tempo libero disponibile? <span class="required">*</span></span>
-<div class="options">
-<label class="option"><input type="radio" name="q3" value="3.00" required> <span class="option-label">Sì, 10+ ore settimanali</span></label>
-<label class="option"><input type="radio" name="q3" value="2.50"> <span class="option-label">Sì, 5-10 ore settimanali</span></label>
-<label class="option"><input type="radio" name="q3" value="2.00"> <span class="option-label">Sì, 3-4 ore settimanali</span></label>
-<label class="option"><input type="radio" name="q3" value="0.50"> <span class="option-label">No, zero tempo disponibile</span></label>
-<label class="option"><input type="radio" name="q3" value="1.00"> <span class="option-label">Non lo so, dipende</span></label>
-</div>
-</div>
-<div class="question">
-<span class="question-number">4</span>
-<span class="question-text">Caratteristiche lavoro ideale? (seleziona tutte) <span class="required">*</span></span>
-<p class="checkbox-hint">Sarà calcolata la media delle selezioni</p>
-<div class="options">
-<label class="option"><input type="checkbox" name="q4" value="2.50"> <span class="option-label">Libertà di gestire i miei orari</span></label>
-<label class="option"><input type="checkbox" name="q4" value="2.50"> <span class="option-label">Potenziale di crescita economica illimitata</span></label>
-<label class="option"><input type="checkbox" name="q4" value="2.00"> <span class="option-label">Formazione professionale strutturata</span></label>
-<label class="option"><input type="checkbox" name="q4" value="1.50"> <span class="option-label">Lavorare in team con persone motivate</span></label>
-<label class="option"><input type="checkbox" name="q4" value="2.00"> <span class="option-label">Indipendenza da un capo</span></label>
-<label class="option"><input type="checkbox" name="q4" value="1.50"> <span class="option-label">Prodotto/servizio di qualità</span></label>
-</div>
-</div>
-<div class="question">
-<span class="question-number">5</span>
-<span class="question-text">Perché un'opportunità diversa? <span class="required">*</span></span>
-<div class="options">
-<label class="option"><input type="radio" name="q5" value="3.00" required> <span class="option-label">Voglio costruire qualcosa di mio</span></label>
-<label class="option"><input type="radio" name="q5" value="2.50"> <span class="option-label">Cerco libertà economica e temporale</span></label>
-<label class="option"><input type="radio" name="q5" value="2.00"> <span class="option-label">Non sono soddisfatto della situazione attuale</span></label>
-<label class="option"><input type="radio" name="q5" value="1.00"> <span class="option-label">Voglio solo informarmi</span></label>
-</div>
-</div>
-<div class="question">
-<span class="question-number">6</span>
-<span class="question-text">Ha deciso di avere successo? <span class="required">*</span></span>
-<div class="options">
-<label class="option"><input type="radio" name="q6" value="3.00" required> <span class="option-label">Sì, sono pronto a impegnarmi</span></label>
-<label class="option"><input type="radio" name="q6" value="2.50"> <span class="option-label">Sono molto motivato</span></label>
-<label class="option"><input type="radio" name="q6" value="1.50"> <span class="option-label">Sono curioso di capire</span></label>
-<label class="option"><input type="radio" name="q6" value="0.50"> <span class="option-label">Non ancora</span></label>
-</div>
-</div>
-<div class="personal-info">
-<h3>I tuoi dati di contatto</h3>
-<div class="form-row">
-<div class="form-group"><label>Nome *</label><input type="text" name="nome" placeholder="Il tuo nome" required></div>
-<div class="form-group"><label>Cognome *</label><input type="text" name="cognome" placeholder="Il tuo cognome" required></div>
-</div>
-<div class="form-row">
-<div class="form-group"><label>Email *</label><input type="email" name="email" placeholder="tua@email.com" required></div>
-<div class="form-group"><label>Telefono *</label><input type="tel" name="telefono" placeholder="+39 3XX XXX XXXX" required></div>
-</div>
-<div class="form-group"><label>Città</label><input type="text" name="citta" placeholder="La tua città"></div>
-</div>
-<div class="privacy">
-<label><input type="checkbox" name="privacy" required> Dichiaro di aver letto l'informativa privacy e acconsento al trattamento dei dati personali ai sensi del GDPR.</label>
-</div>
-<button type="submit" class="submit-btn">INVIA CANDIDATURA</button>
-</form>
-</div>
-<div class="footer">
-<p>© 2026 - Processo di selezione professionale</p>
-</div>
-</div>
-<script>
-// Calcolo punteggio Qualifier B
-function calculateScore() {
-    let total = 0;
-    
-    // Domande 1-3, 5-6 (single)
-    for (let i of [1,2,3,5,6]) {
-        const selected = document.querySelector(`input[name="q${i}"]:checked`);
-        if (selected) total += parseFloat(selected.value);
-    }
-    
-    // Domanda 4 (multipla) - media
-    const q4Selected = document.querySelectorAll('input[name="q4"]:checked');
-    if (q4Selected.length > 0) {
-        let sum = 0;
-        q4Selected.forEach(cb => sum += parseFloat(cb.value));
-        total += (sum / q4Selected.length);
-    }
-    
-    return total.toFixed(2);
-}
+    <div class="container">
+        <div class="header">
+            <h1>PRESELEZIONE CANDIDATO</h1>
+            <p>Collaborazione con struttura autorizzata Banca d'Italia</p>
+        </div>
 
-function getCategory(score) {
-    if (score >= 12) return '🔥 HOT';
-    if (score >= 10) return '🟡 WARM';
-    if (score >= 8) return '🔵 TEPID';
-    return '❌ NON IDONEO';
-}
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">0% completato</div>
+        </div>
 
-// Aggiungi campi nascosti prima dell'invio
-document.querySelector('form').addEventListener('submit', function(e) {
-    const score = calculateScore();
-    const category = getCategory(parseFloat(score));
-    
-    // Crea input nascosti
-    const scoreInput = document.createElement('input');
-    scoreInput.type = 'hidden';
-    scoreInput.name = 'punteggio';
-    scoreInput.value = score;
-    
-    const catInput = document.createElement('input');
-    catInput.type = 'hidden';
-    catInput.name = 'categoria';
-    catInput.value = category;
-    
-    this.appendChild(scoreInput);
-    this.appendChild(catInput);
-});
-</script>
+        <div class="form-container">
+            <form id="qualifierForm" action="https://formspree.io/f/xeepdrqn" method="POST">
+                <input type="hidden" name="punteggio" id="punteggioInput">
+                <input type="hidden" name="categoria" id="categoriaInput">
+                <input type="hidden" name="lavoro_ideale_media" id="lavoroIdealeMedia">
+
+                <div class="section-title">📋 Dati Personali</div>
+                
+                <div class="form-group">
+                    <label>Nome <span class="required">*</span></label>
+                    <input type="text" name="nome" id="nome" required placeholder="Inserisci il tuo nome">
+                </div>
+
+                <div class="form-group">
+                    <label>Cognome <span class="required">*</span></label>
+                    <input type="text" name="cognome" id="cognome" required placeholder="Inserisci il tuo cognome">
+                </div>
+
+                <div class="form-group">
+                    <label>Email <span class="required">*</span></label>
+                    <input type="email" name="email" id="email" required placeholder="esempio@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Telefono <span class="required">*</span></label>
+                    <input type="tel" name="telefono" id="telefono" required placeholder="+39 3XX XXX XXXX">
+                </div>
+
+                <div class="form-group">
+                    <label>Città di residenza</label>
+                    <input type="text" name="citta" id="citta" placeholder="Es. Milano">
+                </div>
+
+                <div class="section-title" style="margin-top: 30px;">❓ Valutazione Profilo</div>
+
+                <div class="question-block">
+                    <span class="question-number">1</span>
+                    <span class="question-text">Qual è la tua professione attuale? <span class="required">*</span></span>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="professione" value="2.00" required> <span class="option-label">Dipendente / Impiegato</span></label>
+                        <label class="option"><input type="radio" name="professione" value="2.50"> <span class="option-label">Libero professionista / Consulente</span></label>
+                        <label class="option"><input type="radio" name="professione" value="3.00"> <span class="option-label">Commerciante / Imprenditore</span></label>
+                        <label class="option"><input type="radio" name="professione" value="2.00"> <span class="option-label">Studente / Disoccupato</span></label>
+                        <label class="option"><input type="radio" name="professione" value="1.00"> <span class="option-label">Pensionato</span></label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <span class="question-number">2</span>
+                    <span class="question-text">Come ti vedi tra 5 anni? <span class="required">*</span></span>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="visione" value="1.00" required> <span class="option-label">Stessa situazione attuale</span></label>
+                        <label class="option"><input type="radio" name="visione" value="2.00"> <span class="option-label">Piccolo miglioramento</span></label>
+                        <label class="option"><input type="radio" name="visione" value="2.50"> <span class="option-label">Crescita professionale importante</span></label>
+                        <label class="option"><input type="radio" name="visione" value="3.00"> <span class="option-label">Libertà finanziaria e indipendenza</span></label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <span class="question-number">3</span>
+                    <span class="question-text">Quanto tempo puoi dedicare a questa opportunità? <span class="required">*</span></span>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="tempo" value="0.50" required> <span class="option-label">Meno di 5 ore settimanali</span></label>
+                        <label class="option"><input type="radio" name="tempo" value="1.00"> <span class="option-label">5-10 ore settimanali</span></label>
+                        <label class="option"><input type="radio" name="tempo" value="2.00"> <span class="option-label">10-20 ore settimanali</span></label>
+                        <label class="option"><input type="radio" name="tempo" value="3.00"> <span class="option-label">Più di 20 ore / Full-time</span></label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <span class="question-number">4</span>
+                    <span class="question-text">Qual è il tuo lavoro ideale? (Seleziona tutte le opzioni che ti rappresentano) <span class="required">*</span></span>
+                    <p class="checkbox-hint">Seleziona tutte le opzioni che ti rappresentano</p>
+                    <div class="options">
+                        <label class="option"><input type="checkbox" name="lavoro_ideale" value="1.50"> <span class="option-label">Lavorare da casa</span></label>
+                        <label class="option"><input type="checkbox" name="lavoro_ideale" value="2.00"> <span class="option-label">Gestire il mio tempo liberamente</span></label>
+                        <label class="option"><input type="checkbox" name="lavoro_ideale" value="2.50"> <span class="option-label">Aiutare gli altri e fare la differenza</span></label>
+                        <label class="option"><input type="checkbox" name="lavoro_ideale" value="2.50"> <span class="option-label">Crescita professionale continua</span></label>
+                        <label class="option"><input type="checkbox" name="lavoro_ideale" value="2.00"> <span class="option-label">Entrate basate sui risultati</span></label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <span class="question-number">5</span>
+                    <span class="question-text">Cosa ti motiva maggiormente? <span class="required">*</span></span>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="motivazione" value="1.00" required> <span class="option-label">Sicurezza e stabilità</span></label>
+                        <label class="option"><input type="radio" name="motivazione" value="2.00"> <span class="option-label">Crescita personale</span></label>
+                        <label class="option"><input type="radio" name="motivazione" value="2.50"> <span class="option-label">Successo finanziario</span></label>
+                        <label class="option"><input type="radio" name="motivazione" value="3.00"> <span class="option-label">Libertà e indipendenza</span></label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <span class="question-number">6</span>
+                    <span class="question-text">Quando sei pronto a iniziare? <span class="required">*</span></span>
+                    <div class="options">
+                        <label class="option"><input type="radio" name="decisione" value="3.00" required> <span class="option-label">Immediatamente</span></label>
+                        <label class="option"><input type="radio" name="decisione" value="2.00"> <span class="option-label">Entro 1 mese</span></label>
+                        <label class="option"><input type="radio" name="decisione" value="1.00"> <span class="option-label">Entro 3 mesi</span></label>
+                        <label class="option"><input type="radio" name="decisione" value="0.50"> <span class="option-label">Non ancora deciso</span></label>
+                    </div>
+                </div>
+
+                <div class="privacy-section">
+                    <p class="privacy-text">
+                        I dati personali forniti saranno trattati in conformità con il Regolamento UE 2016/679 (GDPR) esclusivamente per le finalità di selezione e valutazione del candidato.
+                    </p>
+                    <div class="privacy-checkbox">
+                        <input type="checkbox" id="privacy" name="privacy" required>
+                        <label for="privacy">Dichiaro di aver letto l'informativa privacy e acconsento al trattamento dei miei dati personali ai sensi del GDPR. <span class="required">*</span></label>
+                    </div>
+                </div>
+
+                <button type="button" class="submit-btn" id="calculateBtn" onclick="calculateAndShowResult()">CALCOLA PUNTEGGIO</button>
+            </form>
+
+            <div class="result-box" id="resultBox">
+                <h3 id="resultTitle"></h3>
+                <p id="resultMessage"></p>
+                <a href="/booking/" class="booking-link" id="bookingLink" style="display: none;">📅 PRENOTA COLLOQUIO</a>
+                <button class="secondary-btn" id="submitAnywayBtn" onclick="submitFormAnyway()" style="display: none;">📧 INVIA RICHIESTA COMUNQUE</button>
+            </div>
+
+            <div id="successMessage" style="display: none; text-align: center; padding: 40px 20px;">
+                <div style="font-size: 4rem; margin-bottom: 20px;">✅</div>
+                <h2 style="color: #d4af37; margin-bottom: 15px;">Candidatura Inviata!</h2>
+                <p style="color: rgba(255,255,255,0.8);">Grazie per aver completato il questionario. Ti contatteremo presto.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 - Preselezione Candidato</p>
+        </div>
+    </div>
+
+    <script>
+        // Calcolo punteggio
+        function calculateScore() {
+            let total = 0;
+            
+            // Domande 1, 2, 5, 6 (single)
+            for (let i of ['professione', 'visione', 'motivazione', 'decisione']) {
+                const selected = document.querySelector(`input[name="${i}"]:checked`);
+                if (selected) total += parseFloat(selected.value);
+            }
+            
+            // Domanda 3 (tempo)
+            const tempo = document.querySelector('input[name="tempo"]:checked');
+            if (tempo) total += parseFloat(tempo.value);
+            
+            // Domanda 4 (lavoro ideale - multipla) - media
+            const checked = document.querySelectorAll('input[name="lavoro_ideale"]:checked');
+            if (checked.length > 0) {
+                let sum = 0;
+                checked.forEach(c => sum += parseFloat(c.value));
+                total += (sum / checked.length);
+            }
+            
+            return total;
+        }
+
+        function getCategory(score) {
+            if (score >= 12) return { name: '🔥 HOT', class: 'hot', bookable: true };
+            if (score >= 10) return { name: '🟡 WARM', class: 'warm', bookable: true };
+            if (score >= 8) return { name: '🔵 TEPID', class: 'tepid', bookable: false };
+            return { name: '❌ NON IDONEO', class: 'cold', bookable: false };
+        }
+
+        function calculateAndShowResult() {
+            const form = document.getElementById('qualifierForm');
+            
+            // Validazione
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const score = calculateScore();
+            const category = getCategory(score);
+            
+            // Popola campi nascosti
+            document.getElementById('punteggioInput').value = score.toFixed(2);
+            document.getElementById('categoriaInput').value = category.name;
+            
+            // Calcola media lavoro ideale
+            const checked = document.querySelectorAll('input[name="lavoro_ideale"]:checked');
+            if (checked.length > 0) {
+                let sum = 0;
+                checked.forEach(c => sum += parseFloat(c.value));
+                document.getElementById('lavoroIdealeMedia').value = (sum / checked.length).toFixed(2);
+            }
+            
+            // Mostra risultato
+            const resultBox = document.getElementById('resultBox');
+            resultBox.className = 'result-box ' + category.class;
+            resultBox.style.display = 'block';
+            
+            document.getElementById('resultTitle').textContent = `Punteggio: ${score.toFixed(2)} - ${category.name}`;
+            
+            if (category.bookable) {
+                document.getElementById('resultMessage').textContent = 'Ottimo! Il tuo profilo è molto interessante. Prenota subito un colloquio conoscitivo gratuito di 15 minuti per scoprire l\'opportunità.';
+                document.getElementById('bookingLink').style.display = 'inline-block';
+                document.getElementById('submitAnywayBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('resultMessage').textContent = 'Grazie per la tua richiesta. Al momento il tuo profilo non sembra adatto a questa opportunità, ma ti contatteremo comunque via email.';
+                document.getElementById('bookingLink').style.display = 'none';
+                document.getElementById('submitAnywayBtn').style.display = 'inline-block';
+            }
+            
+            // Nascondi form
+            form.style.display = 'none';
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function submitFormAnyway() {
+            document.getElementById('qualifierForm').submit();
+        }
+
+        // Progress bar
+        const inputs = document.querySelectorAll('input');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        function updateProgress() {
+            const totalFields = 11; // 5 dati + 6 domande + privacy
+            let filled = 0;
+            
+            if (document.getElementById('nome').value) filled++;
+            if (document.getElementById('cognome').value) filled++;
+            if (document.getElementById('email').value) filled++;
+            if (document.getElementById('telefono').value) filled++;
+            if (document.getElementById('citta').value) filled++;
+            if (document.querySelector('input[name="professione"]:checked')) filled++;
+            if (document.querySelector('input[name="visione"]:checked')) filled++;
+            if (document.querySelector('input[name="tempo"]:checked')) filled++;
+            if (document.querySelector('input[name="lavoro_ideale"]:checked')) filled++;
+            if (document.querySelector('input[name="motivazione"]:checked')) filled++;
+            if (document.querySelector('input[name="decisione"]:checked')) filled++;
+            if (document.getElementById('privacy').checked) filled++;
+            
+            const percent = Math.min(Math.round((filled / totalFields) * 100), 100);
+            progressBar.style.width = percent + '%';
+            progressText.textContent = percent + '% completato';
+        }
+        
+        inputs.forEach(input => {
+            input.addEventListener('change', updateProgress);
+            input.addEventListener('input', updateProgress);
+        });
+    </script>
 </body>
 </html>
