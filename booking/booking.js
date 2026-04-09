@@ -211,9 +211,10 @@ window.confirmBooking = async function() {
     const name = document.getElementById('client-name').value.trim();
     const email = document.getElementById('client-email').value.trim();
     const phone = document.getElementById('client-phone').value.trim();
+    const telegram = document.getElementById('client-telegram')?.value.trim() || '';
     
     if (!name || !email || !phone) {
-        alert('Compila tutti i campi');
+        alert('Compila tutti i campi obbligatori');
         return;
     }
     
@@ -238,6 +239,7 @@ window.confirmBooking = async function() {
                 client_name: name,
                 client_email: email,
                 client_phone: phone,
+                telegram: telegram,
                 type: 'conoscitivo',
                 status: 'confirmed'
             })
