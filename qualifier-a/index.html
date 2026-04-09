@@ -33,8 +33,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .form-group input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; }
 .privacy { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 8px; font-size: 0.8rem; color: #666; }
 .privacy input { margin-right: 8px; accent-color: #d4af37; }
-.submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%); color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+.submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%); color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
+.submit-btn.secondary { background: #1a1a2e; }
 .footer { text-align: center; padding: 20px; color: rgba(255,255,255,0.6); font-size: 0.8rem; }
+.result-box { margin-top: 30px; padding: 30px; border-radius: 12px; text-align: center; display: none; }
+.result-box.hot { background: #d4edda; border: 2px solid #28a745; }
+.result-box.warm { background: #fff3cd; border: 2px solid #ffc107; }
+.result-box.tepid { background: #d1ecf1; border: 2px solid #17a2b8; }
+.result-box.cold { background: #f8d7da; border: 2px solid #dc3545; }
+.result-box h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.result-box p { margin-bottom: 20px; font-size: 1.1rem; }
+.booking-link { display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%); color: #fff; border-radius: 10px; font-size: 1.1rem; font-weight: 600; text-decoration: none; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -47,8 +56,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <div class="intro">
 <p>Per offrirti informazioni personalizzate sulle soluzioni di protezione patrimoniale, ti chiediamo di rispondere a 4 brevi domande. La compilazione richiede circa 2 minuti.</p>
 </div>
-<form action="https://formspree.io/f/mwvwzrlg" method="POST" name="qualifierA">
+
+<form id="qualifier-form" action="https://formspree.io/f/mwvwzrlg" method="POST" name="qualifierA">
 <input type="hidden" name="form-type" value="Qualifier A - Clienti">
+<input type="hidden" name="punteggio" id="score-input">
+<input type="hidden" name="categoria" id="category-input">
 
 <div class="question">
 <span class="question-number">1</span>
@@ -114,8 +126,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <label><input type="checkbox" name="privacy" required> Dichiaro di aver letto l'informativa privacy e acconsento al trattamento dei dati personali ai sensi del GDPR.</label>
 </div>
 
-<button type="submit" class="submit-btn">RICHIEDI VALUTAZIONE</button>
+<button type="button" class="submit-btn" onclick="calculateAndShowResult()">CALCOLA PUNTEGGIO</button>
 </form>
+
+<!-- Risultato -->
+<div id="result-box" class="result-box">
+<h3 id="result-title"></h3>
+<p id="result-message"></p>
+<a id="booking-link" href="../booking/" class="booking-link" style="display: none;">📅 PRENOTA APPUNTAMENTO</a>
+<button type="button" class="submit-btn secondary" onclick="submitAnyway()" style="margin-top: 10px;">📧 INVIA RICHIESTA COMUNQUE</button>
+</div>
+
 </div>
 <div class="footer">
 <p>© 2026 - Valutazione profilo patrimoniale</p>
@@ -123,7 +144,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 </div>
 
 <script>
-// Calcolo punteggio Qualifier A
 function calculateScore() {
     let total = 0;
     
@@ -141,35 +161,53 @@ function calculateScore() {
         total += (sum / q3Selected.length);
     }
     
-    return total.toFixed(2);
+    return parseFloat(total.toFixed(2));
 }
 
 function getCategory(score) {
-    if (score >= 9) return '🔥 HOT';
-    if (score >= 7) return '🟡 WARM';
-    if (score >= 5) return '🔵 TEPID';
-    return '❌ NON IDONEO';
+    if (score >= 9) return { name: '🔥 HOT', class: 'hot', bookable: true };
+    if (score >= 7) return { name: '🟡 WARM', class: 'warm', bookable: true };
+    if (score >= 5) return { name: '🔵 TEPID', class: 'tepid', bookable: false };
+    return { name: '❌ NON IDONEO', class: 'cold', bookable: false };
 }
 
-// Aggiungi campi nascosti prima dell'invio
-document.querySelector('form').addEventListener('submit', function(e) {
+function calculateAndShowResult() {
+    // Validazione
+    const form = document.getElementById('qualifier-form');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    
     const score = calculateScore();
-    const category = getCategory(parseFloat(score));
+    const category = getCategory(score);
     
-    // Crea input nascosti
-    const scoreInput = document.createElement('input');
-    scoreInput.type = 'hidden';
-    scoreInput.name = 'punteggio';
-    scoreInput.value = score;
+    // Popola campi nascosti
+    document.getElementById('score-input').value = score;
+    document.getElementById('category-input').value = category.name;
     
-    const catInput = document.createElement('input');
-    catInput.type = 'hidden';
-    catInput.name = 'categoria';
-    catInput.value = category;
+    // Mostra risultato
+    const resultBox = document.getElementById('result-box');
+    resultBox.className = 'result-box ' + category.class;
+    resultBox.style.display = 'block';
     
-    this.appendChild(scoreInput);
-    this.appendChild(catInput);
-});
+    document.getElementById('result-title').textContent = `Punteggio: ${score} - ${category.name}`;
+    
+    if (category.bookable) {
+        document.getElementById('result-message').textContent = 'Ottimo! Il tuo profilo è compatibile. Prenota subito un appuntamento gratuito di 15 minuti.';
+        document.getElementById('booking-link').style.display = 'inline-block';
+    } else {
+        document.getElementById('result-message').textContent = 'Grazie per la tua richiesta. Ti contatteremo via email con informazioni utili.';
+        document.getElementById('booking-link').style.display = 'none';
+    }
+    
+    // Scroll al risultato
+    resultBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function submitAnyway() {
+    document.getElementById('qualifier-form').submit();
+}
 </script>
 </body>
 </html>
