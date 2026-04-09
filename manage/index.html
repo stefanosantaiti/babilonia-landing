@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Appuntamento - BABILONIA</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { text-align: center; padding: 40px 20px; color: #fff; }
+        .header h1 { font-size: 1.8rem; font-weight: 300; margin-bottom: 10px; }
+        .card { background: #fff; border-radius: 16px; padding: 30px; margin-bottom: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
+        .card h2 { color: #1a1a2e; margin-bottom: 20px; font-size: 1.3rem; }
+        .appointment-info { background: #f8f9fa; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: left; }
+        .info-row { margin-bottom: 10px; }
+        .info-label { color: #666; font-size: 0.9rem; }
+        .info-value { color: #1a1a2e; font-weight: 600; font-size: 1.1rem; }
+        .btn { padding: 16px 32px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; margin: 10px; text-transform: uppercase; }
+        .btn-confirm { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: #fff; }
+        .btn-reschedule { background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); color: #fff; }
+        .btn-cancel { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: #fff; }
+        .status-message { padding: 20px; border-radius: 10px; margin: 20px 0; display: none; }
+        .status-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .loading { text-align: center; color: #888; padding: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Gestione Appuntamento</h1>
+            <p>Conferma, sposta o annulla il tuo colloquio</p>
+        </div>
+
+        <div class="card" id="loading-card">
+            <div class="loading">Caricamento appuntamento...</div>
+        </div>
+
+        <div class="card" id="appointment-card" style="display: none;">
+            <h2 id="card-title">Dettagli Appuntamento</h2>
+            
+            <div class="appointment-info" id="appointment-details">
+                <!-- Popolato via JS -->
+            </div>
+
+            <div id="action-buttons">
+                <button class="btn btn-confirm" onclick="confirmAppointment()">✓ Conferma</button>
+                <button class="btn btn-reschedule" onclick="rescheduleAppointment()">🔄 Sposta</button>
+                <button class="btn btn-cancel" onclick="cancelAppointment()">✕ Annulla</button>
+            </div>
+
+            <div id="status-message" class="status-message"></div>
+        </div>
+
+        <div class="card" id="reschedule-card" style="display: none;">
+            <h2>Seleziona nuova data e ora</h2>
+            <div id="available-slots"></div>
+        </div>
+
+        <div class="card" id="success-card" style="display: none;">
+            <h2>✅ Operazione Completata</h2>
+            <p id="success-message"></p>
+            <p style="margin-top: 20px; color: #666;">Riceverai una conferma via email.</p>
+        </div>
+    </div>
+
+    <script type="module" src="./manage.js"></script>
+</body>
+</html>
