@@ -262,6 +262,24 @@ window.confirmBooking = async function() {
         // Notifica Telegram
         await notifyTelegram(name, email, phone);
         
+        // Carica dettagli seller per Zoom link
+        const sellerRes = await fetch(`${SUPABASE_URL}/rest/v1/sellers?id=eq.${selectedSeller}&select=zoom_link`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const sellerData = await sellerRes.json();
+        const zoomLink = sellerData[0]?.zoom_link || '';
+        
+        // Aggiorna success con link Zoom
+        document.getElementById('success-message').innerHTML = `
+            <h3>🎉 Appuntamento Confermato!</h3>
+            <p>Riceverai una conferma via email.</p>
+            ${zoomLink ? `<p style="margin-top: 20px;"><strong>Link Zoom per il colloquio:</strong><br><a href="${zoomLink}" target="_blank" style="color: #d4af37; word-break: break-all;">${zoomLink}</a></p>` : ''}
+            <p style="margin-top: 20px; font-size: 0.9rem; color: #666;">
+                Salva anche il link per accedere alla gestione appuntamento:<br>
+                <a href="/manage/?id=${`apt_${Date.now()}`}" style="color: #666;">Gestisci appuntamento</a>
+            </p>
+        `;
+        
         goToStep(5);
         
     } catch (error) {
