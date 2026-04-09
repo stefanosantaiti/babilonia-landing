@@ -302,5 +302,11 @@ async function notifyTelegram(name, email, phone) {
     }
 }
 
-// Carica immediatamente
-loadSellers();
+// Attendi che DOM sia pronto
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(loadSellers, 100);
+    });
+} else {
+    setTimeout(loadSellers, 100);
+}
