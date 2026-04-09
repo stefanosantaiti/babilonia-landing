@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prenota Appuntamento - BABILONIA</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); 
+            min-height: 100vh; 
+            padding: 20px; 
+            color: #333; 
+        }
+        .container { max-width: 700px; margin: 0 auto; }
+        .header { 
+            text-align: center; 
+            padding: 40px 20px; 
+            color: #fff; 
+        }
+        .header h1 { font-size: 1.8rem; font-weight: 300; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-weight: 300; }
+        .card { 
+            background: #fff; 
+            border-radius: 16px; 
+            padding: 30px; 
+            margin-bottom: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
+        }
+        .card h2 { 
+            color: #1a1a2e; 
+            margin-bottom: 20px; 
+            font-size: 1.3rem;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 10px;
+        }
+        .step { display: none; }
+        .step.active { display: block; }
+        .seller-select { 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 1rem; 
+            border: 2px solid #ddd; 
+            border-radius: 10px; 
+            margin-bottom: 20px;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+        .calendar-day.disabled {
+            background: #f0f0f0;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        .calendar-day.available {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .calendar-day.available:hover {
+            background: #4caf50;
+            color: white;
+            transform: scale(1.05);
+        }
+        .calendar-day.selected {
+            background: #d4af37;
+            color: white;
+        }
+        .calendar-day .day-name {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+        .calendar-day .day-number {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .time-slot {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #e0e0e0;
+            background: #fafafa;
+        }
+        .time-slot:hover {
+            border-color: #d4af37;
+            background: #fff8e1;
+        }
+        .time-slot.selected {
+            background: #d4af37;
+            color: white;
+            border-color: #d4af37;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .summary-label {
+            color: #666;
+        }
+        .summary-value {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+        .success-message {
+            text-align: center;
+            padding: 40px;
+        }
+        .success-message h3 {
+            color: #4caf50;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        .loading {
+            text-align: center;
+            color: #888;
+            padding: 40px;
+        }
+        .back-btn {
+            background: transparent;
+            color: #666;
+            border: 2px solid #ddd;
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            .calendar-grid {
+                gap: 5px;
+            }
+            .calendar-day {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Prenota il tuo appuntamento</h1>
+            <p>Seleziona data e ora disponibili</p>
+        </div>
+
+        <!-- Step 1: Selezione Consulente -->
+        <div class="card step active" id="step-1">
+            <h2>1. Scegli il Consulente</h2>
+            <select id="seller-select" class="seller-select">
+                <option value="">-- Seleziona consulente --</option>
+            </select>
+            <button class="btn" onclick="goToStep(2)">Continua</button>
+        </div>
+
+        <!-- Step 2: Selezione Data -->
+        <div class="card step" id="step-2">
+            <h2>2. Seleziona la Data</h2>
+            <div id="calendar-container">
+                <div class="loading">Caricamento calendario...</div>
+            </div>
+            <button class="btn back-btn" onclick="goToStep(1)">← Indietro</button>
+        </div>
+
+        <!-- Step 3: Selezione Orario -->
+        <div class="card step" id="step-3">
+            <h2>3. Seleziona l'Orario</h2>
+            <p id="selected-date-display"></p>
+            <div id="time-container">
+                <div class="loading">Caricamento orari...</div>
+            </div>
+            <button class="btn back-btn" onclick="goToStep(2)">← Indietro</button>
+        </div>
+
+        <!-- Step 4: Dati Personali -->
+        <div class="card step" id="step-4">
+            <h2>4. I tuoi Dati</h2>
+            
+            <div class="summary">
+                <div class="summary-item">
+                    <span class="summary-label">Data:</span>
+                    <span class="summary-value" id="summary-date">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Ora:</span>
+                    <span class="summary-value" id="summary-time">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Consulente:</span>
+                    <span class="summary-value" id="summary-seller">--</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Nome e Cognome *</label>
+                <input type="text" id="client-name" placeholder="Mario Rossi" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" id="client-email" placeholder="mario@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label>Telefono *</label>
+                <input type="tel" id="client-phone" placeholder="+39 333 123 4567" required>
+            </div>
+
+            <button class="btn" onclick="confirmBooking()">✓ Conferma Appuntamento</button>
+            <button class="btn back-btn" onclick="goToStep(3)">← Indietro</button>
+        </div>
+
+        <!-- Step 5: Conferma -->
+        <div class="card step" id="step-5">
+            <div class="success-message">
+                <h3>🎉 Appuntamento Confermato!</h3>
+                <p>Riceverai una conferma via email.</p>
+                <p>Il consulente ti contatterà per i dettagli.</p>
+                <br>
+                <a href="/" class="btn">Torna alla Home</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module" src="./booking.js"></script>
+</body>
+</html>
