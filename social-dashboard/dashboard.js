@@ -1,39 +1,36 @@
 // BABILONIA Social Dashboard - Gestione post
-// Carica e gestisce post dalla coda
+// Legge post da file JSON locale (posts.json)
 
-const API_URL = 'https://esgjushznmidzdhqsyyx.supabase.co';
-const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
-
-let posts = [];
+const posts = [];
 let editingPost = null;
 
-// Carica post dal file JSON locale (in attesa di integrazione Supabase)
+// Carica post dal file JSON locale
 async function loadPosts() {
     try {
-        // Per ora carica da localStorage o file statico
-        // In produzione: fetch da Supabase table 'social_posts'
-        const response = await fetch('../skills/babilonia-social-publisher/data/queue-pro.json');
+        const response = await fetch('posts.json');
         const data = await response.json();
-        posts = data.posts || [];
+        posts.length = 0;
+        posts.push(...(data.posts || []));
         renderPosts();
         updateStats();
     } catch (err) {
         console.error('Errore caricamento:', err);
-        showEmptyState();
+        showErrorState();
     }
 }
 
 // Renderizza post
 function renderPosts() {
     const container = document.getElementById('posts-container');
-    const pending = posts.filter(p => p.status === 'pending_approval');
     
-    if (pending.length === 0) {
+    if (posts.length === 0) {
         showEmptyState();
         return;
     }
     
-    container.innerHTML = pending.map(post => createPostHTML(post)).join('');
+    // Prendi solo i primi 3
+    const topPosts = posts.slice(0, 3);
+    container.innerHTML = topPosts.map(post => createPostHTML(post)).join('');
 }
 
 // Crea HTML per un post
@@ -44,13 +41,13 @@ function createPostHTML(post) {
         return `
             <div class="post-card" data-id="${post.id}">
                 <div class="post-header">
-                    <span class="post-id">${post.id}</span>
-                    <span class="post-score">Score: ${post.relevance_score}</span>
+                    <span class="post-id">#${post.id}</span>
+                    <span class="post-score">⭐ ${post.relevance_score}/10</span>
                 </div>
                 <div class="edit-mode">
                     <textarea id="edit-text-${post.id}">${post.body}</textarea>
                     <div class="edit-actions">
-                        <button class="btn btn-approve" onclick="saveEdit('${post.id}')">💾 Salva Modifiche</button>
+                        <button class="btn btn-approve" onclick="saveEdit(${post.id})">💾 Salva</button>
                         <button class="btn btn-reject" onclick="cancelEdit()">❌ Annulla</button>
                     </div>
                 </div>
@@ -58,24 +55,26 @@ function createPostHTML(post) {
         `;
     }
     
+    const keywords = post.keywords_matched ? post.keywords_matched.join(', ') : 'N/A';
+    
     return `
         <div class="post-card" data-id="${post.id}">
             <div class="post-header">
-                <span class="post-id">${post.id}</span>
+                <span class="post-id">#${post.id}</span>
                 <span class="post-score">⭐ ${post.relevance_score}/10</span>
             </div>
             <div class="post-meta">
                 <span>📰 <span class="post-source">${post.source}</span></span>
-                <span>📅 ${post.pub_date} ${post.pub_time ? 'alle ' + post.pub_time : ''}</span>
+                <span>📅 ${post.pub_date || 'Oggi'} ${post.pub_time ? 'alle ' + post.pub_time : ''}</span>
                 <span class="post-template">${post.template_used}</span>
             </div>
             <div class="post-content">${escapeHtml(post.body)}</div>
-            <div class="post-hashtags">${post.hashtags}</div>
+            <div class="post-hashtags">${post.hashtags || ''}</div>
             <div class="post-actions">
-                <button class="btn btn-approve" onclick="approvePost('${post.id}')">✅ Approva</button>
-                <button class="btn btn-edit" onclick="editPost('${post.id}')">✏️ Modifica</button>
-                <button class="btn btn-preview" onclick="previewPost('${post.id}')">👁️ Anteprima</button>
-                <button class="btn btn-reject" onclick="rejectPost('${post.id}')">❌ Rifiuta</button>
+                <button class="btn btn-approve" onclick="approvePost(${post.id})">✅ Approva</button>
+                <button class="btn btn-edit" onclick="editPost(${post.id})">✏️ Modifica</button>
+                <button class="btn btn-preview" onclick="previewPost(${post.id})">👁️ Anteprima</button>
+                <button class="btn btn-reject" onclick="rejectPost(${post.id})">❌ Rifiuta</button>
             </div>
         </div>
     `;
@@ -91,19 +90,27 @@ function showEmptyState() {
     document.getElementById('posts-container').innerHTML = `
         <div class="empty-state">
             <h2>🎉 Nessun post in attesa!</h2>
-            <p>Tutti i post sono stati revisionati. Controlla più tardi per nuovi contenuti.</p>
+            <p>I post verranno generati automaticamente dal News Scout.</p>
+            <p style="margin-top: 20px; color: #d4af37;">Prossima generazione: domattina alle 7:30</p>
+        </div>
+    `;
+}
+
+function showWaitingState() {
+    document.getElementById('posts-container').innerHTML = `
+        <div class="empty-state">
+            <h2>�️ In attesa di dati...</h2>
+            <p>La tabella Supabase è in fase di configurazione.</p>
+            <p style="margin-top: 20px; color: #888;">Esegui l'SQL sul database per attivare il sistema.</p>
         </div>
     `;
 }
 
 function updateStats() {
-    const pending = posts.filter(p => p.status === 'pending_approval').length;
-    const approved = posts.filter(p => p.status === 'approved').length;
-    const published = posts.filter(p => p.status === 'published').length;
-    
-    document.getElementById('pending-count').textContent = pending;
-    document.getElementById('approved-count').textContent = approved;
-    document.getElementById('published-count').textContent = published;
+    // In futuro: fetch conteggi reali da Supabase
+    document.getElementById('pending-count').textContent = posts.filter(p => p.status === 'pending_approval').length;
+    document.getElementById('approved-count').textContent = posts.filter(p => p.status === 'approved').length;
+    document.getElementById('published-count').textContent = posts.filter(p => p.status === 'published').length;
 }
 
 // Azioni
@@ -112,9 +119,12 @@ function approvePost(id) {
     if (post) {
         post.status = 'approved';
         post.approved_at = new Date().toISOString();
-        alert(`✅ Post approvato!\n\n"${post.title.substring(0, 50)}..."\n\nPronto per la pubblicazione su Facebook.`);
+        alert(`✅ Post approvato!\n\n"${post.title.substring(0, 50)}..."\n\nPronto per pubblicazione Facebook.`);
         renderPosts();
         updateStats();
+        
+        // Salva stato approvato (in produzione: invia a Meta API)
+        savePosts();
     }
 }
 
@@ -131,6 +141,7 @@ function saveEdit(id) {
         post.edited = true;
         editingPost = null;
         renderPosts();
+        savePosts();
     }
 }
 
@@ -142,9 +153,10 @@ function cancelEdit() {
 function rejectPost(id) {
     const post = posts.find(p => p.id === id);
     if (confirm(`Rifiutare questo post?\n\n"${post.title}"`)) {
-        posts = posts.filter(p => p.id !== id);
+        posts.splice(posts.indexOf(post), 1);
         renderPosts();
         updateStats();
+        savePosts();
     }
 }
 
@@ -160,11 +172,15 @@ function closePreview() {
     document.getElementById('preview-modal').style.display = 'none';
 }
 
-// Chiudi modal cliccando fuori
+function savePosts() {
+    // In produzione: salva su server/Supabase
+    // Per ora: log in console
+    console.log('Posts aggiornati:', posts.length);
+}
+
+// Eventi
 document.addEventListener('click', (e) => {
-    if (e.target.id === 'preview-modal') {
-        closePreview();
-    }
+    if (e.target.id === 'preview-modal') closePreview();
 });
 
 // Carica all'avvio
