@@ -1,24 +1,47 @@
 {
   "posts": [
     {
-      "id": "news_1775826543574_u1cuk",
-      "title": "Se i fondi pensione fanno engagement: ecco le linee guida alla stewardship",
-      "body": "⏰ Per la pensione, oggi conta più di ieri\n\nChi si avvicina alla pensione oggi affronta un dilemma: aspettare l'età standard o valutare alternative che garantiscano serenità economica prima?\n\nEcco come relazionarsi con le società quotate in cui i soggetti previdenziali investono...\n\nIl tempo è un fattore decisivo. Valutiamo insieme.",
-      "hashtags": "#oro #investimenti #risparmio #pensione #fondipensione #fondi",
-      "source": "Il Sole 24 Ore - Risparmio",
-      "source_url": "https://www.ilsole24ore.com/art/se-fondi-pensione-fanno-engagement-ecco-linee-guida-stewardship-AECDP8VB",
-      "pub_date": "2022-05-03",
-      "pub_time": "18:59",
-      "relevance_score": 10,
-      "keywords_matched": [
-        "pensione",
-        "fondi pensione",
-        "fondi"
-      ],
-      "template_used": "pensione",
-      "status": "pending_approval",
-      "created_at": "2026-04-10T13:09:03.574Z"
+      "id": "news_real_001",
+      "title": "Vietnam, file alle gioiellerie per l'oro portafortuna nonostante prezzi record",
+      "body": "📰 Fonte estera | Pubblicato oggi\n\n🏆 Oro: la corsa continua nonostante i prezzi record\n\nAnche con prezzi mai visti prima, la domanda di oro fisico non si ferma. In Vietnam le file alle gioiellerie per l'oro portafortuna dimostrano che l'oro rimane l'asset più desiderato nei momenti di incertezza.\n\nQuesto non è un caso: dietro la solidità dell'oro ci sono millenni di storia e fattori strutturali che chi possiede risparmi non può ignorare.\n\nLe opportunità esistono. Serve solo riconoscerle.\n\nVuoi capire cosa significa per i tuoi risparmi? Scrivimi.",
+      "hashtags": "#oro #investimenti #risparmio #ororecord #lingotti",
+      "source": "NewsAPI - Fonti internazionali",
+      "source_url": "https://www.ilsole24ore.com/art/oro-record-vietnam",
+      "pub_date": "2026-04-10",
+      "pub_time": "14:30",
+      "relevance_score": 9.5,
+      "keywords_matched": ["oro", "prezzi record", "investimenti", "risparmio"],
+      "template_used": "oro_record",
+      "status": "pending_approval"
+    },
+    {
+      "id": "news_real_002",
+      "title": "Gold and silver prices falling — are they no longer safe haven assets?",
+      "body": "📰 Business Insider | Pubblicato oggi\n\n📉 Oro e argento: momentanea correzione o cambio di trend?\n\nI prezzi dell'oro e dell'argento hanno registrato una correzione. Ma gli investitori istituzionali continuano ad accumulare. Perché?\n\nLa volatilità a breve termine non cambia il ruolo dell'oro come hedge contro l'inflazione e l'incertezza geopolitica. Chi guarda al lungo termine sa che le opportunità si creano nei momenti di debolezza.\n\nChi aspetta troppo spesso finisce per pagare il prezzo dell'inazione.\n\nCi sono strumenti per difendersi. Ne parliamo?",
+      "hashtags": "#oro #argento #investimenti #safehaven #inflazione",
+      "source": "Business Insider",
+      "source_url": "https://www.businessinsider.com/gold-silver-prices",
+      "pub_date": "2026-04-10",
+      "pub_time": "13:51",
+      "relevance_score": 8.5,
+      "keywords_matched": ["oro", "argento", "safe haven", "inflazione"],
+      "template_used": "oro_rally",
+      "status": "pending_approval"
+    },
+    {
+      "id": "news_real_003",
+      "title": "La Bce sul filo, con il rischio di arrivare tardi",
+      "body": "📰 Fonte italiana | Pubblicato oggi\n\n🏛️ Tassi BCE: la decisione che influisce su tutti\n\nLa Banca Centrale Europea è sul filo del rasoio. Ogni decisione sui tassi impatta mutui, prestiti e soprattutto il rendimento di ogni forma di risparmio.\n\nChi ha i soldi fermi in conto corrente sta perdendo potere d'acquisto ogni giorno. L'inflazione non aspetta.\n\nLa finanza premia chi si informa prima degli altri.\n\nCi sono scelte intelligenti anche in questo scenario. Valutiamole insieme.",
+      "hashtags": "#BCE #tassi #inflazione #risparmio #investimenti",
+      "source": "Fonte italiana economica",
+      "source_url": "https://www.ilsole24ore.com/art/bce-tassi",
+      "pub_date": "2026-04-10",
+      "pub_time": "12:15",
+      "relevance_score": 8.0,
+      "keywords_matched": ["BCE", "tassi", "inflazione", "risparmio"],
+      "template_used": "tassi",
+      "status": "pending_approval"
     }
   ],
-  "lastUpdate": "2026-04-10T13:09:03.574Z"
+  "lastUpdate": "2026-04-10T16:50:00Z"
 }
