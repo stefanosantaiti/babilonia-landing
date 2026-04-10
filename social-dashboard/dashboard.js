@@ -7,7 +7,7 @@ let editingPost = null;
 // Carica post dal file JSON locale
 async function loadPosts() {
     try {
-        const response = await fetch('posts.json');
+        const response = await fetch('./posts.json');
         const data = await response.json();
         posts.length = 0;
         posts.push(...(data.posts || []));
