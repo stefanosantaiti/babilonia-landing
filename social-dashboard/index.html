@@ -155,12 +155,9 @@
             color: #4a9eff;
             border: 1px solid #4a9eff;
         }
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #888;
+        .btn-preview:hover {
+            background: rgba(74,158,255,0.3);
         }
-        .empty-state h2 { margin-bottom: 15px; color: #d4af37; }
         .edit-mode textarea {
             width: 100%;
             min-height: 200px;
@@ -178,11 +175,6 @@
             display: flex;
             gap: 10px;
             margin-top: 15px;
-        }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #d4af37;
         }
         .preview-modal {
             display: none;
@@ -234,32 +226,57 @@
             cursor: pointer;
             font-size: 1.5rem;
         }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+        .empty-state h2 { margin-bottom: 15px; color: #d4af37; }
+        .status-approved {
+            border-left: 4px solid #28a745;
+            opacity: 0.7;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        .badge-pending { background: rgba(212,175,55,0.3); color: #d4af37; }
+        .badge-approved { background: rgba(40,167,69,0.3); color: #28a745; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🎸 BABILONIA Social Dashboard</h1>
-            <p>Revisione e approvazione post social</p>
+            <p>Revisione e approvazione post social - RSS Reali</p>
         </header>
 
         <div class="stats">
             <div class="stat-card">
-                <div class="number" id="pending-count">-</div>
+                <div class="number" id="pending-count">1</div>
                 <div class="label">In Attesa</div>
             </div>
             <div class="stat-card">
-                <div class="number" id="approved-count">-</div>
+                <div class="number" id="approved-count">0</div>
                 <div class="label">Approvati</div>
             </div>
             <div class="stat-card">
-                <div class="number" id="published-count">-</div>
+                <div class="number" id="published-count">0</div>
                 <div class="label">Pubblicati</div>
             </div>
         </div>
 
         <div id="posts-container">
-            <div class="loading">Caricamento post...</div>
+            <!-- Post generati automaticamente da JavaScript -->
+        </div>
+
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <h2>🎉 Nessun post in attesa!</h2>
+            <p>I post verranno generati automaticamente dal News Scout.</p>
+            <p style="margin-top: 20px; color: #d4af37;">Prossima generazione: domattina alle 7:30</p>
         </div>
     </div>
 
@@ -277,6 +294,166 @@
         <button class="close-preview" onclick="closePreview()">×</button>
     </div>
 
-    <script src="dashboard.js"></script>
+    <script>
+        // Post da RSS reali - Il Sole 24 Ore
+        const POSTS_DATA = [
+            {
+                "id": "news_1775826543574_u1cuk",
+                "title": "Se i fondi pensione fanno engagement: ecco le linee guida alla stewardship",
+                "body": "📰 Il Sole 24 Ore - Risparmio | Pubblicato il 03/05/2022 alle 18:59\n\n⏰ Per la pensione, oggi conta più di ieri\n\nChi si avvicina alla pensione oggi affronta un dilemma: aspettare l'età standard o valutare alternative che garantiscano serenità economica prima?\n\nEcco come relazionarsi con le società quotate in cui i soggetti previdenziali investono...\n\nLe opportunità esistono. Serve solo riconoscerle.\n\nIl tempo è un fattore decisivo. Valutiamo insieme.",
+                "hashtags": "#oro #investimenti #risparmio #pensione #fondipensione #fondi",
+                "source": "Il Sole 24 Ore - Risparmio",
+                "source_url": "https://www.ilsole24ore.com/art/se-fondi-pensione-fanno-engagement-ecco-linee-guida-stewardship-AECDP8VB",
+                "pub_date": "2022-05-03",
+                "pub_time": "18:59",
+                "relevance_score": 10,
+                "keywords_matched": ["pensione", "fondi pensione", "fondi"],
+                "template_used": "pensione",
+                "status": "pending_approval"
+            }
+        ];
+
+        let posts = [...POSTS_DATA];
+        let editingPost = null;
+
+        function renderPosts() {
+            const container = document.getElementById('posts-container');
+            const emptyState = document.getElementById('empty-state');
+            
+            const pending = posts.filter(p => p.status === 'pending_approval');
+            
+            if (pending.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            container.style.display = 'block';
+            emptyState.style.display = 'none';
+            
+            container.innerHTML = pending.map(post => createPostHTML(post)).join('');
+            updateStats();
+        }
+
+        function createPostHTML(post) {
+            if (editingPost === post.id) {
+                return `
+                    <div class="post-card" data-id="${post.id}">
+                        <div class="post-header">
+                            <span class="post-id">#${post.id}</span>
+                            <span class="post-score">⭐ ${post.relevance_score}/10</span>
+                        </div>
+                        <div class="edit-mode">
+                            <textarea id="edit-text-${post.id}">${post.body}</textarea>
+                            <div class="edit-actions">
+                                <button class="btn btn-approve" onclick="saveEdit('${post.id}')">💾 Salva</button>
+                                <button class="btn btn-reject" onclick="cancelEdit()">❌ Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="post-card" data-id="${post.id}">
+                    <div class="post-header">
+                        <span class="post-id">#${post.id}</span>
+                        <div>
+                            <span class="post-score">⭐ ${post.relevance_score}/10</span>
+                            <span class="status-badge badge-pending">In attesa</span>
+                        </div>
+                    </div>
+                    <div class="post-meta">
+                        <span>📰 <span class="post-source">${post.source}</span></span>
+                        <span>📅 ${post.pub_date} ${post.pub_time ? 'alle ' + post.pub_time : ''}</span>
+                        <span class="post-template">${post.template_used}</span>
+                    </div>
+                    <div class="post-content">${escapeHtml(post.body)}</div>
+                    <div class="post-hashtags">${post.hashtags}</div>
+                    <div class="post-actions">
+                        <button class="btn btn-approve" onclick="approvePost('${post.id}')">✅ Approva</button>
+                        <button class="btn btn-edit" onclick="editPost('${post.id}')">✏️ Modifica</button>
+                        <button class="btn btn-preview" onclick="previewPost('${post.id}')">👁️ Anteprima</button>
+                        <button class="btn btn-reject" onclick="rejectPost('${post.id}')">❌ Rifiuta</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function updateStats() {
+            const pending = posts.filter(p => p.status === 'pending_approval').length;
+            const approved = posts.filter(p => p.status === 'approved').length;
+            const published = posts.filter(p => p.status === 'published').length;
+            
+            document.getElementById('pending-count').textContent = pending;
+            document.getElementById('approved-count').textContent = approved;
+            document.getElementById('published-count').textContent = published;
+        }
+
+        function approvePost(id) {
+            const post = posts.find(p => p.id === id);
+            if (post) {
+                post.status = 'approved';
+                post.approved_at = new Date().toISOString();
+                alert(`✅ Post approvato!\n\n"${post.title.substring(0, 50)}..."\n\nPronto per pubblicazione su Facebook.`);
+                renderPosts();
+            }
+        }
+
+        function editPost(id) {
+            editingPost = id;
+            renderPosts();
+        }
+
+        function saveEdit(id) {
+            const post = posts.find(p => p.id === id);
+            const newText = document.getElementById(`edit-text-${id}`).value;
+            if (post && newText) {
+                post.body = newText;
+                post.edited = true;
+                editingPost = null;
+                renderPosts();
+            }
+        }
+
+        function cancelEdit() {
+            editingPost = null;
+            renderPosts();
+        }
+
+        function rejectPost(id) {
+            const post = posts.find(p => p.id === id);
+            if (confirm(`Rifiutare questo post?\n\n"${post.title}"`)) {
+                posts = posts.filter(p => p.id !== id);
+                renderPosts();
+            }
+        }
+
+        function previewPost(id) {
+            const post = posts.find(p => p.id === id);
+            if (post) {
+                document.getElementById('preview-text').innerHTML = post.body.replace(/\n/g, '<br>');
+                document.getElementById('preview-modal').style.display = 'flex';
+            }
+        }
+
+        function closePreview() {
+            document.getElementById('preview-modal').style.display = 'none';
+        }
+
+        // Eventi
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'preview-modal') closePreview();
+        });
+
+        // Carica all'avvio
+        renderPosts();
+    </script>
 </body>
 </html>
