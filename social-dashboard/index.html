@@ -402,8 +402,6 @@
                         <button class="btn btn-approve" onclick="approvePost('${post.id}')">✅ Approva</button>
                         <button class="btn btn-edit" onclick="editPost('${post.id}')">✏️ Modifica</button>
                         <button class="btn btn-preview" onclick="previewPost('${post.id}')">👁️ Anteprima</button>
-                        <button class="btn btn-copy" style="background: #28a745; color: white;" onclick="copyPost('${post.id}')">📋 Copia Testo</button>
-                        <a href="https://facebook.com" target="_blank" class="btn" style="background: #1877f2; color: white; text-decoration: none;">📘 Apri Facebook</a>
                         <button class="btn btn-reject" onclick="rejectPost('${post.id}')">❌ Rifiuta</button>
                     </div>
                 </div>
@@ -470,26 +468,6 @@
             if (post) {
                 document.getElementById('preview-text').innerHTML = post.body.replace(/\n/g, '<br>');
                 document.getElementById('preview-modal').style.display = 'flex';
-            }
-        }
-
-        function copyPost(id) {
-            const post = posts.find(p => p.id === id);
-            if (post) {
-                const textToCopy = post.body + '\n\n' + post.hashtags;
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    alert('✅ Testo copiato!\n\nOra incollalo su Facebook e pubblica.');
-                }).catch(err => {
-                    console.error('Errore copia:', err);
-                    // Fallback
-                    const textarea = document.createElement('textarea');
-                    textarea.value = textToCopy;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textarea);
-                    alert('✅ Testo copiato!\n\nOra incollalo su Facebook e pubblica.');
-                });
             }
         }
 
