@@ -33,84 +33,68 @@
             flex-wrap: wrap;
         }
         .stat-card {
-            background: rgba(255,255,255,0.1);
-            padding: 20px 30px;
-            border-radius: 12px;
-            text-align: center;
-            min-width: 150px;
-        }
-        .stat-card .number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #d4af37;
-        }
-        .stat-card .label { color: #aaa; font-size: 0.9rem; margin-top: 5px; }
-        .post-card {
             background: rgba(255,255,255,0.05);
+            padding: 20px 30px;
+            border-radius: 10px;
+            text-align: center;
             border: 1px solid rgba(212,175,55,0.3);
-            border-radius: 16px;
+        }
+        .stat-card .number { font-size: 2rem; color: #d4af37; font-weight: bold; }
+        .stat-card .label { color: #888; font-size: 0.9rem; margin-top: 5px; }
+        .post-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 12px;
             padding: 25px;
             margin-bottom: 25px;
-            transition: transform 0.2s;
+            position: relative;
         }
-        .post-card:hover { transform: translateY(-2px); }
         .post-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .post-id {
-            font-size: 0.85rem;
-            color: #888;
-            font-family: monospace;
-        }
+        .post-id { color: #888; font-size: 0.85rem; }
         .post-score {
-            background: #d4af37;
-            color: #1a1a2e;
-            padding: 5px 15px;
+            background: rgba(212,175,55,0.2);
+            color: #d4af37;
+            padding: 5px 12px;
             border-radius: 20px;
-            font-weight: bold;
             font-size: 0.9rem;
+            font-weight: bold;
         }
         .post-meta {
             display: flex;
             gap: 15px;
             margin-bottom: 15px;
             flex-wrap: wrap;
-            font-size: 0.9rem;
-            color: #aaa;
+            font-size: 0.85rem;
+            color: #888;
         }
-        .post-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .post-source {
-            color: #d4af37;
-            font-weight: 500;
-        }
+        .post-meta span { display: flex; align-items: center; gap: 5px; }
+        .post-source { color: #d4af37; font-weight: 500; }
         .post-template {
-            background: rgba(212,175,55,0.2);
+            background: rgba(255,255,255,0.1);
             padding: 3px 10px;
             border-radius: 5px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         .post-content {
             background: rgba(0,0,0,0.2);
-            border-radius: 12px;
             padding: 20px;
+            border-radius: 8px;
             margin-bottom: 15px;
-            white-space: pre-wrap;
             line-height: 1.6;
-            font-size: 1rem;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
         }
         .post-hashtags {
-            color: #4a9eff;
+            color: #d4af37;
             font-size: 0.9rem;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .post-actions {
             display: flex;
@@ -118,114 +102,67 @@
             flex-wrap: wrap;
         }
         .btn {
-            padding: 12px 24px;
+            padding: 12px 20px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
         }
-        .btn-approve {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-        }
-        .btn-approve:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(40,167,69,0.4);
-        }
-        .btn-edit {
-            background: rgba(212,175,55,0.2);
-            color: #d4af37;
-            border: 1px solid #d4af37;
-        }
-        .btn-edit:hover {
-            background: rgba(212,175,55,0.3);
-        }
-        .btn-reject {
-            background: rgba(220,53,69,0.2);
-            color: #dc3545;
-            border: 1px solid #dc3545;
-        }
-        .btn-reject:hover {
-            background: rgba(220,53,69,0.3);
-        }
-        .btn-preview {
-            background: rgba(74,158,255,0.2);
-            color: #4a9eff;
-            border: 1px solid #4a9eff;
-        }
-        .btn-preview:hover {
-            background: rgba(74,158,255,0.3);
-        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-approve { background: #28a745; color: white; }
+        .btn-edit { background: #ffc107; color: #000; }
+        .btn-preview { background: #17a2b8; color: white; }
+        .btn-reject { background: #dc3545; color: white; }
+        .edit-mode { margin: 20px 0; }
         .edit-mode textarea {
             width: 100%;
             min-height: 200px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid #d4af37;
-            border-radius: 8px;
             padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #d4af37;
+            background: rgba(0,0,0,0.3);
             color: #fff;
             font-family: inherit;
-            font-size: 1rem;
-            line-height: 1.6;
+            font-size: 0.95rem;
             resize: vertical;
         }
-        .edit-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
+        .edit-actions { display: flex; gap: 10px; margin-top: 15px; }
         .preview-modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.9);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
         .preview-content {
-            background: #fff;
+            background: white;
             color: #333;
-            border-radius: 12px;
             max-width: 500px;
             width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
+            border-radius: 10px;
+            overflow: hidden;
         }
         .preview-header {
-            background: #1877f2;
-            color: white;
+            background: #f0f2f5;
             padding: 15px;
-            border-radius: 12px 12px 0 0;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: bold;
         }
-        .preview-body {
-            padding: 20px;
-        }
-        .preview-text {
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
+        .preview-body { padding: 20px; }
+        .preview-text { line-height: 1.6; white-space: pre-wrap; }
         .close-preview {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 20px; right: 20px;
             background: white;
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             cursor: pointer;
             font-size: 1.5rem;
         }
@@ -235,10 +172,6 @@
             color: #888;
         }
         .empty-state h2 { margin-bottom: 15px; color: #d4af37; }
-        .status-approved {
-            border-left: 4px solid #28a745;
-            opacity: 0.7;
-        }
         .status-badge {
             display: inline-block;
             padding: 3px 10px;
@@ -247,7 +180,6 @@
             margin-left: 10px;
         }
         .badge-pending { background: rgba(212,175,55,0.3); color: #d4af37; }
-        .badge-approved { background: rgba(40,167,69,0.3); color: #28a745; }
     </style>
 </head>
 <body>
@@ -259,7 +191,7 @@
 
         <div class="stats">
             <div class="stat-card">
-                <div class="number" id="pending-count">1</div>
+                <div class="number" id="pending-count">0</div>
                 <div class="label">In Attesa</div>
             </div>
             <div class="stat-card">
@@ -272,13 +204,11 @@
             </div>
         </div>
 
-        <div id="posts-container">
-            <!-- Post generati automaticamente da JavaScript -->
-        </div>
+        <div id="posts-container"></div>
 
         <div class="empty-state" id="empty-state" style="display: none;">
             <h2>🎉 Nessun post in attesa!</h2>
-            <p>I post verranno generati automaticamente dal News Scout.</p>
+            <p>I post verranno generati automaticamente dal RSS Scout.</p>
             <p style="margin-top: 20px; color: #d4af37;">Prossima generazione: domattina alle 7:30</p>
         </div>
     </div>
@@ -291,200 +221,12 @@
             </div>
             <div class="preview-body">
                 <div class="preview-text" id="preview-text"></div>
-                <div style="color: #1877f2; font-size: 0.9rem;">👍 ❤️ 😲 💬 🔄</div>
+                <div style="color: #1877f2; font-size: 0.9rem; margin-top: 15px;">👍 ❤️ 😲 💬 🔄</div>
             </div>
         </div>
         <button class="close-preview" onclick="closePreview()">×</button>
     </div>
 
-    <script>
-        // Post da NewsAPI - Fonti reali aggiornate
-        const POSTS_DATA = [
-            {
-                "id": "news_real_001",
-                "title": "Vietnam, file alle gioiellerie per l'oro portafortuna nonostante prezzi record",
-                "body": "📰 Fonte estera | Pubblicato il 10/04/2026\n\n🏆 Oro: la corsa continua nonostante i prezzi record\n\nAnche con prezzi mai visti prima, la domanda di oro fisico non si ferma. In Vietnam le file alle gioiellerie per l'oro portafortuna dimostrano che l'oro rimane l'asset più desiderato nei momenti di incertezza.\n\nQuesto non è un caso: dietro la solidità dell'oro ci sono millenni di storia e fattori strutturali che chi possiede risparmi non può ignorare.\n\nLe opportunità esistono. Serve solo riconoscerle.\n\nVuoi capire cosa significa per i tuoi risparmi? Scrivimi.",
-                "hashtags": "#oro #investimenti #risparmio #ororecord #lingotti",
-                "source": "NewsAPI - Fonti internazionali",
-                "source_url": "https://newsapi.org",
-                "pub_date": "2026-04-10",
-                "pub_time": "14:30",
-                "relevance_score": 9.5,
-                "keywords_matched": ["oro", "prezzi record", "investimenti", "risparmio"],
-                "template_used": "oro_record",
-                "status": "pending_approval"
-            },
-            {
-                "id": "news_real_002",
-                "title": "Gold and silver prices falling — are they no longer safe haven assets?",
-                "body": "📰 Business Insider | Pubblicato il 10/04/2026\n\n📉 Oro e argento: momentanea correzione o cambio di trend?\n\nI prezzi dell'oro e dell'argento hanno registrato una correzione. Ma gli investitori istituzionali continuano ad accumulare. Perché?\n\nLa volatilità a breve termine non cambia il ruolo dell'oro come hedge contro l'inflazione e l'incertezza geopolitica. Chi guarda al lungo termine sa che le opportunità si creano nei momenti di debolezza.\n\nChi aspetta troppo spesso finisce per pagare il prezzo dell'inazione.\n\nCi sono strumenti per difendersi. Ne parliamo?",
-                "hashtags": "#oro #argento #investimenti #safehaven #inflazione",
-                "source": "Business Insider",
-                "source_url": "https://www.businessinsider.com",
-                "pub_date": "2026-04-10",
-                "pub_time": "13:51",
-                "relevance_score": 8.5,
-                "keywords_matched": ["oro", "argento", "safe haven", "inflazione"],
-                "template_used": "oro_rally",
-                "status": "pending_approval"
-            },
-            {
-                "id": "news_real_003",
-                "title": "La Bce sul filo, con il rischio di arrivare tardi",
-                "body": "📰 Fonte italiana | Pubblicato il 10/04/2026\n\n🏛️ Tassi BCE: la decisione che influisce su tutti\n\nLa Banca Centrale Europea è sul filo del rasoio. Ogni decisione sui tassi impatta mutui, prestiti e soprattutto il rendimento di ogni forma di risparmio.\n\nChi ha i soldi fermi in conto corrente sta perdendo potere d'acquisto ogni giorno. L'inflazione non aspetta.\n\nLa finanza premia chi si informa prima degli altri.\n\nCi sono scelte intelligenti anche in questo scenario. Valutiamole insieme.",
-                "hashtags": "#BCE #tassi #inflazione #risparmio #investimenti",
-                "source": "Fonte italiana economica",
-                "source_url": "https://www.ilsole24ore.com",
-                "pub_date": "2026-04-10",
-                "pub_time": "12:15",
-                "relevance_score": 8.0,
-                "keywords_matched": ["BCE", "tassi", "inflazione", "risparmio"],
-                "template_used": "tassi",
-                "status": "pending_approval"
-            }
-        ];
-
-        let posts = [...POSTS_DATA];
-        let editingPost = null;
-
-        function renderPosts() {
-            const container = document.getElementById('posts-container');
-            const emptyState = document.getElementById('empty-state');
-            
-            const pending = posts.filter(p => p.status === 'pending_approval');
-            
-            if (pending.length === 0) {
-                container.style.display = 'none';
-                emptyState.style.display = 'block';
-                return;
-            }
-            
-            container.style.display = 'block';
-            emptyState.style.display = 'none';
-            
-            container.innerHTML = pending.map(post => createPostHTML(post)).join('');
-            updateStats();
-        }
-
-        function createPostHTML(post) {
-            if (editingPost === post.id) {
-                return `
-                    <div class="post-card" data-id="${post.id}">
-                        <div class="post-header">
-                            <span class="post-id">#${post.id}</span>
-                            <span class="post-score">⭐ ${post.relevance_score}/10</span>
-                        </div>
-                        <div class="edit-mode">
-                            <textarea id="edit-text-${post.id}">${post.body}</textarea>
-                            <div class="edit-actions">
-                                <button class="btn btn-approve" onclick="saveEdit('${post.id}')">💾 Salva</button>
-                                <button class="btn btn-reject" onclick="cancelEdit()">❌ Annulla</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            return `
-                <div class="post-card" data-id="${post.id}">
-                    <div class="post-header">
-                        <span class="post-id">#${post.id}</span>
-                        <div>
-                            <span class="post-score">⭐ ${post.relevance_score}/10</span>
-                            <span class="status-badge badge-pending">In attesa</span>
-                        </div>
-                    </div>
-                    <div class="post-meta">
-                        <span>📰 <span class="post-source">${post.source}</span></span>
-                        <span>📅 ${post.pub_date} ${post.pub_time ? 'alle ' + post.pub_time : ''}</span>
-                        <span class="post-template">${post.template_used}</span>
-                    </div>
-                    <div class="post-content">${escapeHtml(post.body)}</div>
-                    <div class="post-hashtags">${post.hashtags}</div>
-                    <div class="post-actions">
-                        <button class="btn btn-approve" onclick="approvePost('${post.id}')">✅ Approva</button>
-                        <button class="btn btn-edit" onclick="editPost('${post.id}')">✏️ Modifica</button>
-                        <button class="btn btn-preview" onclick="previewPost('${post.id}')">👁️ Anteprima</button>
-                        <button class="btn btn-reject" onclick="rejectPost('${post.id}')">❌ Rifiuta</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function updateStats() {
-            const pending = posts.filter(p => p.status === 'pending_approval').length;
-            const approved = posts.filter(p => p.status === 'approved').length;
-            const published = posts.filter(p => p.status === 'published').length;
-            
-            document.getElementById('pending-count').textContent = pending;
-            document.getElementById('approved-count').textContent = approved;
-            document.getElementById('published-count').textContent = published;
-        }
-
-        function approvePost(id) {
-            const post = posts.find(p => p.id === id);
-            if (post) {
-                post.status = 'approved';
-                post.approved_at = new Date().toISOString();
-                alert(`✅ Post approvato!\n\n"${post.title.substring(0, 50)}..."\n\nPronto per pubblicazione su Facebook.`);
-                renderPosts();
-            }
-        }
-
-        function editPost(id) {
-            editingPost = id;
-            renderPosts();
-        }
-
-        function saveEdit(id) {
-            const post = posts.find(p => p.id === id);
-            const newText = document.getElementById(`edit-text-${id}`).value;
-            if (post && newText) {
-                post.body = newText;
-                post.edited = true;
-                editingPost = null;
-                renderPosts();
-            }
-        }
-
-        function cancelEdit() {
-            editingPost = null;
-            renderPosts();
-        }
-
-        function rejectPost(id) {
-            const post = posts.find(p => p.id === id);
-            if (confirm(`Rifiutare questo post?\n\n"${post.title}"`)) {
-                posts = posts.filter(p => p.id !== id);
-                renderPosts();
-            }
-        }
-
-        function previewPost(id) {
-            const post = posts.find(p => p.id === id);
-            if (post) {
-                document.getElementById('preview-text').innerHTML = post.body.replace(/\n/g, '<br>');
-                document.getElementById('preview-modal').style.display = 'flex';
-            }
-        }
-
-        function closePreview() {
-            document.getElementById('preview-modal').style.display = 'none';
-        }
-
-        // Eventi
-        document.addEventListener('click', (e) => {
-            if (e.target.id === 'preview-modal') closePreview();
-        });
-
-        // Carica all'avvio
-        renderPosts();
-    </script>
+    <script type="module" src="./dashboard-v2.js"></script>
 </body>
 </html>
