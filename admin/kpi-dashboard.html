@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPI Dashboard - Consulenti BABILONIA</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            color: #fff;
+        }
+        .header h1 { font-size: 2rem; font-weight: 300; margin-bottom: 10px; }
+        .header .subtitle { opacity: 0.9; font-size: 1.1rem; }
+        
+        .login-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 400px;
+            margin: 40px auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .login-card h2 { color: #1a1a2e; margin-bottom: 30px; text-align: center; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #666; font-weight: 500; }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        .dashboard { display: none; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border-left: 4px solid #d4af37;
+        }
+        .stat-card h3 { color: #666; font-size: 0.9rem; margin-bottom: 10px; text-transform: uppercase; }
+        .stat-value { font-size: 2.5rem; font-weight: 700; color: #1a1a2e; }
+        .stat-change { font-size: 0.9rem; color: #28a745; margin-top: 5px; }
+        .stat-change.negative { color: #dc3545; }
+        
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .card h2 {
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .appointments-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .appointments-table th,
+        .appointments-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .appointments-table th {
+            background: #f8f9fa;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        .appointments-table tr:hover { background: #f8f9fa; }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-completed { background: #d4edda; color: #155724; }
+        .status-no-show { background: #f8d7da; color: #721c24; }
+        .status-cancelled { background: #fff3cd; color: #856404; }
+        
+        .btn-action {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-right: 5px;
+        }
+        .btn-complete { background: #28a745; color: #fff; }
+        .btn-noshow { background: #dc3545; color: #fff; }
+        .btn-convert { background: #d4af37; color: #fff; }
+        
+        .kpi-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .kpi-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .kpi-item .label { color: #666; font-size: 0.85rem; margin-bottom: 5px; }
+        .kpi-item .value { font-size: 1.8rem; font-weight: 700; color: #1a1a2e; }
+        
+        .period-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .period-btn {
+            padding: 10px 20px;
+            border: 2px solid #d4af37;
+            background: transparent;
+            color: #d4af37;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .period-btn.active {
+            background: #d4af37;
+            color: #fff;
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+        
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .chart-label { width: 120px; font-size: 0.9rem; color: #666; }
+        .chart-bar-fill {
+            flex: 1;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+        .chart-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, #d4af37, #c5a028);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .chart-value { width: 60px; text-align: right; font-weight: 600; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 KPI Dashboard</h1>
+            <p class="subtitle">Monitoraggio Performance Consulenti BABILONIA</p>
+        </div>
+        
+        <!-- Login -->
+        <div class="login-card" id="login-section">
+            <h2>🔐 Accesso Consulenti</h2>
+            <div class="form-group">
+                <label>Seleziona Consulente</label>
+                <select id="seller-select">
+                    <option value="">-- Scegli --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>PIN (4 cifre)</label>
+                <input type="password" id="pin-input" maxlength="4" placeholder="****">
+            </div>
+            <button class="btn" onclick="login()">Accedi</button>
+        </div>
+        
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard-section">
+            <div class="period-selector">
+                <button class="period-btn active" onclick="loadPeriod('daily')">Oggi</button>
+                <button class="period-btn" onclick="loadPeriod('weekly')">Settimana</button>
+                <button class="period-btn" onclick="loadPeriod('monthly')">Mese</button>
+                <button class="period-btn" onclick="loadPeriod('yearly')">Anno</button>
+            </div>
+            
+            <div class="stats-grid" id="stats-grid">
+                <!-- Popolato via JS -->
+            </div>
+            
+            <div class="charts-grid">
+                <div class="card">
+                    <h2>📈 Conversioni per Periodo</h2>
+                    <div id="conversion-chart">
+                        <!-- Chart via JS -->
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>🌍 Performance per Zona</h2>
+                    <div id="region-chart">
+                        <!-- Chart via JS -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>📅 Appuntamenti da Esitare</h2>
+                <table class="appointments-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Ora</th>
+                            <th>Cliente</th>
+                            <th>Tipo</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pending-appointments">
+                        <!-- Popolato via JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2>📊 Riepilogo KPI</h2>
+                <div class="kpi-summary" id="kpi-summary">
+                    <!-- Popolato via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://esgjushznmidzdhqsyyx.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
+        
+        let currentSeller = null;
+        let currentPeriod = 'daily';
+        
+        // Carica consulenti al login
+        async function loadSellers() {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/sellers?select=id,name,active&active=eq.true`, {
+                headers: { 'apikey': SUPABASE_KEY }
+            });
+            const sellers = await res.json();
+            const select = document.getElementById('seller-select');
+            sellers.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.id;
+                opt.textContent = s.name;
+                select.appendChild(opt);
+            });
+        }
+        
+        function login() {
+            const sellerId = document.getElementById('seller-select').value;
+            const pin = document.getElementById('pin-input').value;
+            
+            if (!sellerId || pin.length !== 4) {
+                alert('Seleziona consulente e inserisci PIN');
+                return;
+            }
+            
+            // TODO: Verifica PIN da seller_configs
+            currentSeller = sellerId;
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('dashboard-section').style.display = 'block';
+            loadDashboard();
+        }
+        
+        async function loadDashboard() {
+            await loadStats();
+            await loadPendingAppointments();
+            await loadCharts();
+        }
+        
+        async function loadStats() {
+            // Carica statistiche da appointments_completed
+            const today = new Date().toISOString().split('T')[0];
+            
+            const res = await fetch(
+                `${SUPABASE_URL}/rest/v1/appointments_completed?seller_id=eq.${currentSeller}&completed_at=gte.${today}`,
+                { headers: { 'apikey': SUPABASE_KEY } }
+            );
+            const completed = await res.json();
+            
+            const stats = {
+                total: completed.length,
+                converted: completed.filter(a => a.lead_converted).length,
+                revenue: completed.filter(a => a.lead_converted).reduce((sum, a) => sum + (a.amount_eur || 0), 0),
+                noShow: completed.filter(a => a.status === 'no_show').length
+            };
+            
+            document.getElementById('stats-grid').innerHTML = `
+                <div class="stat-card">
+                    <h3>Appuntamenti Oggi</h3>
+                    <div class="stat-value">${stats.total}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Conversioni</h3>
+                    <div class="stat-value">${stats.converted}</div>
+                    <div class="stat-change">${stats.total > 0 ? Math.round(stats.converted/stats.total*100) : 0}% rate</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Fatturato</h3>
+                    <div class="stat-value">€${stats.revenue.toLocaleString()}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>No Show</h3>
+                    <div class="stat-value">${stats.noShow}</div>
+                    <div class="stat-change ${stats.noShow > 2 ? 'negative' : ''}">${stats.noShow > 2 ? 'Attenzione' : 'OK'}</div>
+                </div>
+            `;
+        }
+        
+        async function loadPendingAppointments() {
+            const today = new Date().toISOString().split('T')[0];
+            const res = await fetch(
+                `${SUPABASE_URL}/rest/v1/appointments?seller_id=eq.${currentSeller}&status=eq.confirmed&slots.date=lte.${today}&select=*,slots(date,time)`,
+                { headers: { 'apikey': SUPABASE_KEY } }
+            );
+            const appointments = await res.json();
+            
+            const tbody = document.getElementById('pending-appointments');
+            tbody.innerHTML = appointments.map(a => `
+                <tr>
+                    <td>${a.slots?.date || 'N/D'}</td>
+                    <td>${a.slots?.time?.substring(0,5) || 'N/D'}</td>
+                    <td>${a.client_name}</td>
+                    <td>${a.type}</td>
+                    <td>
+                        <button class="btn-action btn-complete" onclick="completeAppointment('${a.id}', '${a.client_name}', '${a.client_email}', '${a.client_phone}', '${a.slots?.date}', '${a.slots?.time}', ${currentSeller})">✓ Completato</button>
+                        <button class="btn-action btn-noshow" onclick="noShowAppointment('${a.id}')">✗ No Show</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        async function completeAppointment(aptId, name, email, phone, date, time, sellerId) {
+            const converted = confirm('Il lead si è convertito in cliente?');
+            const amount = converted ? prompt('Importo investito (€):', '0') : 0;
+            const notes = prompt('Note sulla conversazione:', '');
+            
+            // Salva in appointments_completed
+            await fetch(`${SUPABASE_URL}/rest/v1/appointments_completed`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    appointment_id: aptId,
+                    seller_id: sellerId,
+                    client_name: name,
+                    client_email: email,
+                    client_phone: phone,
+                    appointment_date: date,
+                    appointment_time: time,
+                    status: 'completed',
+                    lead_converted: converted,
+                    amount_eur: parseFloat(amount) || 0,
+                    notes: notes,
+                    completed_by: sellerId
+                })
+            });
+            
+            // Aggiorna appointment originale
+            await fetch(`${SUPABASE_URL}/rest/v1/appointments?id=eq.${aptId}`, {
+                method: 'PATCH',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: 'completed' })
+            });
+            
+            alert('Appuntamento esitato!');
+            loadDashboard();
+        }
+        
+        function loadPeriod(period) {
+            currentPeriod = period;
+            document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            loadDashboard();
+        }
+        
+        async function loadCharts() {
+            // Dati mock per demo - in produzione caricare da vista kpi_by_seller
+            document.getElementById('conversion-chart').innerHTML = `
+                <div class="chart-bar">
+                    <div class="chart-label">Lun</div>
+                    <div class="chart-bar-fill"><div class="chart-bar-inner" style="width: 80%">80%</div></div>
+                    <div class="chart-value">4/5</div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Mar</div>
+                    <div class="chart-bar-fill"><div class="chart-bar-inner" style="width: 60%">60%</div></div>
+                    <div class="chart-value">3/5</div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Mer</div>
+                    <div class="chart-bar-fill"><div class="chart-bar-inner" style="width: 100%">100%</div></div>
+                    <div class="chart-value">5/5</div>
+                </div>
+            `;
+            
+            document.getElementById('kpi-summary').innerHTML = `
+                <div class="kpi-item">
+                    <div class="label">Show Rate</div>
+                    <div class="value">92%</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="label">Conversion Rate</div>
+                    <div class="value">68%</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="label">Avg Deal</div>
+                    <div class="value">€12K</div>
+                </div>
+                <div class="kpi-item">
+                    <div class="label">Slot Utilizzo</div>
+                    <div class="value">78%</div>
+                </div>
+            `;
+        }
+        
+        // Init
+        loadSellers();
+    </script>
+</body>
+</html>
