@@ -149,9 +149,10 @@ function loadTimeSlots() {
     
     let html = '<div class="time-grid">';
     slots.forEach(slot => {
+        const timeFormatted = slot.time ? slot.time.substring(0, 5) : '--:--';
         html += `
-            <div class="time-slot" onclick="window.selectTime('${slot.id}', '${slot.time}')" data-slot="${slot.id}">
-                ${slot.time}
+            <div class="time-slot" onclick="window.selectTime('${slot.id}', '${timeFormatted}')" data-slot="${slot.id}">
+                ${timeFormatted}
             </div>
         `;
     });
@@ -247,6 +248,33 @@ window.confirmBooking = async function() {
         
         if (!response.ok) throw new Error('Errore creazione appuntamento');
         
+        // Genera ID appuntamento
+        const appointmentId = `apt_${Date.now()}`;
+        
+        // Crea appuntamento corretto con ID
+        const aptResponse = await fetch(`${SUPABASE_URL}/rest/v1/appointments`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=representation'
+            },
+            body: JSON.stringify({
+                id: appointmentId,
+                slot_id: selectedSlot,
+                seller_id: selectedSeller,
+                client_name: name,
+                client_email: email,
+                client_phone: phone,
+                telegram: telegram,
+                type: 'conoscitivo',
+                status: 'confirmed'
+            })
+        });
+        
+        if (!aptResponse.ok) throw new Error('Errore creazione appuntamento');
+        
         // Aggiorna slot
         await fetch(`${SUPABASE_URL}/rest/v1/slots?id=eq.${selectedSlot}`, {
             method: 'PATCH',
@@ -260,23 +288,43 @@ window.confirmBooking = async function() {
         });
         
         // Notifica Telegram
-        await notifyTelegram(name, email, phone);
+        await notifyTelegram(name, email, phone, appointmentId);
+        
+        // Invia email conferma
+        await sendConfirmationEmail(name, email, appointmentId);
         
         // Carica dettagli seller per Zoom link
-        const sellerRes = await fetch(`${SUPABASE_URL}/rest/v1/sellers?id=eq.${selectedSeller}&select=zoom_link`, {
+        const sellerRes = await fetch(`${SUPABASE_URL}/rest/v1/sellers?id=eq.${selectedSeller}&select=name,zoom_link`, {
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
         });
         const sellerData = await sellerRes.json();
-        const zoomLink = sellerData[0]?.zoom_link || '';
+        const zoomLink = sellerData[0]?.zoom_link || 'https://us05web.zoom.us/j/88023214697?pwd=BZ1utALORk7aAOaVFCGEt0Xb7MUJOC.1';
+        const sellerName = sellerData[0]?.name || 'Consulente';
         
-        // Aggiorna success con link Zoom
+        const manageUrl = `https://stefanosantaiti.github.io/babilonia-landing/manage/?id=${appointmentId}`;
+        
+        // Aggiorna success con link Zoom e gestione
         document.getElementById('success-message').innerHTML = `
             <h3>🎉 Appuntamento Confermato!</h3>
-            <p>Riceverai una conferma via email.</p>
-            ${zoomLink ? `<p style="margin-top: 20px;"><strong>Link Zoom per il colloquio:</strong><br><a href="${zoomLink}" target="_blank" style="color: #d4af37; word-break: break-all;">${zoomLink}</a></p>` : ''}
+            <p>Hai ricevuto una email di conferma con tutti i dettagli.</p>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: left;">
+                <p><strong>📅 Data:</strong> ${selectedDate}</p>
+                <p><strong>⏰ Ora:</strong> ${document.getElementById('summary-time').textContent}</p>
+                <p><strong>👤 Consulente:</strong> ${sellerName}</p>
+                <p><strong>⏱️ Durata:</strong> 15-20 minuti</p>
+            </div>
+            
+            <p style="margin-top: 20px;"><strong>🔗 Link Zoom per il colloquio:</strong><br>
+            <a href="${zoomLink}" target="_blank" style="color: #d4af37; word-break: break-all;">${zoomLink}</a></p>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin: 20px 0;">
+                <p style="margin: 0;"><strong>Gestisci appuntamento:</strong><br>
+                <a href="${manageUrl}" style="color: #856404;">${manageUrl}</a></p>
+            </div>
+            
             <p style="margin-top: 20px; font-size: 0.9rem; color: #666;">
-                Salva anche il link per accedere alla gestione appuntamento:<br>
-                <a href="/manage/?id=${`apt_${Date.now()}`}" style="color: #666;">Gestisci appuntamento</a>
+                Salva questa pagina per modificare o annullare l'appuntamento.
             </p>
         `;
         

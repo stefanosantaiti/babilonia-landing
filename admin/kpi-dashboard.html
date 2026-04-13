@@ -335,7 +335,7 @@
             const stats = {
                 total: completed.length,
                 converted: completed.filter(a => a.lead_converted).length,
-                revenue: completed.filter(a => a.lead_converted).reduce((sum, a) => sum + (a.amount_eur || 0), 0),
+                points: completed.filter(a => a.lead_converted).reduce((sum, a) => sum + (a.careisgold_points || 0), 0),
                 noShow: completed.filter(a => a.status === 'no_show').length
             };
             
@@ -350,8 +350,8 @@
                     <div class="stat-change">${stats.total > 0 ? Math.round(stats.converted/stats.total*100) : 0}% rate</div>
                 </div>
                 <div class="stat-card">
-                    <h3>Fatturato</h3>
-                    <div class="stat-value">€${stats.revenue.toLocaleString()}</div>
+                    <h3>Points Careisgold</h3>
+                    <div class="stat-value">${stats.points.toFixed(2)}</div>
                 </div>
                 <div class="stat-card">
                     <h3>No Show</h3>
@@ -387,6 +387,7 @@
         async function completeAppointment(aptId, name, email, phone, date, time, sellerId) {
             const converted = confirm('Il lead si è convertito in cliente?');
             const amount = converted ? prompt('Importo investito (€):', '0') : 0;
+            const points = converted ? prompt('Points Careisgold:', '0') : 0;
             const notes = prompt('Note sulla conversazione:', '');
             
             // Salva in appointments_completed
@@ -407,6 +408,7 @@
                     status: 'completed',
                     lead_converted: converted,
                     amount_eur: parseFloat(amount) || 0,
+                    careisgold_points: parseFloat(points) || 0,
                     notes: notes,
                     completed_by: sellerId
                 })
