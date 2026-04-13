@@ -4,10 +4,11 @@
 const posts = [];
 let editingPost = null;
 
-// Carica post dal file JSON locale
+// Carica post dal file JSON locale (con cache-busting)
 async function loadPosts() {
     try {
-        const response = await fetch('./posts.json');
+        const timestamp = new Date().getTime();
+        const response = await fetch(`./posts.json?t=${timestamp}`);
         const data = await response.json();
         posts.length = 0;
         posts.push(...(data.posts || []));
