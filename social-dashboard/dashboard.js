@@ -8,7 +8,7 @@ let editingPost = null;
 async function loadPosts() {
     try {
         const timestamp = new Date().getTime();
-        const response = await fetch(`./posts.json?t=${timestamp}`);
+        const response = await fetch(`./posts-v2.json?t=${timestamp}`);
         const data = await response.json();
         posts.length = 0;
         posts.push(...(data.posts || []));
