@@ -7,22 +7,35 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let posts = [];
+let approvedPosts = [];
 let editingPost = null;
 
-// Carica post da Supabase
+// Carica post da Supabase (pending + approved)
 async function loadPosts() {
     try {
-        const { data, error } = await supabase
+        // Carica pending
+        const { data: pending, error: err1 } = await supabase
             .from('social_posts')
             .select('*')
             .eq('status', 'pending_approval')
             .order('created_at', { ascending: false })
             .limit(3);
         
-        if (error) throw error;
+        // Carica approved
+        const { data: approved, error: err2 } = await supabase
+            .from('social_posts')
+            .select('*')
+            .eq('status', 'approved')
+            .order('approved_at', { ascending: false })
+            .limit(5);
         
-        posts = data || [];
+        if (err1) throw err1;
+        if (err2) console.error('Errore approved:', err2);
+        
+        posts = pending || [];
+        approvedPosts = approved || [];
         renderPosts();
+        renderApprovedPosts();
         updateStats();
     } catch (err) {
         console.error('Errore caricamento:', err);
@@ -100,6 +113,36 @@ function escapeHtml(text) {
 // Aggiorna statistiche
 function updateStats() {
     document.getElementById('pending-count').textContent = posts.length;
+    document.getElementById('approved-count').textContent = approvedPosts.length;
+}
+
+// Renderizza post approvati
+function renderApprovedPosts() {
+    const container = document.getElementById('approved-container');
+    if (!container) return;
+    
+    if (approvedPosts.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #888; padding: 20px;">Nessun post approvato</p>';
+        return;
+    }
+    
+    container.innerHTML = approvedPosts.map(post => `
+        <div class="post-card status-approved" style="opacity: 0.7;">
+            <div class="post-header">
+                <span class="post-id">#${post.id}</span>
+                <div>
+                    <span class="post-score">⭐ ${post.relevance_score}/10</span>
+                    <span class="status-badge badge-approved">✅ Approvato</span>
+                </div>
+            </div>
+            <div class="post-meta">
+                <span>📰 ${post.source}</span>
+                <span>📅 ${post.pub_date}</span>
+            </div>
+            <div class="post-content">${escapeHtml(post.body.substring(0, 200))}...</div>
+            <div class="post-hashtags">${post.hashtags}</div>
+        </div>
+    `).join('');
 }
 
 // Mostra stato vuoto
