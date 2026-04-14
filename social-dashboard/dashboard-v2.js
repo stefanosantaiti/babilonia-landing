@@ -7,7 +7,7 @@ let posts = [];
 let editingPost = null;
 
 // Carica post da Supabase
-async function loadPosts() {
+async function loadPosts(true) {
     try {
         showLoadingState();
         
@@ -134,7 +134,7 @@ function showEmptyState() {
             <h2>🎉 Nessun post in attesa!</h2>
             <p>I post verranno generati automaticamente dal News Scout.</p>
             <p style="margin-top: 20px; color: #d4af37;">Prossima generazione: domattina alle 7:00</p>
-            <button class="btn btn-refresh" onclick="loadPosts()" style="margin-top: 30px;">🔄 Ricarica ora</button>
+            <button class="btn btn-refresh" onclick="loadPosts(true)" style="margin-top: 30px;">🔄 Ricarica ora</button>
         </div>
     `;
 }
@@ -147,7 +147,7 @@ function showAllApprovedState() {
             <p>Tutti i post sono stati approvati.</p>
             <p style="margin-top: 10px; color: #d4af37;">${approvedCount} post approvati in totale</p>
             <p style="margin-top: 20px; color: #888;">Prossimi post disponibili: domattina alle 7:00</p>
-            <button class="btn btn-refresh" onclick="loadPosts()" style="margin-top: 30px;">🔄 Ricarica ora</button>
+            <button class="btn btn-refresh" onclick="loadPosts(true)" style="margin-top: 30px;">🔄 Ricarica ora</button>
         </div>
     `;
 }
@@ -158,7 +158,7 @@ function showErrorState(error) {
             <h2>❌ Errore connessione</h2>
             <p>Impossibile connettersi a Supabase</p>
             <p style="margin-top: 10px; color: #ff4444;">${error}</p>
-            <button class="btn btn-refresh" onclick="loadPosts()" style="margin-top: 30px;">🔄 Riprova</button>
+            <button class="btn btn-refresh" onclick="loadPosts(true)" style="margin-top: 30px;">🔄 Riprova</button>
         </div>
     `;
 }
@@ -298,7 +298,7 @@ document.addEventListener('click', (e) => {
 });
 
 // Carica all'avvio
-loadPosts();
+loadPosts(true);
 
 // Aggiorna ogni 30 secondi
 setInterval(loadPosts, 30000);
