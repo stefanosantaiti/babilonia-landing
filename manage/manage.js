@@ -55,7 +55,7 @@ function renderAppointmentDetails() {
         </div>
         <div class="info-row">
             <div class="info-label">Ora:</div>
-            <div class="info-value">${appointmentData.slots.time}</div>
+            <div class="info-value">${appointmentData.slots.time.substring(0, 5)}</div>
         </div>
         <div class="info-row">
             <div class="info-label">Consulente:</div>
@@ -129,11 +129,17 @@ function renderRescheduleOptions(slots) {
         return;
     }
 
-    // Raggruppa per data
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Raggruppa per data (solo future)
     const byDate = {};
     slots.forEach(slot => {
-        if (!byDate[slot.date]) byDate[slot.date] = [];
-        byDate[slot.date].push(slot);
+        const slotDate = new Date(slot.date);
+        if (slotDate >= today) {
+            if (!byDate[slot.date]) byDate[slot.date] = [];
+            byDate[slot.date].push(slot);
+        }
     });
 
     let html = '';
@@ -143,7 +149,8 @@ function renderRescheduleOptions(slots) {
         html += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;">';
 
         byDate[dateStr].forEach(slot => {
-            html += `<button class="btn" style="padding: 12px; font-size: 0.9rem;" onclick="selectNewSlot('${slot.id}')">${slot.time}</button>`;
+            const timeFormatted = slot.time ? slot.time.substring(0, 5) : '--:--';
+            html += `<button class="btn" style="padding: 12px; font-size: 0.9rem;" onclick="selectNewSlot('${slot.id}')">${timeFormatted}</button>`;
         });
 
         html += '</div>';
@@ -246,7 +253,7 @@ window.cancelAppointment = async function() {
 async function notifyTelegram(message) {
     const text = `${message}
 
-📅 Appuntamento: ${appointmentData.slots.date} ${appointmentData.slots.time}
+📅 Appuntamento: ${appointmentData.slots.date} ${appointmentData.slots.time.substring(0, 5)}
 👤 Cliente: ${appointmentData.client_name}
 📧 ${appointmentData.client_email}`;
 
