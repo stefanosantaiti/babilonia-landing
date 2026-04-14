@@ -7,11 +7,13 @@ let posts = [];
 let editingPost = null;
 
 // Carica post da Supabase
-async function loadPosts(true) {
+async function loadPosts() {
     try {
         showLoadingState();
         
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/social_posts?select=*&order=created_at.desc`, {
+        // Cache-buster per evitare problemi di cache
+        const timestamp = new Date().getTime();
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/social_posts?select=*&order=created_at.desc&ts=${timestamp}`, {
             headers: {
                 'apikey': SUPABASE_ANON_KEY,
                 'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
