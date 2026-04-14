@@ -230,35 +230,11 @@ window.confirmBooking = async function() {
     btn.textContent = 'Conferma in corso...';
     
     try {
-        // Crea appuntamento via API
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/appointments`, {
-            method: 'POST',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify({
-                id: `apt_${Date.now()}`,
-                slot_id: selectedSlot,
-                seller_id: selectedSeller,
-                client_name: name,
-                client_email: email,
-                client_phone: phone,
-                telegram: telegram,
-                type: 'conoscitivo',
-                status: 'confirmed'
-            })
-        });
-        
-        if (!response.ok) throw new Error('Errore creazione appuntamento');
-        
         // Genera ID appuntamento
         const appointmentId = `apt_${Date.now()}`;
         
-        // Crea appuntamento corretto con ID
-        const aptResponse = await fetch(`${SUPABASE_URL}/rest/v1/appointments`, {
+        // Crea appuntamento
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/appointments`, {
             method: 'POST',
             headers: {
                 'apikey': SUPABASE_KEY,
@@ -279,7 +255,7 @@ window.confirmBooking = async function() {
             })
         });
         
-        if (!aptResponse.ok) throw new Error('Errore creazione appuntamento');
+        if (!response.ok) throw new Error('Errore creazione appuntamento');
         
         // Aggiorna slot
         await fetch(`${SUPABASE_URL}/rest/v1/slots?id=eq.${selectedSlot}`, {
