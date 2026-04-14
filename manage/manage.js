@@ -99,6 +99,17 @@ window.confirmAppointment = async function() {
         if (response.ok) {
             showSuccess('Appuntamento confermato! Riceverai un reminder il giorno prima.');
             notifyTelegram('✅ Appuntamento confermato dal cliente');
+            
+            // Invia email conferma
+            try {
+                await fetch(`${SUPABASE_URL}/functions/v1/confirm-booking`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ appointment_id: appointmentId })
+                });
+            } catch (e) {
+                console.log('Email opzionale');
+            }
         } else {
             throw new Error('Errore conferma');
         }
@@ -206,6 +217,17 @@ window.selectNewSlot = async function(newSlotId) {
 
         showSuccess('Appuntamento spostato con successo! Riceverai una nuova conferma via email.');
         notifyTelegram('🔄 Appuntamento spostato dal cliente');
+        
+        // Invia email aggiornamento
+        try {
+            await fetch(`${SUPABASE_URL}/functions/v1/confirm-booking`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ appointment_id: appointmentId })
+            });
+        } catch (e) {
+            console.log('Email opzionale');
+        }
 
     } catch (error) {
         showError('Errore durante lo spostamento');
@@ -243,6 +265,17 @@ window.cancelAppointment = async function() {
 
         showSuccess('Appuntamento annullato. Puoi prenotare un nuovo appuntamento quando vuoi.');
         notifyTelegram('❌ Appuntamento annullato dal cliente');
+        
+        // Invia email annullamento
+        try {
+            await fetch(`${SUPABASE_URL}/functions/v1/confirm-booking`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ appointment_id: appointmentId })
+            });
+        } catch (e) {
+            console.log('Email opzionale');
+        }
 
     } catch (error) {
         showError('Errore durante l\'annullamento');

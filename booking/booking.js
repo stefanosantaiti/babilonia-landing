@@ -257,6 +257,19 @@ window.confirmBooking = async function() {
         
         if (!response.ok) throw new Error('Errore creazione appuntamento');
         
+        // Invia email conferma
+        try {
+            await fetch(`${SUPABASE_URL}/functions/v1/confirm-booking`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ appointment_id: appointmentId })
+            });
+        } catch (e) {
+            console.log('Email conferma opzionale');
+        }
+        
         // Aggiorna slot
         await fetch(`${SUPABASE_URL}/rest/v1/slots?id=eq.${selectedSlot}`, {
             method: 'PATCH',
