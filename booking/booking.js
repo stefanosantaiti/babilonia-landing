@@ -272,9 +272,6 @@ window.confirmBooking = async function() {
         // Notifica Telegram
         await notifyTelegram(name, email, phone, appointmentId);
         
-        // Invia email conferma
-        await sendConfirmationEmail(name, email, appointmentId);
-        
         // Carica dettagli seller per Zoom link
         const sellerRes = await fetch(`${SUPABASE_URL}/rest/v1/sellers?id=eq.${selectedSeller}&select=name,zoom_link`, {
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
