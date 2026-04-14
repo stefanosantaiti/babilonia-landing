@@ -84,9 +84,15 @@ function renderCalendar() {
     
     // Raggruppa per data
     const byDate = {};
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset ora per confronto solo data
+    
     availableSlots.forEach(slot => {
-        if (!byDate[slot.date]) byDate[slot.date] = [];
-        byDate[slot.date].push(slot);
+        const slotDate = new Date(slot.date + 'T00:00:00');
+        if (slotDate >= today) { // Solo date future/oggi
+            if (!byDate[slot.date]) byDate[slot.date] = [];
+            byDate[slot.date].push(slot);
+        }
     });
     
     // Prendi prime 14 date
