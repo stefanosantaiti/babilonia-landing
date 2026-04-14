@@ -270,7 +270,7 @@ window.confirmBooking = async function() {
         });
         
         // Notifica Telegram
-        await notifyTelegram(name, email, phone, appointmentId);
+        await notifyTelegram(name, email, phone);
         
         // Carica dettagli seller per Zoom link
         const sellerRes = await fetch(`${SUPABASE_URL}/rest/v1/sellers?id=eq.${selectedSeller}&select=name,zoom_link`, {
