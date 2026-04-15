@@ -1,11 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=dashboard.html">
-    <title>Redirect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BABILONIA - Social Dashboard</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+            padding: 15px; 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); 
+            color: #fff; 
+            line-height: 1.5;
+        }
+        h1 { color: #d4af37; text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 20px; font-size: 0.9rem; }
+        .stats { display: flex; gap: 15px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
+        .stat-box { background: rgba(255,255,255,0.05); padding: 15px 25px; border-radius: 8px; text-align: center; border: 1px solid rgba(212,175,55,0.3); }
+        .stat-number { font-size: 1.8rem; color: #d4af37; font-weight: bold; }
+        .stat-label { color: #888; font-size: 0.85rem; }
+        h2 { color: #d4af37; border-bottom: 2px solid #d4af37; padding-bottom: 8px; margin-top: 30px; margin-bottom: 15px; }
+        .post { 
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 10px; 
+            padding: 20px; 
+            margin-bottom: 20px;
+        }
+        .post-pending { border-left: 4px solid #d4af37; }
+        .post-approved { border-left: 4px solid #28a745; opacity: 0.9; }
+        .post-header { display: flex; justify-content: space-between; margin-bottom: 10px; color: #888; font-size: 0.85rem; }
+        .post-title { font-size: 1.1rem; margin-bottom: 10px; }
+        .post-content { 
+            background: rgba(0,0,0,0.2); 
+            padding: 15px; 
+            border-radius: 6px; 
+            margin: 10px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+        }
+        .hashtags { color: #d4af37; font-size: 0.9rem; margin: 10px 0; }
+        .btn { 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 1rem;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        .btn-approve { background: #28a745; color: white; }
+        .btn-reject { background: #dc3545; color: white; }
+        .loading { color: #d4af37; text-align: center; padding: 40px; }
+        .error { color: #ff4444; text-align: center; padding: 40px; }
+        .source { color: #888; font-size: 0.85rem; margin-bottom: 5px; }
+    </style>
 </head>
 <body>
-    <p>Redirecting to <a href="dashboard.html">dashboard.html</a>...</p>
+    <h1>🎸 BABILONIA</h1>
+    <div class="subtitle">Social Dashboard - Approvazione Post</div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-number" id="pending-count">0</div>
+            <div class="stat-label">In Attesa</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" id="approved-count">0</div>
+            <div class="stat-label">Approvati</div>
+        </div>
+    </div>
+
+    <div id="loading"><div class="loading">⏳ Caricamento post...</div></div>
+    <div id="content"></div>
+
+<script>
+const SUPABASE_URL = 'https://esgjushznmidzdhqsyyx.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
+
+async function loadPosts() {
+    const loading = document.getElementById('loading');
+    const content = document.getElementById('content');
+    
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/social_posts?select=*&order=created_at.desc`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        
+        const posts = await res.json();
+        const pending = posts.filter(p => p.status === 'pending' || p.status === 'pending_approval');
+        const approved = posts.filter(p => p.status === 'approved');
+        
+        document.getElementById('pending-count').textContent = pending.length;
+        document.getElementById('approved-count').textContent = approved.length;
+        
+        loading.innerHTML = '';
+        let html = '';
+        
+        // Post in attesa
+        if (pending.length > 0) {
+            html += '<h2>⏳ In Attesa di Approvazione</h2>';
+            pending.forEach(p => {
+                html += `<div class="post post-pending">`;
+                html += `<div class="post-header"><span>#${p.id}</span><span>${p.status}</span></div>`;
+                html += `<div class="source">📰 ${p.source || 'Fonte sconosciuta'}</div>`;
+                html += `<div class="post-title">${p.title}</div>`;
+                html += `<div class="post-content">${escapeHtml(p.body)}</div>`;
+                html += `<div class="hashtags">${p.hashtags || ''}</div>`;
+                html += `<button class="btn btn-approve" onclick="approvePost(${p.id})">✅ Approva</button>`;
+                html += `<button class="btn btn-reject" onclick="rejectPost(${p.id})">❌ Rifiuta</button>`;
+                html += `</div>`;
+            });
+        } else {
+            html += '<div style="text-align:center;padding:40px;color:#888;"><h2>🎉 Nessun post in attesa!</h2><p>Prossima generazione: domattina alle 7:00</p></div>';
+        }
+        
+        // Post approvati
+        if (approved.length > 0) {
+            html += '<h2>✅ Post Approvati</h2>';
+            approved.forEach(p => {
+                html += `<div class="post post-approved">`;
+                html += `<div class="post-header"><span>#${p.id}</span><span style="color:#28a745;">✅ ${p.status}</span></div>`;
+                html += `<div class="source">📰 ${p.source || 'Fonte sconosciuta'}</div>`;
+                html += `<div class="post-title">${p.title}</div>`;
+                html += `<div class="post-content">${escapeHtml(p.body)}</div>`;
+                html += `<div class="hashtags">${p.hashtags || ''}</div>`;
+                html += `</div>`;
+            });
+        }
+        
+        content.innerHTML = html;
+        
+    } catch (err) {
+        loading.innerHTML = `<div class="error">❌ Errore: ${err.message}</div>`;
+    }
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+async function approvePost(id) {
+    if (!confirm('Approvare questo post?')) return;
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/social_posts?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ status: 'approved' })
+        });
+        if (res.ok) { alert('✅ Approvato!'); loadPosts(); }
+        else alert('❌ Errore');
+    } catch (e) { alert('❌ Errore: ' + e.message); }
+}
+
+async function rejectPost(id) {
+    if (!confirm('Rifiutare questo post?')) return;
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/social_posts?id=eq.${id}`, {
+            method: 'DELETE',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        if (res.ok) { alert('🗑️ Rimosso'); loadPosts(); }
+        else alert('❌ Errore');
+    } catch (e) { alert('❌ Errore: ' + e.message); }
+}
+
+loadPosts();
+setInterval(loadPosts, 30000);
+</script>
 </body>
 </html>
