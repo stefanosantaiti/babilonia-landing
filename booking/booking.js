@@ -312,7 +312,7 @@ window.confirmBooking = async function() {
             
             <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin: 20px 0;">
                 <p style="margin: 0;"><strong>Gestisci appuntamento:</strong><br>
-                <a href="${manageUrl}" style="color: #856404;">${manageUrl}</a></p>
+                <a href="${manageUrl}" style="color: #856404; word-break: break-all;">${manageUrl}</a></p>
             </div>
             
             <p style="margin-top: 20px; font-size: 0.9rem; color: #666;">
