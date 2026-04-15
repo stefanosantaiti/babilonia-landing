@@ -113,7 +113,7 @@ async function loadPosts() {
             return;
         }
         
-        let html = '';
+        let html = '<h2 class="section-title">⏳ In Attesa di Approvazione</h2>';
         pending.forEach(post => {
             html += `
                 <div class="post-card">
@@ -133,6 +133,26 @@ async function loadPosts() {
                 </div>
             `;
         });
+        
+        // Aggiungi sezione post approvati
+        if (approved.length > 0) {
+            html += '<h2 class="section-title">✅ Post Approvati</h2>';
+            approved.forEach(post => {
+                html += `
+                    <div class="post-card" style="opacity: 0.8; border-left: 3px solid #28a745;">
+                        <div class="post-header">
+                            <span class="post-id">#${post.id}</span>
+                            <span class="post-status" style="color: #28a745;">✅ ${post.status}</span>
+                        </div>
+                        <div class="post-meta">
+                            <span>📰 ${post.source || 'Fonte sconosciuta'}</span>
+                        </div>
+                        <div class="post-content">${escapeHtml(post.body)}</div>
+                        <div class="post-hashtags">${post.hashtags || ''}</div>
+                    </div>
+                `;
+            });
+        }
         
         container.innerHTML = html;
         
