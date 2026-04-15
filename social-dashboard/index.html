@@ -108,8 +108,11 @@ async function loadPosts() {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         
         const posts = await res.json();
-        const pending = posts.filter(p => p.status === 'pending' || p.status === 'pending_approval');
-        const approved = posts.filter(p => p.status === 'approved');
+        
+        // Filtra per target_audience (post vecchi senza campo appaiono in entrambe)
+        const filtered = posts.filter(p => p.target_audience === currentTarget || !p.target_audience);
+        const pending = filtered.filter(p => p.status === 'pending' || p.status === 'pending_approval');
+        const approved = filtered.filter(p => p.status === 'approved');
         
         document.getElementById('pending-count').textContent = pending.length;
         document.getElementById('approved-count').textContent = approved.length;
