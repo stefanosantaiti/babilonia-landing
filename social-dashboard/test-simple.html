@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #1a1a2e; color: #fff; }
+        .post-card { background: rgba(255,255,255,0.1); padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .pending { border-left: 3px solid #d4af37; }
+        .approved { border-left: 3px solid #28a745; opacity: 0.8; }
+        h2 { color: #d4af37; margin-top: 30px; }
+        .loading { color: #d4af37; }
+        .error { color: #ff4444; }
+    </style>
+</head>
+<body>
+    <h1>🎸 BABILONIA Test</h1>
+    <div id="status" class="loading">Caricamento...</div>
+    <div id="content"></div>
+
+<script>
+const SUPABASE_URL = 'https://esgjushznmidzdhqsyyx.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
+
+async function test() {
+    const status = document.getElementById('status');
+    const content = document.getElementById('content');
+    
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/social_posts?select=*&order=created_at.desc`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        
+        const posts = await res.json();
+        const pending = posts.filter(p => p.status === 'pending');
+        const approved = posts.filter(p => p.status === 'approved');
+        
+        status.innerHTML = `✅ ${posts.length} post totali <br>⏳ ${pending.length} in attesa <br>✅ ${approved.length} approvati`;
+        
+        let html = '';
+        
+        if (pending.length > 0) {
+            html += '<h2>⏳ In Attesa</h2>';
+            pending.forEach(p => {
+                html += `<div class="post-card pending">#${p.id}: ${p.title.substring(0,50)}...</div>`;
+            });
+        }
+        
+        if (approved.length > 0) {
+            html += '<h2>✅ Approvati</h2>';
+            approved.forEach(p => {
+                html += `<div class="post-card approved">#${p.id}: ${p.title.substring(0,50)}...</div>`;
+            });
+        }
+        
+        content.innerHTML = html;
+        
+    } catch (err) {
+        status.innerHTML = `<span class="error">❌ Errore: ${err.message}</span>`;
+    }
+}
+
+test();
+</script>
+</body>
+</html>
