@@ -89,7 +89,7 @@ function renderCalendar() {
     
     availableSlots.forEach(slot => {
         const slotDate = new Date(slot.date + 'T00:00:00');
-        if (slotDate >= today) { // Solo date future/oggi
+        if (slotDate > today) { // Solo date da domani in poi (esclude oggi)
             if (!byDate[slot.date]) byDate[slot.date] = [];
             byDate[slot.date].push(slot);
         }
