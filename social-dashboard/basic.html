@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BABILONIA Basic</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #1a1a2e; color: #fff; }
+        h1 { color: #d4af37; }
+        h2 { color: #d4af37; border-bottom: 2px solid #d4af37; padding-bottom: 5px; }
+        .post { background: #333; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .approved { border-left: 5px solid #28a745; }
+        .pending { border-left: 5px solid #d4af37; }
+        button { padding: 10px; margin: 5px; cursor: pointer; }
+        .btn-approve { background: #28a745; color: white; border: none; }
+        .btn-reject { background: #dc3545; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <h1>🎸 BABILONIA Social Dashboard</h1>
+    <div id="loading">⏳ Caricamento...</div>
+    <div id="content"></div>
+
+<script>
+const SUPABASE_URL = 'https://esgjushznmidzdhqsyyx.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
+
+async function load() {
+    const loading = document.getElementById('loading');
+    const content = document.getElementById('content');
+    
+    try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/social_posts?select=*&order=created_at.desc', {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        
+        const posts = await res.json();
+        loading.innerHTML = '✅ ' + posts.length + ' post caricati';
+        
+        const pending = posts.filter(p => p.status === 'pending');
+        const approved = posts.filter(p => p.status === 'approved');
+        
+        let html = '';
+        
+        if (pending.length > 0) {
+            html += '<h2>⏳ IN ATTESA (' + pending.length + ')</h2>';
+            pending.forEach(p => {
+                html += '<div class="post pending">';
+                html += '<b>#' + p.id + '</b>: ' + p.title + '<br>';
+                html += '<small>' + (p.body ? p.body.substring(0, 100) : 'vuoto') + '...</small><br>';
+                html += '<button class="btn-approve" onclick="alert(\'Approvare ' + p.id + '?\')">Approva</button>';
+                html += '</div>';
+            });
+        }
+        
+        if (approved.length > 0) {
+            html += '<h2>✅ APPROVATI (' + approved.length + ')</h2>';
+            approved.forEach(p => {
+                html += '<div class="post approved">';
+                html += '<b>#' + p.id + '</b>: ' + p.title + '<br>';
+                html += '<small>' + (p.body ? p.body.substring(0, 100) : 'vuoto') + '...</small>';
+                html += '</div>';
+            });
+        }
+        
+        content.innerHTML = html;
+        
+    } catch (err) {
+        loading.innerHTML = '❌ ERRORE: ' + err.message;
+    }
+}
+
+load();
+</script>
+</body>
+</html>
