@@ -73,12 +73,28 @@
         </div>
     </div>
 
+    <div style="text-align: center; margin-bottom: 20px;">
+        <button class="btn" onclick="setTarget('clienti')" id="btn-clienti" style="background: #d4af37; color: #000;">Per Clienti</button>
+        <button class="btn" onclick="setTarget('collaboratori')" id="btn-collaboratori" style="background: transparent; color: #d4af37; border: 1px solid #d4af37;">Per Collaboratori</button>
+    </div>
+
     <div id="loading"><div class="loading">⏳ Caricamento post...</div></div>
     <div id="content"></div>
 
 <script>
 const SUPABASE_URL = 'https://esgjushznmidzdhqsyyx.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
+
+let currentTarget = 'clienti';
+
+function setTarget(target) {
+    currentTarget = target;
+    document.getElementById('btn-clienti').style.background = target === 'clienti' ? '#d4af37' : 'transparent';
+    document.getElementById('btn-clienti').style.color = target === 'clienti' ? '#000' : '#d4af37';
+    document.getElementById('btn-collaboratori').style.background = target === 'collaboratori' ? '#d4af37' : 'transparent';
+    document.getElementById('btn-collaboratori').style.color = target === 'collaboratori' ? '#000' : '#d4af37';
+    loadPosts();
+}
 
 async function loadPosts() {
     const loading = document.getElementById('loading');
