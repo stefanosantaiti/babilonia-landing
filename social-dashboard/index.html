@@ -109,8 +109,22 @@ async function loadPosts() {
         
         const posts = await res.json();
         
-        // Filtra per target_audience (post vecchi senza campo appaiono in entrambe)
-        const filtered = posts.filter(p => p.target_audience === currentTarget || !p.target_audience);
+        // Filtra per target (fino a quando non c'è campo target_audience nel DB)
+        const filtered = posts.filter(p => {
+            if (currentTarget === 'clienti') {
+                // Post clienti: contengono parole chiave clienti o NON contengono parole collaboratori
+                const text = (p.title + ' ' + p.body).toLowerCase();
+                const collabWords = ['network', 'libertà', 'autonomia', 'business', 'carriera', 'collabora'];
+                const isCollaboratore = collabWords.some(w => text.includes(w));
+                return !isCollaboratore; // Se non è collaboratore, è cliente
+            } else {
+                // Post collaboratori: contengono parole chiave specifiche
+                const text = (p.title + ' ' + p.body).toLowerCase();
+                const collabWords = ['network', 'libertà', 'autonomia', 'business', 'carriera', 'collabora', 'opportunità professionale'];
+                return collabWords.some(w => text.includes(w));
+            }
+        });
+        
         const pending = filtered.filter(p => p.status === 'pending' || p.status === 'pending_approval');
         const approved = filtered.filter(p => p.status === 'approved');
         
