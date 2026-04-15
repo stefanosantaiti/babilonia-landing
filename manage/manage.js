@@ -147,7 +147,7 @@ function renderRescheduleOptions(slots) {
     const byDate = {};
     slots.forEach(slot => {
         const slotDate = new Date(slot.date);
-        if (slotDate >= today) {
+        if (slotDate > today) {
             if (!byDate[slot.date]) byDate[slot.date] = [];
             byDate[slot.date].push(slot);
         }
