@@ -53,6 +53,72 @@
         }
         .btn-approve { background: #28a745; color: white; }
         .btn-reject { background: #dc3545; color: white; }
+        .btn-preview { background: #1877f2; color: white; }
+        .btn-edit { background: #6c757d; color: white; }
+        .preview-box {
+            background: #fff;
+            color: #1c1e21;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            border: 1px solid #dddfe2;
+        }
+        .preview-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .preview-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        .preview-name {
+            font-weight: 600;
+            color: #050505;
+            font-size: 0.95rem;
+        }
+        .preview-time {
+            color: #65676b;
+            font-size: 0.8rem;
+        }
+        .preview-content {
+            line-height: 1.5;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+        .preview-hashtags {
+            color: #1877f2;
+        }
+        .edit-form {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .edit-form textarea {
+            width: 100%;
+            min-height: 200px;
+            background: #1a1a2e;
+            color: #fff;
+            border: 1px solid #d4af37;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 0.95rem;
+            resize: vertical;
+        }
+        .edit-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d4af37;
+        }
         .loading { color: #d4af37; text-align: center; padding: 40px; }
         .error { color: #ff4444; text-align: center; padding: 40px; }
         .source { color: #888; font-size: 0.85rem; margin-bottom: 5px; }
@@ -144,8 +210,12 @@ async function loadPosts() {
                 html += `<div class="post-title">${p.title}</div>`;
                 html += `<div class="post-content">${escapeHtml(p.body)}</div>`;
                 html += `<div class="hashtags">${p.hashtags || ''}</div>`;
+                html += `<button class="btn btn-preview" onclick="previewPost(${p.id}, 'facebook')">👁️ Anteprima Facebook</button>`;
+                html += `<button class="btn btn-edit" onclick="editPost(${p.id}, '${escapeHtml(p.title)}', '${escapeHtml(p.body)}', '${escapeHtml(p.hashtags || '')}')">✏️ Modifica</button>`;
                 html += `<button class="btn btn-approve" onclick="approvePost(${p.id})">✅ Approva</button>`;
                 html += `<button class="btn btn-reject" onclick="rejectPost(${p.id})">❌ Rifiuta</button>`;
+                html += `<div id="preview-${p.id}" style="display:none;"></div>`;
+                html += `<div id="edit-${p.id}" style="display:none;"></div>`;
                 html += `</div>`;
             });
         } else {
@@ -205,6 +275,101 @@ async function rejectPost(id) {
         });
         if (res.ok) { alert('🗑️ Rimosso'); loadPosts(); }
         else alert('❌ Errore');
+    } catch (e) { alert('❌ Errore: ' + e.message); }
+}
+
+function previewPost(id, platform) {
+    const previewDiv = document.getElementById(`preview-${id}`);
+    const editDiv = document.getElementById(`edit-${id}`);
+    editDiv.style.display = 'none';
+    
+    if (previewDiv.style.display === 'block') {
+        previewDiv.style.display = 'none';
+        return;
+    }
+    
+    const post = document.querySelector(`button[onclick*="previewPost(${id}"]`).closest('.post');
+    const title = post.querySelector('.post-title').textContent;
+    const body = post.querySelector('.post-content').textContent;
+    const hashtags = post.querySelector('.hashtags').textContent;
+    const source = post.querySelector('.source').textContent;
+    
+    if (platform === 'facebook') {
+        previewDiv.innerHTML = `
+            <div class="preview-box">
+                <div class="preview-header">
+                    <div class="preview-avatar">🎸</div>
+                    <div>
+                        <div class="preview-name">Babilonia - Investimenti in Oro</div>
+                        <div class="preview-time">${new Date().toLocaleString('it-IT', {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'})} · 🌐 Pubblico</div>
+                    </div>
+                </div>
+                <div class="preview-content">${escapeHtml(title)}
+
+${escapeHtml(body)}
+
+<span class="preview-hashtags">${escapeHtml(hashtags)}</span></div>
+                <div style="border-top: 1px solid #dddfe2; margin-top: 10px; padding-top: 10px; display: flex; justify-content: space-around; color: #65676b; font-size: 0.85rem;">
+                    <span>👍 Mi piace</span>
+                    <span>💬 Commenta</span>
+                    <span>↗️ Condividi</span>
+                </div>
+            </div>
+        `;
+    }
+    previewDiv.style.display = 'block';
+}
+
+function editPost(id, title, body, hashtags) {
+    const editDiv = document.getElementById(`edit-${id}`);
+    const previewDiv = document.getElementById(`preview-${id}`);
+    previewDiv.style.display = 'none';
+    
+    if (editDiv.style.display === 'block') {
+        editDiv.style.display = 'none';
+        return;
+    }
+    
+    editDiv.innerHTML = `
+        <div class="edit-form">
+            <label>Titolo / Hook:</label>
+            <textarea id="edit-title-${id}">${unescapeHtml(title)}</textarea>
+            <label style="margin-top:15px;">Contenuto:</label>
+            <textarea id="edit-body-${id}">${unescapeHtml(body)}</textarea>
+            <label style="margin-top:15px;">Hashtags:</label>
+            <textarea id="edit-hashtags-${id}">${unescapeHtml(hashtags)}</textarea>
+            <div style="margin-top:15px;">
+                <button class="btn btn-approve" onclick="saveEdit(${id})">💾 Salva modifiche</button>
+                <button class="btn btn-reject" onclick="editDiv.style.display='none'">Annulla</button>
+            </div>
+        </div>
+    `;
+    editDiv.style.display = 'block';
+}
+
+function unescapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
+}
+
+async function saveEdit(id) {
+    const newTitle = document.getElementById(`edit-title-${id}`).value;
+    const newBody = document.getElementById(`edit-body-${id}`).value;
+    const newHashtags = document.getElementById(`edit-hashtags-${id}`).value;
+    
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/social_posts?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ title: newTitle, body: newBody, hashtags: newHashtags })
+        });
+        if (res.ok) { alert('✅ Salvato!'); loadPosts(); }
+        else alert('❌ Errore nel salvataggio');
     } catch (e) { alert('❌ Errore: ' + e.message); }
 }
 
