@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BABILONIA - Social Dashboard</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>BABILONIA - Social Dashboard v2</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -210,8 +213,8 @@ async function loadPosts() {
                 html += `<div class="post-title">${p.title}</div>`;
                 html += `<div class="post-content">${escapeHtml(p.body)}</div>`;
                 html += `<div class="hashtags">${p.hashtags || ''}</div>`;
-                html += `<button class="btn btn-preview" onclick="previewPost(${p.id}, 'facebook')">👁️ Anteprima Facebook</button>`;
-                html += `<button class="btn btn-edit" onclick="editPost(${p.id}, '${escapeHtml(p.title)}', '${escapeHtml(p.body)}', '${escapeHtml(p.hashtags || '')}')">✏️ Modifica</button>`;
+                html += `<button class="btn btn-preview" onclick="togglePreview(${p.id})">👁️ Anteprima Facebook</button>`;
+                html += `<button class="btn btn-edit" onclick="toggleEdit(${p.id})">✏️ Modifica</button>`;
                 html += `<button class="btn btn-approve" onclick="approvePost(${p.id})">✅ Approva</button>`;
                 html += `<button class="btn btn-reject" onclick="rejectPost(${p.id})">❌ Rifiuta</button>`;
                 html += `<div id="preview-${p.id}" style="display:none;"></div>`;
@@ -278,78 +281,86 @@ async function rejectPost(id) {
     } catch (e) { alert('❌ Errore: ' + e.message); }
 }
 
-function previewPost(id, platform) {
-    const previewDiv = document.getElementById(`preview-${id}`);
-    const editDiv = document.getElementById(`edit-${id}`);
-    editDiv.style.display = 'none';
+function togglePreview(id) {
+    const div = document.getElementById('preview-' + id);
+    const editDiv = document.getElementById('edit-' + id);
     
-    if (previewDiv.style.display === 'block') {
-        previewDiv.style.display = 'none';
+    // Nascondi edit se aperto
+    if (editDiv) editDiv.style.display = 'none';
+    
+    if (div.style.display === 'block') {
+        div.style.display = 'none';
         return;
     }
     
-    const post = document.querySelector(`button[onclick*="previewPost(${id}"]`).closest('.post');
-    const title = post.querySelector('.post-title').textContent;
-    const body = post.querySelector('.post-content').textContent;
-    const hashtags = post.querySelector('.hashtags').textContent;
-    const source = post.querySelector('.source').textContent;
+    // Trova il post e genera anteprima
+    const postDiv = div.closest('.post');
+    const title = postDiv.querySelector('.post-title').textContent;
+    const body = postDiv.querySelector('.post-content').textContent;
+    const hashtags = postDiv.querySelector('.hashtags').textContent;
     
-    if (platform === 'facebook') {
-        previewDiv.innerHTML = `
-            <div class="preview-box">
-                <div class="preview-header">
-                    <div class="preview-avatar">🎸</div>
-                    <div>
-                        <div class="preview-name">Babilonia - Investimenti in Oro</div>
-                        <div class="preview-time">${new Date().toLocaleString('it-IT', {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'})} · 🌐 Pubblico</div>
-                    </div>
-                </div>
-                <div class="preview-content">${escapeHtml(title)}
-
-${escapeHtml(body)}
-
-<span class="preview-hashtags">${escapeHtml(hashtags)}</span></div>
-                <div style="border-top: 1px solid #dddfe2; margin-top: 10px; padding-top: 10px; display: flex; justify-content: space-around; color: #65676b; font-size: 0.85rem;">
-                    <span>👍 Mi piace</span>
-                    <span>💬 Commenta</span>
-                    <span>↗️ Condividi</span>
-                </div>
-            </div>
-        `;
-    }
-    previewDiv.style.display = 'block';
+    const now = new Date().toLocaleString('it-IT', {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'});
+    
+    div.innerHTML = 
+        '<div class="preview-box">' +
+            '<div class="preview-header">' +
+                '<div class="preview-avatar">🎸</div>' +
+                '<div>' +
+                    '<div class="preview-name">Babilonia - Investimenti in Oro</div>' +
+                    '<div class="preview-time">' + now + ' · 🌐 Pubblico</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="preview-content">' + 
+                escapeHtml(title) + '\n\n' + 
+                escapeHtml(body) + '\n\n' + 
+                '<span class="preview-hashtags">' + escapeHtml(hashtags) + '</span>' +
+            '</div>' +
+            '<div style="border-top: 1px solid #dddfe2; margin-top: 10px; padding-top: 10px; display: flex; justify-content: space-around; color: #65676b; font-size: 0.85rem;">' +
+                '<span>👍 Mi piace</span>' +
+                '<span>💬 Commenta</span>' +
+                '<span>↗️ Condividi</span>' +
+            '</div>' +
+        '</div>';
+    div.style.display = 'block';
 }
 
-function editPost(id, title, body, hashtags) {
-    const editDiv = document.getElementById(`edit-${id}`);
-    const previewDiv = document.getElementById(`preview-${id}`);
-    previewDiv.style.display = 'none';
+function toggleEdit(id) {
+    const div = document.getElementById('edit-' + id);
+    const previewDiv = document.getElementById('preview-' + id);
     
-    if (editDiv.style.display === 'block') {
-        editDiv.style.display = 'none';
+    // Nascondi preview se aperta
+    if (previewDiv) previewDiv.style.display = 'none';
+    
+    if (div.style.display === 'block') {
+        div.style.display = 'none';
         return;
     }
     
-    editDiv.innerHTML = `
-        <div class="edit-form">
-            <label>Titolo / Hook:</label>
-            <textarea id="edit-title-${id}">${unescapeHtml(title)}</textarea>
-            <label style="margin-top:15px;">Contenuto:</label>
-            <textarea id="edit-body-${id}">${unescapeHtml(body)}</textarea>
-            <label style="margin-top:15px;">Hashtags:</label>
-            <textarea id="edit-hashtags-${id}">${unescapeHtml(hashtags)}</textarea>
-            <div style="margin-top:15px;">
-                <button class="btn btn-approve" onclick="saveEdit(${id})">💾 Salva modifiche</button>
-                <button class="btn btn-reject" onclick="editDiv.style.display='none'">Annulla</button>
-            </div>
-        </div>
-    `;
-    editDiv.style.display = 'block';
+    // Trova i dati dal post
+    const postDiv = div.closest('.post');
+    const title = postDiv.querySelector('.post-title').textContent;
+    const body = postDiv.querySelector('.post-content').textContent;
+    const hashtags = postDiv.querySelector('.hashtags').textContent;
+    
+    div.innerHTML = 
+        '<div class="edit-form">' +
+            '<label>Titolo / Hook:</label>' +
+            '<textarea id="edit-title-' + id + '" rows="2">' + escapeHtml(title) + '</textarea>' +
+            '<label style="margin-top:15px;">Contenuto:</label>' +
+            '<textarea id="edit-body-' + id + '" rows="8">' + escapeHtml(body) + '</textarea>' +
+            '<label style="margin-top:15px;">Hashtags:</label>' +
+            '<textarea id="edit-hashtags-' + id + '" rows="2">' + escapeHtml(hashtags) + '</textarea>' +
+            '<div style="margin-top:15px;">' +
+                '<button class="btn btn-approve" onclick="saveEdit(' + id + ')">💾 Salva modifiche</button>' +
+                '<button class="btn btn-reject" onclick="toggleEdit(' + id + ')">Annulla</button>' +
+            '</div>' +
+        '</div>';
+    div.style.display = 'block';
 }
 
 function unescapeHtml(text) {
     if (!text) return '';
-    return text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#039;/g, "'");
+    return text.replace(/\u003c/g, '<').replace(/\u003e/g, '>').replace(/\u0026amp;/g, '&').replace(/\u0026lt;/g, '<').replace(/\u0026gt;/g, '>').replace(/\u0026quot;/g, '"').replace(/\u0026#039;/g, "'");
 }
 
 async function saveEdit(id) {
