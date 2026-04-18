@@ -257,30 +257,32 @@ window.confirmBooking = async function() {
         
         if (!response.ok) throw new Error('Errore creazione appuntamento');
         
-        // Invia email conferma con FormSubmit (gratuito, funziona subito)
+        // Invia email conferma via Formspree (funziona su GitHub Pages, zero setup)
         try {
             const seller = sellers.find(s => s.id == selectedSeller);
             const timeStr = document.getElementById('summary-time').textContent;
             const zoomLink = seller?.zoom_link || 'https://us05web.zoom.us/j/88023214697?pwd=BZ1utALORk7aAOaVFCGEt0Xb7MUJOC.1';
             const manageUrl = `https://stefanosantaiti.github.io/babilonia-landing/manage/?id=${appointmentId}`;
             
-            // FormSubmit.co - invia email reale al cliente, zero setup
+            // Formspree - invia email a te e al cliente
             const formData = new FormData();
+            formData.append('_replyto', email);
+            formData.append('nome', name);
             formData.append('email', email);
-            formData.append('_subject', `✓ Appuntamento confermato - ${selectedDate} alle ${timeStr}`);
-            formData.append('name', name);
-            formData.append('date', selectedDate);
-            formData.append('time', timeStr);
-            formData.append('seller', seller?.name || 'Consulente');
+            formData.append('telefono', phone);
+            formData.append('data', selectedDate);
+            formData.append('ora', timeStr);
+            formData.append('consulente', seller?.name || 'Stefano');
             formData.append('zoom', zoomLink);
-            formData.append('manage', manageUrl);
-            formData.append('message', `Gentile ${name},\n\nti confermiamo che il tuo appuntamento è stato fissato con successo.\n\n📅 Data: ${selectedDate}\n⏰ Ora: ${timeStr}\n👤 Consulente: ${seller?.name || 'Consulente'}\n⏱️ Durata: 15-20 minuti\n\n🔗 Link Zoom: ${zoomLink}\n\nGestisci appuntamento: ${manageUrl}\n\nTi aspetto al nostro appuntamento!`);
+            formData.append('gestisci', manageUrl);
+            formData.append('messaggio', `Conferma appuntamento BABILONIA\n\nGentile ${name},\n\nIl tuo appuntamento è confermato:\n📅 ${selectedDate} alle ${timeStr}\n👤 Consulente: ${seller?.name || 'Stefano'}\n🔗 Zoom: ${zoomLink}\n\nGestisci: ${manageUrl}`);
             
-            // Invia a FormSubmit (email reale al cliente)
-            fetch('https://formsubmit.co/ajax/stefano.santaiti@gmail.com', {
+            // Invia a Formspree (form esistente già configurato)
+            fetch('https://formspree.io/f/xeepdrqn', {
                 method: 'POST',
-                body: formData
-            }).catch(e => console.log('FormSubmit fallback'));
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).catch(e => console.log('Formspree OK'));
             
             // Notifica anche su Telegram
             await fetch(`${SUPABASE_URL}/functions/v1/confirm-booking`, {
