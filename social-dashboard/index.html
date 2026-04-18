@@ -125,6 +125,9 @@
         .loading { color: #d4af37; text-align: center; padding: 40px; }
         .error { color: #ff4444; text-align: center; padding: 40px; }
         .source { color: #888; font-size: 0.85rem; margin-bottom: 5px; }
+        .target-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; margin-left: 10px; }
+        .target-clienti { background: #d4af37; color: #000; }
+        .target-collaboratori { background: #1877f2; color: #fff; }
     </style>
 </head>
 <body>
@@ -207,9 +210,11 @@ async function loadPosts() {
         if (pending.length > 0) {
             html += '<h2>⏳ In Attesa di Approvazione</h2>';
             pending.forEach(p => {
+                const targetClass = (p.body || '').toLowerCase().includes('network') || (p.body || '').toLowerCase().includes('libertà') ? 'collaboratori' : 'clienti';
+                const targetLabel = targetClass === 'collaboratori' ? '👥 Collaboratori' : '👤 Clienti';
                 html += `<div class="post post-pending">`;
                 html += `<div class="post-header"><span>#${p.id}</span><span>${p.status}</span></div>`;
-                html += `<div class="source">📰 ${p.source || 'Fonte sconosciuta'}</div>`;
+                html += `<div class="source">📰 ${p.source || 'Fonte sconosciuta'} <span class="target-badge target-${targetClass}">${targetLabel}</span></div>`;
                 html += `<div class="post-title">${p.title}</div>`;
                 html += `<div class="post-content">${escapeHtml(p.body)}</div>`;
                 html += `<div class="hashtags">${p.hashtags || ''}</div>`;
