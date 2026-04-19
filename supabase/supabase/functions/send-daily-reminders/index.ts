@@ -9,12 +9,12 @@ const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL') || 'stefano.santaiti@gmail.com';
 const SENDER_EMAIL = Deno.env.get('SENDER_EMAIL') || 'stefano.santaiti@gmail.com';
 const SENDER_NAME = Deno.env.get('SENDER_NAME') || 'Babilonia - Care is Gold';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || 'https://esgjushznmidzdhqsyyx.supabase.co';
-const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_KEY') || '';
+const SERVICE_ROLE_KEY = Deno.env.get('SERVICE_ROLE_KEY') || '';
+const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
 
 interface Appointment {
   id: string;
-  date: string;
-  time: string;
+  slot_id: string; // formato: {seller_id}_{YYYY-MM-DD}_{HH:MM}
   client_name: string;
   client_email: string;
   client_phone: string;
@@ -25,6 +25,23 @@ interface Appointment {
     name: string;
     zoom_link: string | null;
   };
+}
+
+// Helper: Estrae ora dallo slot_id
+function getTimeFromSlot(slotId: string): string {
+  const parts = slotId.split('_');
+  return parts[2] || '--:--';
+}
+
+// Helper: Estrae data dallo slot_id
+function getDateFromSlot(slotId: string): string {
+  const parts = slotId.split('_');
+  return parts[1] || '';
+}
+
+// Helper: Valida email
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 serve(async (req) => {
@@ -84,18 +101,29 @@ serve(async (req) => {
   }
 });
 
-// Helper: Recupera appuntamenti di oggi
+// Helper: Recupera appuntamenti di oggi (estrae data dallo slot_id)
 async function getTodayAppointments(today: string): Promise<Appointment[]> {
-  const url = `${SUPABASE_URL}/rest/v1/appointments?select=*,sellers(name,zoom_link)&date=eq.${today}&status=eq.confirmed&order=time.asc`;
+  // Lo slot_id ha formato: {seller_id}_{YYYY-MM-DD}_{HH:MM}
+  // Quindi filtriamo per slot_id che contiene la data di oggi
+  const datePattern = `_${today}_`; // es: _2026-04-20_
   
-  const res = await fetch(url, {
-    headers: {
-      'apikey': SUPABASE_SERVICE_KEY,
-      'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
-    },
-  });
+  const url = `${SUPABASE_URL}/rest/v1/appointments?select=*,sellers(name,zoom_link)&slot_id=like.*${datePattern}*&status=eq.confirmed&order=slot_id.asc`;
+  
+  const headers: Record<string, string> = {
+    'apikey': SERVICE_ROLE_KEY || SUPABASE_ANON_KEY,
+  };
+  
+  if (SERVICE_ROLE_KEY) {
+    headers['Authorization'] = `Bearer ${SERVICE_ROLE_KEY}`;
+  } else {
+    headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`;
+  }
+  
+  const res = await fetch(url, { headers });
   
   if (!res.ok) {
+    const errorText = await res.text();
+    console.error('[Reminders] Query error:', res.status, errorText);
     throw new Error(`Errore query Supabase: ${res.status}`);
   }
   
@@ -150,7 +178,7 @@ async function sendAdminSummary(today: string, bySeller: { [key: string]: Appoin
       
       for (const apt of apts) {
         emailHtml += `<tr>`;
-        emailHtml += `<td>${apt.time?.substring(0, 5) || '--:--'}</td>`;
+        emailHtml += `<td>${getTimeFromSlot(apt.slot_id)}</td>`;
         emailHtml += `<td>${apt.client_name}</td>`;
         emailHtml += `<td>${apt.client_phone}</td>`;
         emailHtml += `<td>${apt.client_email}</td>`;
@@ -168,12 +196,19 @@ async function sendAdminSummary(today: string, bySeller: { [key: string]: Appoin
 
 // Helper: Invia email reminder al cliente
 async function sendClientEmailReminder(apt: Appointment) {
+  // Salta se email non valida
+  if (!isValidEmail(apt.client_email)) {
+    console.log(`[Reminders] Email non valida per ${apt.client_name}: ${apt.client_email}`);
+    return;
+  }
+  
   if (!BREVO_API_KEY) {
     console.log(`[Reminders] Brevo non configurato, skip email per ${apt.client_name}`);
     return;
   }
 
-  const subject = `🌅 Reminder: Appuntamento oggi alle ${apt.time?.substring(0, 5)}`;
+  const aptTime = getTimeFromSlot(apt.slot_id);
+  const subject = `🌅 Reminder: Appuntamento oggi alle ${aptTime}`;
   const manageUrl = `https://stefanosantaiti.github.io/babilonia-landing/manage/?id=${apt.id}`;
   
   const html = `
@@ -201,8 +236,8 @@ async function sendClientEmailReminder(apt: Appointment) {
         </p>
         
         <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #d4af37;">
-          <p style="margin: 8px 0; color: #333;"><strong>📅 Data:</strong> ${formatDateItalian(apt.date)}</p>
-          <p style="margin: 8px 0; color: #333;"><strong>⏰ Ora:</strong> ${apt.time?.substring(0, 5)}</p>
+          <p style="margin: 8px 0; color: #333;"><strong>📅 Data:</strong> ${formatDateItalian(getDateFromSlot(apt.slot_id))}</p>
+          <p style="margin: 8px 0; color: #333;"><strong>⏰ Ora:</strong> ${getTimeFromSlot(apt.slot_id)}</p>
           <p style="margin: 8px 0; color: #333;"><strong>👤 Consulente:</strong> ${apt.sellers?.name || 'Team Babilonia'}</p>
           <p style="margin: 8px 0; color: #333;"><strong>⏱️ Durata:</strong> 15-20 minuti</p>
         </div>
@@ -258,8 +293,8 @@ async function sendClientTelegramReminder(apt: Appointment) {
 
   const msg = `🌅 <b>Buongiorno ${apt.client_name}!</b>\n\n` +
     `Ti ricordo l'appuntamento di <b>oggi</b>:\n\n` +
-    `📅 <b>Data:</b> ${formatDateItalian(apt.date)}\n` +
-    `⏰ <b>Ora:</b> ${apt.time?.substring(0, 5)}\n` +
+    `📅 <b>Data:</b> ${formatDateItalian(getDateFromSlot(apt.slot_id))}\n` +
+    `⏰ <b>Ora:</b> ${getTimeFromSlot(apt.slot_id)}\n` +
     `👤 <b>Consulente:</b> ${apt.sellers?.name || 'Team Babilonia'}\n\n` +
     `🔗 <b>Zoom:</b> ${apt.sellers?.zoom_link || 'da confermare'}\n\n` +
     `⏱️ Durata: 15-20 minuti\n\n` +
