@@ -257,19 +257,27 @@ window.confirmBooking = async function() {
         
         if (!response.ok) throw new Error('Errore creazione appuntamento');
         
-        // Email conferma - configurata manualmente dal consulente
-        // Il consulente contatterà il cliente via email con i dettagli
-        console.log('Email: da inviare manualmente dal consulente');
-        
-        // Notifica anche su Telegram
+        // Invia email di conferma via Brevo
         try {
-            await fetch(`${SUPABASE_URL}/functions/v1/confirm-booking`, {
+            const emailRes = await fetch(`${SUPABASE_URL}/functions/v1/send-confirmation`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ appointment_id: appointmentId })
+                body: JSON.stringify({
+                    appointment_id: appointmentId,
+                    client_email: email,
+                    client_name: name,
+                    appointment_date: new Date(selectedDate + 'T00:00:00').toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }),
+                    appointment_time: document.getElementById('summary-time').textContent,
+                    seller_name: sellerData[0]?.name || 'Team Babilonia',
+                    zoom_link: zoomLink,
+                    manage_url: manageUrl
+                })
             });
+            const emailData = await emailRes.json();
+            console.log('Email inviata:', emailData);
         } catch (e) {
-            console.log('Telegram notify optional');
+            console.error('Errore invio email:', e);
+            // Non bloccare il flusso se email fallisce
         }
         
         // Aggiorna slot
