@@ -257,41 +257,19 @@ window.confirmBooking = async function() {
         
         if (!response.ok) throw new Error('Errore creazione appuntamento');
         
-        // Invia email conferma via Formspree (funziona su GitHub Pages, zero setup)
+        // Email conferma - configurata manualmente dal consulente
+        // Il consulente contatterà il cliente via email con i dettagli
+        console.log('Email: da inviare manualmente dal consulente');
+        
+        // Notifica anche su Telegram
         try {
-            const seller = sellers.find(s => s.id == selectedSeller);
-            const timeStr = document.getElementById('summary-time').textContent;
-            const zoomLink = seller?.zoom_link || 'https://us05web.zoom.us/j/88023214697?pwd=BZ1utALORk7aAOaVFCGEt0Xb7MUJOC.1';
-            const manageUrl = `https://stefanosantaiti.github.io/babilonia-landing/manage/?id=${appointmentId}`;
-            
-            // Formspree - invia email a te e al cliente
-            const formData = new FormData();
-            formData.append('_replyto', email);
-            formData.append('nome', name);
-            formData.append('email', email);
-            formData.append('telefono', phone);
-            formData.append('data', selectedDate);
-            formData.append('ora', timeStr);
-            formData.append('consulente', seller?.name || 'Stefano');
-            formData.append('zoom', zoomLink);
-            formData.append('gestisci', manageUrl);
-            formData.append('messaggio', `Conferma appuntamento BABILONIA\n\nGentile ${name},\n\nIl tuo appuntamento è confermato:\n📅 ${selectedDate} alle ${timeStr}\n👤 Consulente: ${seller?.name || 'Stefano'}\n🔗 Zoom: ${zoomLink}\n\nGestisci: ${manageUrl}`);
-            
-            // Invia a Formspree (form esistente già configurato)
-            fetch('https://formspree.io/f/xeepdrqn', {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            }).catch(e => console.log('Formspree OK'));
-            
-            // Notifica anche su Telegram
             await fetch(`${SUPABASE_URL}/functions/v1/confirm-booking`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ appointment_id: appointmentId })
             });
         } catch (e) {
-            console.log('Email opzionale');
+            console.log('Telegram notify optional');
         }
         
         // Aggiorna slot

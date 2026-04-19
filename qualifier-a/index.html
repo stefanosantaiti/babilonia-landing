@@ -57,7 +57,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <p>Per offrirti informazioni personalizzate sulle soluzioni di protezione patrimoniale, ti chiediamo di rispondere a 4 brevi domande. La compilazione richiede circa 2 minuti.</p>
 </div>
 
-<form id="qualifier-form" action="https://formspree.io/f/mwvwzrlg" method="POST" name="qualifierA">
+<form id="qualifier-form" action="javascript:void(0)" method="POST" name="qualifierA">
 <input type="hidden" name="form-type" value="Qualifier A - Clienti">
 <input type="hidden" name="punteggio" id="score-input">
 <input type="hidden" name="categoria" id="category-input">
@@ -119,7 +119,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <div class="form-group"><label>Email *</label><input type="email" name="email" placeholder="tua@email.com" required></div>
 <div class="form-group"><label>Telefono *</label><input type="tel" name="telefono" placeholder="+39 3XX XXX XXXX" required></div>
 </div>
+<div class="form-row">
+<div class="form-group"><label>Telegram (opzionale)</label><input type="text" name="telegram_username" placeholder="@username"></div>
 <div class="form-group"><label>Città</label><input type="text" name="citta" placeholder="La tua città"></div>
+</div>
 </div>
 
 <div class="privacy">
@@ -205,8 +208,65 @@ function calculateAndShowResult() {
     resultBox.scrollIntoView({ behavior: 'smooth' });
 }
 
+// Invia a Telegram
+async function submitToTelegram(data) {
+    const BOT_TOKEN = '8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk';
+    const CHAT_ID = '354943189';
+    
+    const q3Values = [];
+    document.querySelectorAll('input[name="q3"]:checked').forEach(cb => {
+        const label = cb.closest('.option').querySelector('.option-label').textContent;
+        q3Values.push(label);
+    });
+    
+    const text = `🔔 NUOVO LEAD CLIENTE BABILONIA
+
+👤 ${data.nome} ${data.cognome}
+📧 ${data.email}
+📱 ${data.telefono}
+💬 Telegram: ${data.telegram_username || 'Non fornito'}
+📍 ${data.citta || 'N/D'}
+
+📊 PUNTEGGIO: ${data.punteggio}/10
+🏷️ CATEGORIA: ${data.categoria}
+
+📝 RISPOSTE:
+• Età: ${data.q1 === '1.00' ? '-25/+65' : data.q1 === '2.00' ? '25-34' : data.q1 === '3.00' ? '35-55' : '56-65'}
+• Obiettivo: ${data.q2 === '1.00' ? 'Info' : data.q2 === '2.00' ? 'Diversificare' : 'Proteggere/Pensione'}
+• Asset: ${q3Values.join(', ') || 'Nessuno'}
+• Timing: ${data.q4 === '2.00' ? 'Questo mese' : data.q4 === '1.00' ? 'Entro 3 mesi' : 'Entro 6 mesi/Non deciso'}`;
+
+    try {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: CHAT_ID, text: text })
+        });
+    } catch (e) {
+        console.log('Telegram notify failed:', e);
+    }
+}
+
 function submitAnyway() {
-    document.getElementById('qualifier-form').submit();
+    const form = document.getElementById('qualifier-form');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Aggiungi valori calcolati
+    const score = calculateScore();
+    const category = getCategory(score);
+    data.punteggio = score;
+    data.categoria = category.name;
+    
+    // Invia a Telegram
+    submitToTelegram(data);
+    
+    // Mostra conferma
+    const resultBox = document.getElementById('result-box');
+    resultBox.innerHTML = `
+        <h3>✅ Richiesta Inviata!</h3>
+        <p>Grazie ${data.nome}. Ti contatterò presto via email.</p>
+    `;
 }
 </script>
 </body>

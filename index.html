@@ -70,7 +70,7 @@
         </div>
 
         <div class="form-container">
-            <form id="qualifierForm" action="https://formspree.io/f/xeepdrqn" method="POST">
+            <form id="qualifierForm" action="javascript:void(0)" method="POST">
                 <input type="hidden" name="punteggio" id="punteggioInput">
                 <input type="hidden" name="categoria" id="categoriaInput">
                 <input type="hidden" name="lavoro_ideale_media" id="lavoroIdealeMedia">
@@ -95,6 +95,11 @@
                 <div class="form-group">
                     <label>Telefono <span class="required">*</span></label>
                     <input type="tel" name="telefono" id="telefono" required placeholder="+39 3XX XXX XXXX">
+                </div>
+
+                <div class="form-group">
+                    <label>Telegram (opzionale) <span style="color: #888; font-size: 0.8rem;">- per ricevere risposta più veloce</span></label>
+                    <input type="text" name="telegram_username" id="telegram" placeholder="@username">
                 </div>
 
                 <div class="form-group">
@@ -284,8 +289,54 @@
             resultBox.scrollIntoView({ behavior: 'smooth' });
         }
 
+        // Invia a Telegram
+        async function submitToTelegram(data) {
+            const BOT_TOKEN = '8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk';
+            const CHAT_ID = '354943189';
+            
+            const text = `🔔 NUOVO CANDIDATO BABILONIA
+
+👤 ${data.nome} ${data.cognome}
+📧 ${data.email}
+📱 ${data.telefono}
+💬 Telegram: ${data.telegram_username || 'Non fornito'}
+📍 ${data.città || 'N/D'}
+
+📊 PUNTEGGIO: ${data.punteggio}/16
+🏷️ CATEGORIA: ${data.categoria}
+
+📝 RISPOSTE:
+• Professione: ${data.professione}
+• Visione: ${data.visione}
+• Tempo: ${data.tempo}
+• Lavoro ideale (media ${data.lavoro_ideale_media}): ${data.lavoro_ideale}
+• Motivazione: ${data.motivazione}
+• Decisione: ${data.decisione}`;
+
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'HTML' })
+                });
+            } catch (e) {
+                console.log('Telegram notify failed:', e);
+            }
+        }
+
         function submitFormAnyway() {
-            document.getElementById('qualifierForm').submit();
+            const form = document.getElementById('qualifierForm');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Invia a Telegram
+            submitToTelegram(data);
+            
+            // Mostra conferma
+            document.getElementById('resultBox').innerHTML = `
+                <h3>✅ Dati Inviati!</h3>
+                <p>Grazie ${data.nome}. Ti contatterò presto via email per il prossimo passo.</p>
+            `;
         }
 
         // Progress bar
