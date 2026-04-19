@@ -194,8 +194,7 @@
             <div class="result-box" id="resultBox">
                 <h3 id="resultTitle"></h3>
                 <p id="resultMessage"></p>
-                <a href="/booking/" class="booking-link" id="bookingLink" style="display: none;">📅 PRENOTA COLLOQUIO</a>
-                <button class="secondary-btn" id="submitAnywayBtn" onclick="submitFormAnyway()" style="display: none;">📧 INVIA RICHIESTA COMUNQUE</button>
+                <a href="./booking/" class="booking-link" id="bookingLink" style="display: none;">📅 PRENOTA COLLOQUIO</a>
             </div>
 
             <div id="successMessage" style="display: none; text-align: center; padding: 40px 20px;">
@@ -277,11 +276,11 @@
             if (category.bookable) {
                 document.getElementById('resultMessage').textContent = 'Ottimo! Il tuo profilo è molto interessante. Prenota subito un colloquio conoscitivo gratuito di 15 minuti per scoprire l\'opportunità.';
                 document.getElementById('bookingLink').style.display = 'inline-block';
-                document.getElementById('submitAnywayBtn').style.display = 'inline-block';
+                document.getElementById('submitAnywayBtn').style.display = 'none';
             } else {
-                document.getElementById('resultMessage').textContent = 'Grazie per la tua richiesta. Al momento il tuo profilo non sembra adatto a questa opportunità, ma ti contatteremo comunque via email.';
+                document.getElementById('resultMessage').textContent = 'Grazie per la tua richiesta. Al momento il tuo profilo non sembra adatto a questa opportunità.';
                 document.getElementById('bookingLink').style.display = 'none';
-                document.getElementById('submitAnywayBtn').style.display = 'inline-block';
+                document.getElementById('submitAnywayBtn').style.display = 'none';
             }
             
             // Nascondi form
