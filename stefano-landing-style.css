@@ -31,7 +31,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+  scroll-padding-top: 120px;
 }
 
 body {
@@ -41,6 +41,7 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  padding-top: 100px; /* Compensa header fisso */
 }
 
 /* Background Gradients (The "Not a Flat Void" Effect) */
@@ -136,33 +137,33 @@ p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1rem; }
 .header {
   position: fixed;
   top: 0; left: 0; width: 100%;
-  padding: 1.2rem 0;
-  background: rgba(2, 2, 2, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  padding: 0.8rem 0;
+  background: rgba(2, 2, 2, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--glass-border);
   z-index: 1000;
   transition: var(--transition);
 }
-.nav-container { display: flex; justify-content: space-between; align-items: center; }
-.logo { font-family: var(--font-serif); font-size: 1.75rem; font-weight: 700; color: var(--text-main); }
-.nav-links { display: flex; gap: 3rem; }
-.nav-links a { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; opacity: 0.7; }
+.nav-container { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.logo { 
+  font-family: var(--font-serif); 
+  font-size: 1.5rem; 
+  font-weight: 700; 
+  color: var(--text-main); 
+  line-height: 1.2;
+}
+.nav-links { display: flex; gap: 2.5rem; }
+.nav-links a { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; opacity: 0.7; }
 .nav-links a:hover { color: var(--gold-primary); opacity: 1; }
 
-/* Buttons */
-.btn {
-  display: inline-block;
-  padding: 0.75rem 1.8rem;
-  border-radius: 100px; /* Pill shape for premium feel */
-  font-weight: 600;
-  cursor: pointer;
+/* Buttons uniformi */
+.btn-sm { 
+  padding: 0.7rem 1.4rem; 
+  font-size: 0.8rem; 
+  min-width: 160px;
   text-align: center;
-  border: none;
-  font-size: 0.95rem;
-  transition: var(--transition);
 }
-.btn-sm { padding: 0.6rem 1.5rem; font-size: 0.85rem; }
 .btn-lg { padding: 1.2rem 2.5rem; font-size: 1.1rem; }
 .btn-huge { padding: 1.4rem 3rem; font-size: 1.25rem; }
 
