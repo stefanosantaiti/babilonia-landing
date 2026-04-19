@@ -261,7 +261,10 @@ window.confirmBooking = async function() {
         try {
             const emailRes = await fetch(`${SUPABASE_URL}/functions/v1/send-confirmation`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                },
                 body: JSON.stringify({
                     appointment_id: appointmentId,
                     client_email: email,

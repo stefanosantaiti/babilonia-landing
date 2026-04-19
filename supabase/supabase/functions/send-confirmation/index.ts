@@ -1,7 +1,7 @@
 // Edge Function: Invia email di conferma appuntamento via Brevo
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
-const BREVO_API_KEY = 'xkeysib-02319714740378973bf129a784';
+const BREVO_API_KEY = Deno.env.get('BREVO_API_KEY') || '';
 const SENDER_EMAIL = 'stefano.santaiti@gmail.com';
 const SENDER_NAME = 'Babilonia - Care is Gold';
 
