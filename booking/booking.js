@@ -257,6 +257,16 @@ window.confirmBooking = async function() {
         
         if (!response.ok) throw new Error('Errore creazione appuntamento');
         
+        // Carica dettagli seller PRIMA di inviare email
+        const sellerRes = await fetch(`${SUPABASE_URL}/rest/v1/sellers?id=eq.${selectedSeller}&select=name,zoom_link`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const sellerData = await sellerRes.json();
+        const zoomLink = sellerData[0]?.zoom_link || 'https://us05web.zoom.us/j/88023214697?pwd=BZ1utALORk7aAOaVFCGEt0Xb7MUJOC.1';
+        const sellerName = sellerData[0]?.name || 'Consulente';
+        
+        const manageUrl = `https://stefanosantaiti.github.io/babilonia-landing/manage/?id=${appointmentId}`;
+        
         // Invia email di conferma via Brevo
         try {
             const emailRes = await fetch(`${SUPABASE_URL}/functions/v1/send-confirmation`, {
@@ -271,7 +281,7 @@ window.confirmBooking = async function() {
                     client_name: name,
                     appointment_date: new Date(selectedDate + 'T00:00:00').toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }),
                     appointment_time: document.getElementById('summary-time').textContent,
-                    seller_name: sellerData[0]?.name || 'Team Babilonia',
+                    seller_name: sellerName,
                     zoom_link: zoomLink,
                     manage_url: manageUrl
                 })
@@ -297,16 +307,6 @@ window.confirmBooking = async function() {
         
         // Notifica Telegram
         await notifyTelegram(name, email, phone);
-        
-        // Carica dettagli seller per Zoom link
-        const sellerRes = await fetch(`${SUPABASE_URL}/rest/v1/sellers?id=eq.${selectedSeller}&select=name,zoom_link`, {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-        });
-        const sellerData = await sellerRes.json();
-        const zoomLink = sellerData[0]?.zoom_link || 'https://us05web.zoom.us/j/88023214697?pwd=BZ1utALORk7aAOaVFCGEt0Xb7MUJOC.1';
-        const sellerName = sellerData[0]?.name || 'Consulente';
-        
-        const manageUrl = `https://stefanosantaiti.github.io/babilonia-landing/manage/?id=${appointmentId}`;
         
         // Aggiorna success con link Zoom e gestione
         document.getElementById('success-message').innerHTML = `
