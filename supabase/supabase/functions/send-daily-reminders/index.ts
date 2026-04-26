@@ -150,7 +150,7 @@ async function sendAdminSummary(today: string, bySeller: { [key: string]: Appoin
   for (const [seller, apts] of Object.entries(bySeller)) {
     tgMsg += `👤 <b>${seller}</b>\n`;
     for (const apt of apts) {
-      tgMsg += `  ⏰ ${apt.time?.substring(0, 5) || '--:--'} - ${apt.client_name}\n`;
+      tgMsg += `  ⏰ ${getTimeFromSlot(apt.slot_id)} - ${apt.client_name}\n`;
       tgMsg += `     📱 ${apt.client_phone}\n`;
       tgMsg += `     📧 ${apt.client_email}\n`;
       if (apt.telegram) tgMsg += `     💬 ${apt.telegram}\n`;
