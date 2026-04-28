@@ -197,7 +197,7 @@ async function loadPosts() {
             }
         });
         
-        const pending = filtered.filter(p => p.status === 'pending' || p.status === 'pending_approval');
+        const pending = filtered.filter(p => p.status === 'pending' || p.status === 'pending_approval' || p.status === 'draft');
         const approved = filtered.filter(p => p.status === 'approved');
         
         document.getElementById('pending-count').textContent = pending.length;
