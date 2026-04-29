@@ -181,19 +181,13 @@ async function loadPosts() {
         
         const posts = await res.json();
         
-        // Filtra per target (fino a quando non c'è campo target_audience nel DB)
+        // Filtra per campo audience nel DB
         const filtered = posts.filter(p => {
+            const aud = (p.audience || '').toLowerCase();
             if (currentTarget === 'clienti') {
-                // Post clienti: contengono parole chiave clienti o NON contengono parole collaboratori
-                const text = (p.title + ' ' + p.body).toLowerCase();
-                const collabWords = ['network', 'libertà', 'autonomia', 'business', 'carriera', 'collabora'];
-                const isCollaboratore = collabWords.some(w => text.includes(w));
-                return !isCollaboratore; // Se non è collaboratore, è cliente
+                return aud === 'cliente' || aud === 'clienti' || (!aud && p.status); // fallback: se no audience, mostra
             } else {
-                // Post collaboratori: contengono parole chiave specifiche
-                const text = (p.title + ' ' + p.body).toLowerCase();
-                const collabWords = ['network', 'libertà', 'autonomia', 'business', 'carriera', 'collabora', 'opportunità professionale'];
-                return collabWords.some(w => text.includes(w));
+                return aud === 'collaboratore' || aud === 'collaboratori';
             }
         });
         
@@ -210,7 +204,7 @@ async function loadPosts() {
         if (pending.length > 0) {
             html += '<h2>⏳ In Attesa di Approvazione</h2>';
             pending.forEach(p => {
-                const targetClass = (p.body || '').toLowerCase().includes('network') || (p.body || '').toLowerCase().includes('libertà') ? 'collaboratori' : 'clienti';
+                const targetClass = p.audience === 'collaboratore' || p.audience === 'collaboratori' ? 'collaboratori' : 'clienti';
                 const targetLabel = targetClass === 'collaboratori' ? '👥 Collaboratori' : '👤 Clienti';
                 html += `<div class="post post-pending">`;
                 html += `<div class="post-header"><span>#${p.id}</span><span>${p.status}</span></div>`;
