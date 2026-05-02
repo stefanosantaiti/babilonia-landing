@@ -10,7 +10,7 @@ let currentSeller = null;
 let sellerConfig = {
   days: [1, 2, 3, 4, 5],
   morning: ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30'],
-  afternoon: ['14:00', '14:30', '15:00', '15:30', '16:00', '16:30']
+  afternoon: ['14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00']
 };
 
 // Carica config da localStorage
@@ -81,7 +81,7 @@ function renderConfigForm() {
   ];
   
   const morningTimes = ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00'];
-  const afternoonTimes = ['13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00'];
+  const afternoonTimes = ['13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00'];
   
   container.innerHTML = `
     <div class="config-section">
@@ -111,7 +111,7 @@ function renderConfigForm() {
     </div>
     
     <div class="config-section">
-      <h3>🕐 Pomeriggio</h3>
+      <h3>🕐 Pomeriggio e Sera</h3>
       <div class="time-grid">
         ${afternoonTimes.map(t => `
           <label class="checkbox-label">
@@ -170,6 +170,8 @@ async function generateSlots() {
   if (deleteError) {
     console.error('Errore cancellazione slot:', deleteError);
   }
+  
+  const slots = [];
   
   // Genera slot da oggi per 14 giorni
   for (let i = 0; i < 14; i++) {
