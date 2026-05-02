@@ -152,12 +152,16 @@ function saveConfig() {
 async function generateSlots() {
   showStatus('action-status', 'Generazione slot in corso...', true);
   
-  // FIX: Ottieni data reale dal server, non dal browser
-  const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
-  const slots = [];
+  // FIX: Ottieni data e ora reali
+  const now = new Date();
+  const todayStr = now.toISOString().split('T')[0];
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
   
-  // FIX: Cancella TUTTI i slot esistenti del seller (non solo futuri)
+  // FIX: Calcola ora minima (adesso + 1 ora)
+  const minTimeMinutes = (currentHour * 60 + currentMinute) + 60;
+  
+  // FIX: Cancella TUTTI i slot esistenti del seller
   const { error: deleteError } = await supabase
     .from('slots')
     .delete()
@@ -169,15 +173,22 @@ async function generateSlots() {
   
   // Genera slot da oggi per 14 giorni
   for (let i = 0; i < 14; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
+    const date = new Date(now);
+    date.setDate(now.getDate() + i);
     const dayOfWeek = date.getDay();
     
     if (!sellerConfig.days.includes(dayOfWeek)) continue;
     
     const dateStr = date.toISOString().split('T')[0];
+    const isToday = (i === 0);
     
+    // FIX: Filtra orari per oggi (solo dopo +1 ora)
     sellerConfig.morning.forEach(time => {
+      if (isToday) {
+        const [h, m] = time.split(':').map(Number);
+        const slotMinutes = h * 60 + m;
+        if (slotMinutes < minTimeMinutes) return; // Salta slot passati
+      }
       slots.push({
         id: `${currentSeller}_${dateStr}_${time}`,
         seller_id: currentSeller,
@@ -189,6 +200,11 @@ async function generateSlots() {
     });
     
     sellerConfig.afternoon.forEach(time => {
+      if (isToday) {
+        const [h, m] = time.split(':').map(Number);
+        const slotMinutes = h * 60 + m;
+        if (slotMinutes < minTimeMinutes) return; // Salta slot passati
+      }
       slots.push({
         id: `${currentSeller}_${dateStr}_${time}`,
         seller_id: currentSeller,
