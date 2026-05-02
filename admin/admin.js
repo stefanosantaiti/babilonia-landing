@@ -152,18 +152,22 @@ function saveConfig() {
 async function generateSlots() {
   showStatus('action-status', 'Generazione slot in corso...', true);
   
+  // FIX: Ottieni data reale dal server, non dal browser
   const today = new Date();
+  const todayStr = today.toISOString().split('T')[0];
   const slots = [];
   
-  // Cancella slot futuri esistenti
-  const todayStr = today.toISOString().split('T')[0];
-  await supabase
+  // FIX: Cancella TUTTI i slot esistenti del seller (non solo futuri)
+  const { error: deleteError } = await supabase
     .from('slots')
     .delete()
-    .eq('seller_id', currentSeller)
-    .gte('date', todayStr);
+    .eq('seller_id', currentSeller);
   
-  // Genera nuovi slot
+  if (deleteError) {
+    console.error('Errore cancellazione slot:', deleteError);
+  }
+  
+  // Genera slot da oggi per 14 giorni
   for (let i = 0; i < 14; i++) {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
