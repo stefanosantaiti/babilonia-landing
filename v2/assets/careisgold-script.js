@@ -82,21 +82,38 @@
     });
   }
 
-  // ---- Fetch Gold Fixing (simulated, replace with real API if available) ----
-  function fetchFixing() {
+  // ---- Fetch Gold Fixing (CoinGecko PAXG ≈ oro spot) ----
+  async function fetchFixing() {
     const valueEl = document.getElementById('fixing-value');
     const changeEl = document.getElementById('fixing-change');
     if (!valueEl || !changeEl) return;
 
-    // Placeholder: replace with real API endpoint
-    // fetch('https://api.example.com/gold-fixing').then(r=>r.json()).then(data=>{...})
-    const mockValue = 2450.30 + (Math.random() - 0.5) * 20;
-    const mockChange = (Math.random() - 0.5) * 30;
-    const changePct = (mockChange / mockValue * 100).toFixed(2);
+    try {
+      const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=pax-gold&vs_currencies=eur,usd&include_24hr_change=true', {
+        method: 'GET',
+        cache: 'no-store'
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const gold = data['pax-gold'];
+      if (!gold) throw new Error('No data');
 
-    valueEl.textContent = '€ ' + mockValue.toFixed(2);
-    changeEl.textContent = (mockChange >= 0 ? '+' : '') + mockChange.toFixed(2) + ' (' + changePct + '%)';
-    changeEl.className = 'fixing-change ' + (mockChange >= 0 ? 'up' : 'down');
+      // Prezzo oro per oncia in EUR (PAXG = 1 oz troy)
+      const eurPerOz = gold.eur;
+      // Converti in EUR per grammo (1 troy oz = 31.1034768 g)
+      const eurPerGram = eurPerOz / 31.1034768;
+      const changePct = gold.eur_24h_change;
+
+      valueEl.textContent = '€ ' + eurPerGram.toFixed(2) + '/g';
+      const arrow = changePct >= 0 ? '▲' : '▼';
+      changeEl.textContent = arrow + ' ' + Math.abs(changePct).toFixed(2) + '% (24h)';
+      changeEl.className = 'fixing-change ' + (changePct >= 0 ? 'up' : 'down');
+    } catch (e) {
+      // Fallback: dato statico con ultimo valore noto (€ 126.64/g ≈ €3,937/oz)
+      valueEl.textContent = '€ 126.64/g';
+      changeEl.textContent = '— aggiorna pagina';
+      changeEl.className = 'fixing-change';
+    }
   }
   fetchFixing();
 
