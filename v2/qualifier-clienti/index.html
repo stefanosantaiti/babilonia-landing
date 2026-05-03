@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valuta il tuo profilo — Consulenza Oro Fisico | BABILONIA V2</title>
+<meta name="description" content="Scopri come proteggere il tuo patrimonio con oro fisico. Valuta il tuo profilo in 2 minuti. Consulenza gratuita personalizzata.">
+<meta name="author" content="Stefano Santaiti">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://stefanosantaiti.github.io/babilonia-landing/v2/qualifier-clienti/">
+<meta property="og:title" content="Valuta il tuo profilo — Consulenza Oro Fisico | BABILONIA">
+<meta property="og:description" content="Valutazione profilo in 2 minuti. Consulenza gratuita.">
+<meta property="og:url" content="https://stefanosantaiti.github.io/babilonia-landing/v2/qualifier-clienti/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/careisgold-style.css">
+<style>
+/* Qualifier-specific overrides */
+.qualifier-main { padding-top: 100px; min-height: 100vh; background: #fafafa; }
+.qualifier-card {
+  background: #fff; border-radius: 20px;
+  box-shadow: 0 10px 60px rgba(0,0,0,0.08);
+  max-width: 720px; margin: 0 auto; padding: 40px 32px;
+}
+.qualifier-header {
+  text-align: center; margin-bottom: 30px;
+}
+.qualifier-header h1 {
+  font-size: 1.6rem; font-weight: 700; color: #1a1a1a;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.qualifier-header .subtitle {
+  color: #b7955a; font-size: 0.95rem; font-weight: 500; margin-top: 6px;
+}
+.qualifier-intro {
+  background: #f5f0e8; border-left: 4px solid #b7955a;
+  padding: 18px 20px; border-radius: 0 10px 10px 0; margin-bottom: 30px;
+}
+.qualifier-intro p { color: #444; line-height: 1.7; font-size: 0.9rem; }
+.question-block-qual { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #eee; }
+.question-block-qual:last-of-type { border-bottom: none; }
+.question-number {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; background: #b7955a; color: #fff;
+  border-radius: 50%; font-weight: 700; font-size: 0.85rem; margin-right: 10px;
+}
+.question-text { font-size: 1rem; color: #1a1a1a; font-weight: 600; line-height: 1.5; }
+.required { color: #e11d48; }
+.checkbox-hint { font-size: 0.8rem; color: #888; margin: 6px 0 12px 38px; }
+.options { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.option {
+  display: flex; align-items: flex-start; padding: 14px 16px;
+  background: #fafafa; border: 2px solid #e8e8e8; border-radius: 12px;
+  cursor: pointer; transition: all 0.3s ease;
+}
+.option:hover { background: #f5f0e8; border-color: #b7955a; }
+.option input { margin-right: 12px; margin-top: 2px; width: 18px; height: 18px; accent-color: #b7955a; }
+.option-label { flex: 1; font-size: 0.9rem; color: #444; line-height: 1.4; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; font-size: 0.85rem; }
+.form-group input {
+  width: 100%; padding: 14px; border: 2px solid #ddd;
+  border-radius: 10px; font-size: 1rem; font-family: inherit;
+  transition: border-color 0.3s;
+}
+.form-group input:focus { border-color: #b7955a; outline: none; }
+.privacy-box {
+  margin: 24px 0; padding: 18px; background: #f9f9f9;
+  border-radius: 10px; border: 1px solid #eee;
+}
+.privacy-box label { font-size: 0.85rem; color: #555; line-height: 1.5; }
+.privacy-box input { margin-right: 8px; accent-color: #b7955a; }
+.submit-btn {
+  width: 100%; padding: 18px; background: #b7955a; color: #fff;
+  border: none; border-radius: 12px; font-size: 1rem; font-weight: 700;
+  cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+  transition: all 0.3s; font-family: inherit;
+}
+.submit-btn:hover { background: #9a7b4a; transform: translateY(-2px); }
+.result-box {
+  margin-top: 30px; padding: 30px; border-radius: 16px;
+  text-align: center; display: none;
+}
+.result-box.hot { background: #e8f5e9; border: 2px solid #4caf50; }
+.result-box.warm { background: #fff8e1; border: 2px solid #ffc107; }
+.result-box.tepid { background: #e3f2fd; border: 2px solid #2196f3; }
+.result-box.cold { background: #ffebee; border: 2px solid #f44336; }
+.result-box h3 { font-size: 1.5rem; margin-bottom: 12px; }
+.result-box p { margin-bottom: 20px; font-size: 1.05rem; }
+.booking-link {
+  display: inline-block; padding: 16px 40px; background: #b7955a;
+  color: #fff; border-radius: 10px; font-size: 1.1rem; font-weight: 700;
+  text-decoration: none; transition: all 0.3s;
+}
+.booking-link:hover { background: #9a7b4a; transform: translateY(-2px); }
+.btn-secondary {
+  display: inline-block; padding: 14px 30px; background: transparent;
+  color: #1a1a1a; border: 2px solid #ddd; border-radius: 10px;
+  font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 12px;
+  transition: all 0.3s; font-family: inherit;
+}
+.btn-secondary:hover { border-color: #b7955a; color: #b7955a; }
+.personal-info-box {
+  background: #f0f4f8; padding: 24px; border-radius: 14px; margin-top: 24px;
+}
+.personal-info-box h3 { color: #1a1a1e; margin-bottom: 16px; font-size: 1.05rem; }
+@media (max-width: 600px) {
+  .qualifier-card { padding: 24px 18px; }
+  .form-row { grid-template-columns: 1fr; }
+  .qualifier-header h1 { font-size: 1.3rem; }
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+
+<!-- Navbar V2 -->
+<nav id="navbar" class="navbar" role="navigation" aria-label="Navigazione principale">
+  <div class="navbar-brand">
+    <a href="../" aria-label="BABILONIA Home">BABILO<span class="gold">NIA</span></a>
+  </div>
+  <div class="nav-menu-pill" role="menubar">
+    <a href="../#la-scelta" role="menuitem">Prodotti</a>
+    <a href="../#contatto" role="menuitem">Consulenza</a>
+    <a href="./" role="menuitem" style="background:rgba(0,0,0,0.15);">Valuta Profilo</a>
+    <a href="../#collabora" role="menuitem">Collabora</a>
+    <a href="../booking/" role="menuitem" class="underline-pill">Prenota</a>
+  </div>
+  <button id="hamburger" class="hamburger" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="mobile-menu-overlay" role="dialog" aria-label="Menu mobile">
+  <a href="../#la-scelta">Prodotti</a>
+  <a href="../#contatto">Consulenza</a>
+  <a href="./">Valuta Profilo</a>
+  <a href="../#collabora">Collabora</a>
+  <a href="../booking/">Prenota</a>
+</div>
+
+<main id="main-content" class="qualifier-main">
+  <div class="qualifier-card">
+    <div class="qualifier-header">
+      <h1>Valutazione Profilo</h1>
+      <p class="subtitle">Proteggere il tuo patrimonio nel tempo</p>
+    </div>
+
+    <div class="qualifier-intro">
+      <p><strong>L'oro fisico è il modo più sicuro per proteggere il tuo patrimonio</strong> da inflazione, crisi economiche e instabilità finanziaria. Da secoli, l'oro mantiene il suo valore reale indipendentemente da banche, governi o mercati. Se stai cercando una consulenza personalizzata, compila il questionario in 2 minuti.</p>
+    </div>
+
+    <form id="qualifier-form" action="javascript:void(0)" method="POST" name="qualifierA">
+      <input type="hidden" name="form-type" value="Qualifier A - Clienti">
+      <input type="hidden" name="punteggio" id="score-input">
+      <input type="hidden" name="categoria" id="category-input">
+
+      <div class="question-block-qual">
+        <span class="question-number">1</span>
+        <span class="question-text">Per personalizzare al meglio le informazioni, mi dici in che fascia d'età ti trovi? <span class="required">*</span></span>
+        <div class="options">
+          <label class="option"><input type="radio" name="q1" value="1.00" required> <span class="option-label">Meno di 25 anni o più di 65 anni</span></label>
+          <label class="option"><input type="radio" name="q1" value="2.00"> <span class="option-label">25-34 anni</span></label>
+          <label class="option"><input type="radio" name="q1" value="3.00"> <span class="option-label">35-55 anni</span></label>
+          <label class="option"><input type="radio" name="q1" value="2.00"> <span class="option-label">56-65 anni</span></label>
+        </div>
+      </div>
+
+      <div class="question-block-qual">
+        <span class="question-number">2</span>
+        <span class="question-text">Cosa ti spinge a informarti oggi? Stai pensando a... <span class="required">*</span></span>
+        <div class="options">
+          <label class="option"><input type="radio" name="q2" value="1.00" required> <span class="option-label">Solo informarmi, senza impegno</span></label>
+          <label class="option"><input type="radio" name="q2" value="2.00"> <span class="option-label">Diversificare i miei investimenti</span></label>
+          <label class="option"><input type="radio" name="q2" value="3.00"> <span class="option-label">Proteggere i miei risparmi dall'inflazione</span></label>
+          <label class="option"><input type="radio" name="q2" value="3.00"> <span class="option-label">Integrare la mia pensione futura</span></label>
+        </div>
+      </div>
+
+      <div class="question-block-qual">
+        <span class="question-number">3</span>
+        <span class="question-text">Hai già pensato a come proteggere i tuoi risparmi? <span class="required">*</span></span>
+        <p class="checkbox-hint">Seleziona tutte le opzioni che ti riguardano</p>
+        <div class="options">
+          <label class="option"><input type="checkbox" name="q3" value="1.00"> <span class="option-label">Conto corrente / deposito bancario</span></label>
+          <label class="option"><input type="checkbox" name="q3" value="2.00"> <span class="option-label">Immobili</span></label>
+          <label class="option"><input type="checkbox" name="q3" value="2.00"> <span class="option-label">Titoli di mercato (azioni, obbligazioni)</span></label>
+          <label class="option"><input type="checkbox" name="q3" value="3.00"> <span class="option-label">Oro / Argento / Metalli preziosi</span></label>
+          <label class="option"><input type="checkbox" name="q3" value="2.00"> <span class="option-label">Nessuno, tutto in liquidità</span></label>
+          <label class="option"><input type="checkbox" name="q3" value="3.00"> <span class="option-label">Nessun risparmio significativo</span></label>
+        </div>
+      </div>
+
+      <div class="question-block-qual">
+        <span class="question-number">4</span>
+        <span class="question-text">In che tempi ti piacerebbe mettere al sicuro i tuoi asset? <span class="required">*</span></span>
+        <div class="options">
+          <label class="option"><input type="radio" name="q4" value="2.00" required> <span class="option-label">Questo mese</span></label>
+          <label class="option"><input type="radio" name="q4" value="1.00"> <span class="option-label">Entro 3 mesi</span></label>
+          <label class="option"><input type="radio" name="q4" value="0.00"> <span class="option-label">Entro 6 mesi</span></label>
+          <label class="option"><input type="radio" name="q4" value="0.00"> <span class="option-label">Non ancora deciso</span></label>
+        </div>
+      </div>
+
+      <div class="personal-info-box">
+        <h3>I tuoi dati di contatto</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Nome *</label><input type="text" name="nome" placeholder="Il tuo nome" required></div>
+          <div class="form-group"><label>Cognome *</label><input type="text" name="cognome" placeholder="Il tuo cognome" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Email *</label><input type="email" name="email" placeholder="tua@email.com" required></div>
+          <div class="form-group"><label>Telefono *</label><input type="tel" name="telefono" placeholder="+39 3XX XXX XXXX" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Telegram (opzionale)</label><input type="text" name="telegram_username" placeholder="@username"></div>
+          <div class="form-group"><label>Città</label><input type="text" name="citta" placeholder="La tua città"></div>
+        </div>
+      </div>
+
+      <div class="privacy-box">
+        <label><input type="checkbox" name="privacy" required> Dichiaro di aver letto l'informativa privacy e acconsento al trattamento dei dati personali ai sensi del GDPR.</label>
+      </div>
+
+      <button type="button" class="submit-btn" onclick="calculateAndShowResult()">CALCOLA PUNTEGGIO</button>
+    </form>
+
+    <!-- Risultato -->
+    <div id="result-box" class="result-box">
+      <h3 id="result-title"></h3>
+      <p id="result-message"></p>
+      <a id="booking-link" href="../booking/" class="booking-link" style="display: none;">📅 PRENOTA APPUNTAMENTO</a>
+      <button type="button" class="btn-secondary" onclick="submitAnyway()" style="margin-top: 10px;">📧 INVIA RICHIESTA COMUNQUE</button>
+    </div>
+  </div>
+</main>
+
+<!-- Footer V2 -->
+<footer class="footer-v2" role="contentinfo" style="margin-top: 60px;">
+  <div class="footer-content">
+    <div>
+      <div class="footer-brand">BABILO<span class="gold">NIA</span></div>
+      <p class="footer-desc">La rete di consulenti Careisgold. Consulenza gratuita, prodotto reale.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Azienda</h4>
+      <a href="../">Home</a>
+      <a href="../#la-scelta">Prodotti</a>
+      <a href="../#collabora">Collabora</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contatti</h4>
+      <a href="../booking/">Prenota</a>
+      <a href="mailto:stefano.santaiti@gmail.com">Email</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legale</h4>
+      <a href="../../privacy.html">Privacy</a>
+      <a href="../../termini.html">Termini</a>
+    </div>
+  </div>
+  <div class="footer-bottom" style="justify-content: center;">
+    <span>© 2026 Babilonia — Careisgold Network.</span>
+  </div>
+</footer>
+
+<!-- Gold Widget -->
+<div class="gold-widget" role="region" aria-label="Quotazione oro">
+  <div class="widget-header"><span style="font-size:1.1rem;">🪙</span><span>FIXING ORO</span></div>
+  <div class="widget-body">
+    <div class="fixing-value" id="fixing-value">—</div>
+    <div class="fixing-change" id="fixing-change">—</div>
+  </div>
+</div>
+
+<script src="../assets/careisgold-script.js"></script>
+<script>
+function calculateScore() {
+  let total = 0;
+  for (let i of [1, 2, 4]) {
+    const selected = document.querySelector('input[name="q' + i + '"]:checked');
+    if (selected) total += parseFloat(selected.value);
+  }
+  const q3Selected = document.querySelectorAll('input[name="q3"]:checked');
+  if (q3Selected.length > 0) {
+    let sum = 0;
+    q3Selected.forEach(cb => sum += parseFloat(cb.value));
+    total += (sum / q3Selected.length);
+  }
+  return parseFloat(total.toFixed(2));
+}
+function getCategory(score) {
+  if (score >= 9) return { name: '🔥 HOT', class: 'hot', bookable: true };
+  if (score >= 7) return { name: '🟡 WARM', class: 'warm', bookable: true };
+  if (score >= 5) return { name: '🔵 TEPID', class: 'tepid', bookable: false };
+  return { name: '❌ NON IDONEO', class: 'cold', bookable: false };
+}
+function calculateAndShowResult() {
+  const form = document.getElementById('qualifier-form');
+  if (!form.checkValidity()) { form.reportValidity(); return; }
+  const score = calculateScore();
+  const category = getCategory(score);
+  document.getElementById('score-input').value = score;
+  document.getElementById('category-input').value = category.name;
+  const resultBox = document.getElementById('result-box');
+  resultBox.className = 'result-box ' + category.class;
+  resultBox.style.display = 'block';
+  document.getElementById('result-title').textContent = 'Punteggio: ' + score + ' — ' + category.name;
+  if (category.bookable) {
+    document.getElementById('result-message').textContent = 'Ottimo! Il tuo profilo è compatibile. Prenota subito un appuntamento gratuito.';
+    document.getElementById('booking-link').style.display = 'inline-block';
+  } else {
+    document.getElementById('result-message').textContent = 'Grazie per la tua richiesta. Ti contatteremo via email con informazioni utili.';
+    document.getElementById('booking-link').style.display = 'none';
+  }
+  resultBox.scrollIntoView({ behavior: 'smooth' });
+}
+async function submitToTelegram(data) {
+  const BOT_TOKEN = '8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk';
+  const CHAT_ID = '354943189';
+  const q3Values = [];
+  document.querySelectorAll('input[name="q3"]:checked').forEach(cb => {
+    const label = cb.closest('.option').querySelector('.option-label').textContent;
+    q3Values.push(label);
+  });
+  const text = `🔔 NUOVO LEAD CLIENTE BABILONIA V2\n\n👤 ${data.nome} ${data.cognome}\n📧 ${data.email}\n📱 ${data.telefono}\n💬 Telegram: ${data.telegram_username || 'Non fornito'}\n📍 ${data.citta || 'N/D'}\n\n📊 PUNTEGGIO: ${data.punteggio}\n🏷️ CATEGORIA: ${data.categoria}\n\n📋 RISPOSTE:\n1. Età: ${document.querySelector('input[name="q1"]:checked')?.closest('.option').querySelector('.option-label').textContent || 'N/D'}\n2. Motivazione: ${document.querySelector('input[name="q2"]:checked')?.closest('.option').querySelector('.option-label').textContent || 'N/D'}\n3. Strumenti: ${q3Values.join(', ') || 'Nessuna'}\n4. Tempi: ${document.querySelector('input[name="q4"]:checked')?.closest('.option').querySelector('.option-label').textContent || 'N/D'}`;
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'HTML' })
+    });
+    return response.ok;
+  } catch (e) { console.error('Errore invio Telegram:', e); return false; }
+}
+async function submitAnyway() {
+  const form = document.getElementById('qualifier-form');
+  if (!form.checkValidity()) { form.reportValidity(); return; }
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+  data.q3 = formData.getAll('q3');
+  document.querySelector('.submit-btn').disabled = true;
+  document.querySelector('.submit-btn').textContent = 'Invio in corso...';
+  const sent = await submitToTelegram(data);
+  if (sent) {
+    document.getElementById('result-box').innerHTML = '<div style="font-size:4rem;margin-bottom:20px;">✅</div><h3 style="color:#b7955a;margin-bottom:15px;">Richiesta Inviata!</h3><p>Grazie, ti contatteremo presto.</p>';
+    document.getElementById('result-box').style.display = 'block';
+  } else {
+    alert('Errore nell\'invio. Riprova più tardi.');
+    document.querySelector('.submit-btn').disabled = false;
+    document.querySelector('.submit-btn').textContent = 'CALCOLA PUNTEGGIO';
+  }
+}
+</script>
+</body>
+</html>
