@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /manage/
+Disallow: /social-dashboard/
+
+Sitemap: https://stefanosantaiti.github.io/babilonia-landing/sitemap.xml
