@@ -20,4 +20,14 @@
     <priority>0.7</priority>
     <changefreq>monthly</changefreq>
   </url>
+  <url>
+    <loc>https://stefanosantaiti.github.io/babilonia-landing/blog/oro-fisico-vs-etf.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://stefanosantaiti.github.io/babilonia-landing/blog/come-iniziare-oro.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
 </urlset>
