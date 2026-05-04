@@ -18,47 +18,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/careisgold-style.css">
+<link rel="stylesheet" href="../../assets/qualifier-shared.css">
 <style>
+/* V2 Qualifier overrides (navbar + layout specific) */
 .qualifier-main { padding-top: 100px; min-height: 100vh; background: #fafafa; }
 .qualifier-card {
   background: #fff; border-radius: 20px;
   box-shadow: 0 10px 60px rgba(0,0,0,0.08);
   max-width: 720px; margin: 0 auto; padding: 40px 32px;
 }
-.qualifier-header {
-  text-align: center; margin-bottom: 30px;
-}
-.qualifier-header h1 {
-  font-size: 1.6rem; font-weight: 700; color: #1a1a1a;
-  text-transform: uppercase; letter-spacing: 1px;
-}
-.qualifier-header .subtitle {
-  color: #b7955a; font-size: 0.95rem; font-weight: 500; margin-top: 6px;
-}
-.qualifier-intro {
-  background: #f5f0e8; border-left: 4px solid #b7955a;
-  padding: 18px 20px; border-radius: 0 10px 10px 0; margin-bottom: 30px;
-}
-.qualifier-intro p { color: #444; line-height: 1.7; font-size: 0.9rem; }
 .question-block-qual { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #eee; }
 .question-block-qual:last-of-type { border-bottom: none; }
-.question-number {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; background: #b7955a; color: #fff;
-  border-radius: 50%; font-weight: 700; font-size: 0.85rem; margin-right: 10px;
-}
-.question-text { font-size: 1rem; color: #1a1a1a; font-weight: 600; line-height: 1.5; }
-.required { color: #e11d48; }
-.checkbox-hint { font-size: 0.8rem; color: #888; margin: 6px 0 12px 38px; }
-.options { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
-.option {
-  display: flex; align-items: flex-start; padding: 14px 16px;
-  background: #fafafa; border: 2px solid #e8e8e8; border-radius: 12px;
-  cursor: pointer; transition: all 0.3s ease;
-}
-.option:hover { background: #f5f0e8; border-color: #b7955a; }
-.option input { margin-right: 12px; margin-top: 2px; width: 18px; height: 18px; accent-color: #b7955a; }
-.option-label { flex: 1; font-size: 0.9rem; color: #444; line-height: 1.4; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
 .form-group { margin-bottom: 14px; }
 .form-group label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; font-size: 0.85rem; }
@@ -74,29 +44,10 @@
 }
 .privacy-box label { font-size: 0.85rem; color: #555; line-height: 1.5; }
 .privacy-box input { margin-right: 8px; accent-color: #b7955a; }
-.submit-btn {
-  width: 100%; padding: 18px; background: #b7955a; color: #fff;
-  border: none; border-radius: 12px; font-size: 1rem; font-weight: 700;
-  cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
-  transition: all 0.3s; font-family: inherit;
-}
-.submit-btn:hover { background: #9a7b4a; transform: translateY(-2px); }
-.result-box {
-  margin-top: 30px; padding: 30px; border-radius: 16px;
-  text-align: center; display: none;
-}
 .result-box.hot { background: #e8f5e9; border: 2px solid #4caf50; }
 .result-box.warm { background: #fff8e1; border: 2px solid #ffc107; }
 .result-box.tepid { background: #e3f2fd; border: 2px solid #2196f3; }
 .result-box.cold { background: #ffebee; border: 2px solid #f44336; }
-.result-box h3 { font-size: 1.5rem; margin-bottom: 12px; }
-.result-box p { margin-bottom: 20px; font-size: 1.05rem; }
-.booking-link {
-  display: inline-block; padding: 16px 40px; background: #b7955a;
-  color: #fff; border-radius: 10px; font-size: 1.1rem; font-weight: 700;
-  text-decoration: none; transition: all 0.3s;
-}
-.booking-link:hover { background: #9a7b4a; transform: translateY(-2px); }
 .btn-secondary {
   display: inline-block; padding: 14px 30px; background: transparent;
   color: #1a1a1a; border: 2px solid #ddd; border-radius: 10px;
@@ -111,7 +62,6 @@
 @media (max-width: 600px) {
   .qualifier-card { padding: 24px 18px; }
   .form-row { grid-template-columns: 1fr; }
-  .qualifier-header h1 { font-size: 1.3rem; }
 }
 </style>
 </head>
