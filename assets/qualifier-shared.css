@@ -217,3 +217,84 @@
     padding: 14px 24px;
   }
 }
+
+/* ============================================
+   DARK THEME VARIANT
+   Per Qualifier B (collaboratori) - Nero/Oro
+   ============================================ */
+
+.qualifier-container.dark {
+  background: #0a0a0a;
+  color: #fff;
+}
+.qualifier-container.dark .qualifier-header h1 {
+  color: #fff;
+}
+.qualifier-container.dark .qualifier-header .subtitle {
+  color: #d4af37;
+}
+.qualifier-container.dark .qualifier-intro {
+  background: rgba(255,255,255,0.05);
+  border-left-color: #d4af37;
+}
+.qualifier-container.dark .qualifier-intro p {
+  color: rgba(255,255,255,0.9);
+}
+.qualifier-container.dark .question-text {
+  color: #fff;
+}
+.qualifier-container.dark .option {
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.02);
+}
+.qualifier-container.dark .option:hover {
+  border-color: #d4af37;
+  background: rgba(212,175,55,0.1);
+}
+.qualifier-container.dark .option-label {
+  color: rgba(255,255,255,0.9);
+}
+.qualifier-container.dark .checkbox-hint {
+  color: rgba(255,255,255,0.6);
+}
+.qualifier-container.dark .result-box {
+  background: rgba(255,255,255,0.05);
+}
+.qualifier-container.dark .result-box h3 {
+  color: #d4af37;
+}
+.qualifier-container.dark .result-box p {
+  color: rgba(255,255,255,0.9);
+}
+.qualifier-container.dark .footer {
+  color: rgba(255,255,255,0.5);
+}
+
+/* ---- Progress Bar (Qualifier B only) ---- */
+.progress-container {
+  margin-bottom: 30px;
+}
+.progress-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #d4af37, #f0d878);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+.progress-text {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+}
+.qualifier-container:not(.dark) .progress-text {
+  color: #666;
+}
+.qualifier-container:not(.dark) .progress-bar {
+  background: rgba(0,0,0,0.1);
+}
