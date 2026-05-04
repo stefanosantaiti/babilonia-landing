@@ -148,6 +148,11 @@
 
         <div class="form-container">
             <form id="qualifierForm" action="javascript:void(0)" method="POST">
+                <!-- Honeypot anti-spam -->
+                <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none;" aria-hidden="true">
+                <label for="website_url">Non compilare</label>
+                <input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="off">
+                </div>
                 <input type="hidden" name="punteggio" id="punteggioInput">
                 <input type="hidden" name="categoria" id="categoriaInput">
                 <input type="hidden" name="lavoro_ideale_media" id="lavoroIdealeMedia">
@@ -286,6 +291,7 @@
         </div>
     </div>
 
+    <script src="assets/config.js"></script>
     <script>
         // Calcolo punteggio
         function calculateScore() {
@@ -365,50 +371,10 @@
             resultBox.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Invia a Telegram
-        async function submitToTelegram(data) {
-            const BOT_TOKEN = '8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk';
-            const CHAT_ID = '354943189';
-            
-            const text = `🔔 NUOVO CANDIDATO BABILONIA
-
-👤 ${data.nome} ${data.cognome}
-📧 ${data.email}
-📱 ${data.telefono}
-💬 Telegram: ${data.telegram_username || 'Non fornito'}
-📍 ${data.città || 'N/D'}
-
-📊 PUNTEGGIO: ${data.punteggio}/16
-🏷️ CATEGORIA: ${data.categoria}
-
-📝 RISPOSTE:
-• Professione: ${data.professione}
-• Visione: ${data.visione}
-• Tempo: ${data.tempo}
-• Lavoro ideale (media ${data.lavoro_ideale_media}): ${data.lavoro_ideale}
-• Motivazione: ${data.motivazione}
-• Decisione: ${data.decisione}`;
-
-            try {
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'HTML' })
-                });
-            } catch (e) {
-                console.log('Telegram notify failed:', e);
-            }
-        }
-
-        // Configurazione Supabase
-        const SUPABASE_URL = 'https://esgjushznmidzdhqsyyx.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
-
-        // Salva lead in Supabase + notifica Telegram
-        async function saveLead(data) {
+        // Invia lead sicuro all'Edge Function (Supabase + Telegram + anti-spam)
+        async function submitLead(data) {
             const lavoroIdealeValues = Array.from(document.querySelectorAll('input[name="lavoro_ideale"]:checked')).map(cb => cb.value);
-            
-            const leadData = {
+            const payload = {
                 name: `${data.nome} ${data.cognome}`,
                 email: data.email,
                 phone: data.telefono,
@@ -421,38 +387,22 @@
                     professione: data.professione,
                     visione: data.visione,
                     tempo: data.tempo,
-                    lavoro_ideale: lavoroIdealeValues,
+                    lavoro_ideale: lavoroIdealeValues.join(', '),
                     lavoro_ideale_media: data.lavoro_ideale_media,
                     motivazione: data.motivazione,
                     decisione: data.decisione
                 },
-                source: 'qualifier-b',
-                status: 'new'
+                source: 'qualifier-b'
             };
-
-            // Salva in Supabase (non bloccante)
-            const supabasePromise = fetch(`${SUPABASE_URL}/rest/v1/leads`, {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'return=representation'
-                },
-                body: JSON.stringify(leadData)
-            }).then(res => {
-                if (!res.ok) console.log('Supabase save status:', res.status);
-                return res.ok;
-            }).catch(err => {
-                console.log('Supabase save failed:', err);
-                return false;
-            });
-
-            // Notifica Telegram (sempre)
-            const telegramPromise = submitToTelegram(data);
-
-            // Attendi entrambi
-            await Promise.all([supabasePromise, telegramPromise]);
+            try {
+                await fetch('https://esgjushznmidzdhqsyyx.supabase.co/functions/v1/lead-capture', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (e) {
+                console.log('Lead capture failed:', e);
+            }
         }
 
         function submitFormAnyway() {
@@ -460,8 +410,8 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
             
-            // Salva in Supabase + Telegram
-            saveLead(data);
+            // Invia lead sicuro
+            submitLead(data);
             
             // Mostra conferma immediata
             document.getElementById('resultBox').innerHTML = `

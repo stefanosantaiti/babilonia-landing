@@ -157,6 +157,11 @@
     </div>
 
     <form id="qualifier-form" action="javascript:void(0)" method="POST" name="qualifierA">
+      <!-- Honeypot anti-spam -->
+      <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none;" aria-hidden="true">
+      <label for="website_url">Non compilare</label>
+      <input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="off">
+      </div>
       <input type="hidden" name="form-type" value="Qualifier A - Clienti">
       <input type="hidden" name="punteggio" id="score-input">
       <input type="hidden" name="categoria" id="category-input">
@@ -280,6 +285,7 @@
 </div>
 
 <script src="../assets/careisgold-script.js"></script>
+<script src="../assets/config.js"></script>
 <script>
 function calculateScore() {
   let total = 0;
@@ -321,23 +327,38 @@ function calculateAndShowResult() {
   }
   resultBox.scrollIntoView({ behavior: 'smooth' });
 }
-async function submitToTelegram(data) {
-  const BOT_TOKEN = '8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk';
-  const CHAT_ID = '354943189';
+// Invia lead sicuro (Edge Function → Supabase + Telegram)
+async function submitLead(data) {
   const q3Values = [];
   document.querySelectorAll('input[name="q3"]:checked').forEach(cb => {
     const label = cb.closest('.option').querySelector('.option-label').textContent;
     q3Values.push(label);
   });
-  const text = `🔔 NUOVO LEAD CLIENTE BABILONIA V2\n\n👤 ${data.nome} ${data.cognome}\n📧 ${data.email}\n📱 ${data.telefono}\n💬 Telegram: ${data.telegram_username || 'Non fornito'}\n📍 ${data.citta || 'N/D'}\n\n📊 PUNTEGGIO: ${data.punteggio}\n🏷️ CATEGORIA: ${data.categoria}\n\n📋 RISPOSTE:\n1. Età: ${document.querySelector('input[name="q1"]:checked')?.closest('.option').querySelector('.option-label').textContent || 'N/D'}\n2. Motivazione: ${document.querySelector('input[name="q2"]:checked')?.closest('.option').querySelector('.option-label').textContent || 'N/D'}\n3. Strumenti: ${q3Values.join(', ') || 'Nessuna'}\n4. Tempi: ${document.querySelector('input[name="q4"]:checked')?.closest('.option').querySelector('.option-label').textContent || 'N/D'}`;
+  const payload = {
+    name: `${data.nome} ${data.cognome}`,
+    email: data.email,
+    phone: data.telefono,
+    telegram_username: data.telegram_username || null,
+    city: data.citta || null,
+    lead_type: 'cliente',
+    score: parseFloat(data.punteggio) || 0,
+    category: data.categoria,
+    answers: {
+      eta: document.querySelector('input[name="q1"]:checked')?.closest('.option').querySelector('.option-label').textContent || 'N/D',
+      motivazione: document.querySelector('input[name="q2"]:checked')?.closest('.option').querySelector('.option-label').textContent || 'N/D',
+      strumenti: q3Values.join(', ') || 'Nessuna',
+      tempi: document.querySelector('input[name="q4"]:checked')?.closest('.option').querySelector('.option-label').textContent || 'N/D'
+    },
+    source: 'v2-qualifier-clienti'
+  };
   try {
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    const resp = await fetch(window.BABILONIA_CONFIG.LEAD_CAPTURE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'HTML' })
+      body: JSON.stringify(payload)
     });
-    return response.ok;
-  } catch (e) { console.error('Errore invio Telegram:', e); return false; }
+    return resp.ok;
+  } catch (e) { console.error('Lead capture error:', e); return false; }
 }
 async function submitAnyway() {
   const form = document.getElementById('qualifier-form');
@@ -347,7 +368,7 @@ async function submitAnyway() {
   data.q3 = formData.getAll('q3');
   document.querySelector('.submit-btn').disabled = true;
   document.querySelector('.submit-btn').textContent = 'Invio in corso...';
-  const sent = await submitToTelegram(data);
+  const sent = await submitLead(data);
   if (sent) {
     document.getElementById('result-box').innerHTML = '<div style="font-size:4rem;margin-bottom:20px;">✅</div><h3 style="color:#b7955a;margin-bottom:15px;">Richiesta Inviata!</h3><p>Grazie, ti contatteremo presto.</p>';
     document.getElementById('result-box').style.display = 'block';
