@@ -1,0 +1,219 @@
+/* ============================================
+   BABILONIA — Qualifier Shared Styles
+   Stili condivisi per tutti i qualifier form
+   ============================================ */
+
+/* ---- Base Layout ---- */
+.qualifier-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  background: #fafafa;
+  min-height: 100vh;
+}
+
+/* ---- Header ---- */
+.qualifier-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.qualifier-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.qualifier-header .subtitle {
+  color: #b7955a;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* ---- Intro Box ---- */
+.qualifier-intro {
+  background: #f5f0e8;
+  border-left: 4px solid #b7955a;
+  padding: 18px 20px;
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 30px;
+}
+.qualifier-intro p {
+  color: #444;
+  line-height: 1.7;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ---- Question Blocks ---- */
+.question-block {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #eee;
+}
+.question-block:last-of-type {
+  border-bottom: none;
+}
+
+/* Question number badge */
+.question-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: #b7955a;
+  color: #fff;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-right: 10px;
+}
+
+/* Question text */
+.question-text {
+  font-size: 1rem;
+  color: #1a1a1a;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.required {
+  color: #e11d48;
+  margin-left: 4px;
+}
+
+/* ---- Options ---- */
+.options {
+  margin-top: 16px;
+}
+.option {
+  display: flex;
+  align-items: flex-start;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 2px solid #e5e5e5;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.option:hover {
+  border-color: #b7955a;
+  background: #fefdf9;
+}
+.option input[type="radio"],
+.option input[type="checkbox"] {
+  margin: 3px 12px 0 0;
+  accent-color: #b7955a;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.option input[type="radio"]:checked + .option-label,
+.option input[type="checkbox"]:checked + .option-label {
+  font-weight: 600;
+  color: #b7955a;
+}
+.option-label {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* Checkbox hint */
+.checkbox-hint {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* ---- Form Actions ---- */
+.form-actions {
+  margin-top: 32px;
+  text-align: center;
+}
+
+/* Submit button */
+.submit-btn {
+  background: linear-gradient(135deg, #b7955a 0%, #9a7b4a 100%);
+  color: #fff;
+  border: none;
+  padding: 16px 48px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(183, 149, 90, 0.3);
+}
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(183, 149, 90, 0.4);
+}
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---- Result Box ---- */
+.result-box {
+  display: none;
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 32px;
+  text-align: center;
+  box-shadow: 0 10px 60px rgba(0, 0, 0, 0.08);
+  margin-top: 30px;
+}
+.result-box h3 {
+  color: #b7955a;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+.result-box p {
+  color: #444;
+  font-size: 0.95rem;
+}
+
+/* Booking link button */
+.booking-link {
+  display: inline-block;
+  background: linear-gradient(135deg, #b7955a 0%, #9a7b4a 100%);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 20px;
+  transition: all 0.3s;
+}
+.booking-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(183, 149, 90, 0.4);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  .qualifier-container {
+    padding: 24px 16px;
+  }
+  .qualifier-header h1 {
+    font-size: 1.3rem;
+  }
+  .option {
+    padding: 12px 14px;
+  }
+  .option-label {
+    font-size: 0.85rem;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 14px 24px;
+  }
+}
