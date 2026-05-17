@@ -3,290 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prenota Consulenza Gratuita — BABILONIA</title>
-<meta name="description" content="Prenota la tua consulenza gratuita con un esperto di oro fisico. Consulenza personalizzata, senza impegno.">
-<meta name="author" content="Stefano Santaiti">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://stefanosantaiti.github.io/babilonia-landing/v2/booking/">
-<meta property="og:title" content="Prenota Consulenza Gratuita — BABILONIA">
-<meta property="og:description" content="Consulenza personalizzata senza impegno. I nostri esperti ti guidano passo dopo passo.">
-<meta property="og:url" content="https://stefanosantaiti.github.io/babilonia-landing/v2/booking/">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-
-<link rel="stylesheet" href="../assets/qualifier-shared.css">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "BABILONIA — Prenotazione Consulenza Oro Fisico",
-  "description": "Prenota la tua consulenza gratuita con esperti di oro fisico. Consulenze personalizzate per la protezione del patrimonio.",
-  "url": "https://stefanosantaiti.github.io/babilonia-landing/v2/booking/",
-  "telephone": "+39-XXX-XXXXXXX",
-  "address": { "@type": "PostalAddress", "addressCountry": "IT" },
-  "priceRange": "€€",
-  "openingHours": ["Mo-Fr 09:00-18:00"],
-  "sameAs": ["https://www.facebook.com/1107273769127879"]
-}
-</script>
+<title>Prenota Consulenza — BABILONIA V2</title>
+<meta name="description" content="Prenota la tua consulenza gratuita con un consulente Babilonia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/careisgold-style.css">
 <style>
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  min-height: 100vh;
-  padding: 20px;
-  color: #333;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-.container { max-width: 700px; margin: 0 auto; }
-.header { text-align: center; padding: 40px 20px; color: #fff; }
-.header h1 { font-size: 1.8rem; font-weight: 300; margin-bottom: 10px; letter-spacing: 1px; }
-.header .subtitle { font-size: 1rem; opacity: 0.9; font-weight: 300; }
-.form-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); margin-bottom: 20px; }
-.intro { background: #f8f9fa; border-left: 4px solid #d4af37; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0; }
-.intro p { color: #555; line-height: 1.6; font-size: 0.95rem; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
-.form-group { margin-bottom: 12px; }
-.form-group label { display: block; margin-bottom: 6px; color: #333; font-weight: 500; font-size: 0.85rem; }
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: inherit;
-}
-.form-group textarea { resize: vertical; min-height: 100px; }
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none; border-color: #d4af37;
-}
-.required { color: #e74c3c; }
-.privacy { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 8px; font-size: 0.8rem; color: #666; }
-.privacy input { margin-right: 8px; accent-color: #d4af37; }
-.submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%); color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; }
-.submit-btn:hover { opacity: 0.9; }
-.footer { text-align: center; padding: 20px; color: rgba(255,255,255,0.6); font-size: 0.8rem; }
-.result-box { margin-top: 30px; padding: 30px; border-radius: 12px; text-align: center; display: none; }
-.result-box.success { background: #d4edda; border: 2px solid #28a745; }
-.result-box.error { background: #f8d7da; border: 2px solid #dc3545; }
-.result-box h3 { font-size: 1.5rem; margin-bottom: 10px; color: #333; }
-.result-box p { margin-bottom: 15px; font-size: 1rem; color: #555; }
+body { background: var(--black); }
+.booking-wrapper { padding-top: 100px; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+.booking-iframe { width: 100%; max-width: 800px; height: 85vh; border: none; border-radius: 16px; margin: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.booking-fallback { text-align: center; padding: 100px 24px; color: var(--white); }
+.booking-fallback h1 { font-size: 2rem; margin-bottom: 20px; color: var(--gold); }
+.booking-fallback p { color: var(--text-light); margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.7; }
 </style>
 </head>
 <body>
-<div class="container">
-<div class="header">
-<h1>PRENOTA CONSULENZA</h1>
-<p class="subtitle">Consulenza gratuita e senza impegno</p>
+<a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+
+<nav id="navbar" class="navbar" role="navigation" aria-label="Navigazione principale">
+  <div class="navbar-brand">
+    <a href="../" aria-label="BABILONIA Home">BABILO<span class="gold">NIA</span></a>
+  </div>
+  <div class="nav-menu-pill" role="menubar">
+    <a href="../#la-scelta" role="menuitem">Prodotti</a>
+    <a href="../#contatto" role="menuitem">Consulenza</a>
+    <a href="../#chi-siamo" role="menuitem">Chi siamo</a>
+    <a href="../#collabora" role="menuitem">Collabora</a>
+    <a href="./" role="menuitem" class="underline-pill" style="background:rgba(0,0,0,0.15);">Prenota</a>
+  </div>
+  <button id="hamburger" class="hamburger" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div id="mobile-menu" class="mobile-menu-overlay" role="dialog" aria-label="Menu mobile">
+  <a href="../#la-scelta">Prodotti</a>
+  <a href="../#contatto">Consulenza</a>
+  <a href="../#chi-siamo">Chi siamo</a>
+  <a href="../#collabora">Collabora</a>
+  <a href="./">Prenota</a>
 </div>
 
-<div class="form-card">
-<div class="intro">
-<p><strong>Prenota una consulenza personalizzata</strong> con un nostro esperto. Ti guideremo passo passo per capire se l'oro fisico può essere utile per la tua situazione. Nessuna pressione, nessun obbligo — solo informazioni concrete e risposte alle tue domande.</p>
+<main id="main-content" class="booking-wrapper">
+  <iframe src="../../booking/" class="booking-iframe" title="Prenota appuntamento" loading="lazy"
+    onerror="this.style.display='none'; document.getElementById('booking-fallback').style.display='block';">
+  </iframe>
+  <div id="booking-fallback" class="booking-fallback" style="display:none;">
+    <h1>Prenota la tua consulenza</h1>
+    <p>Non siamo riusciti a caricare il calendario. Clicca sotto per accedere direttamente alla prenotazione.</p>
+    <a href="../../booking/" class="progress-btn">Vai al booking</a>
+  </div>
+</main>
+
+<div class="gold-widget" role="region" aria-label="Quotazione oro">
+  <div class="widget-header"><span style="font-size:1.1rem;">&#9670;</span><span>FIXING ORO</span></div>
+  <div class="widget-body">
+    <div class="fixing-value" id="fixing-value">&mdash;</div>
+    <div class="fixing-change" id="fixing-change">&mdash;</div>
+  </div>
 </div>
 
-<form id="booking-form" action="javascript:void(0)" method="POST">
-<!-- Honeypot anti-spam -->
-<div style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none;" aria-hidden="true">
-<label for="website_url">Non compilare questo campo</label>
-<input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="off">
-</div>
-<input type="hidden" name="form-type" value="Booking V2">
-
-<div class="form-group">
-<label>Nome <span class="required">*</span></label>
-<input type="text" name="nome" id="nome" required placeholder="Il tuo nome">
-</div>
-
-<div class="form-row">
-<div class="form-group">
-<label>Cognome <span class="required">*</span></label>
-<input type="text" name="cognome" id="cognome" required placeholder="Il tuo cognome">
-</div>
-<div class="form-group">
-<label>Email <span class="required">*</span></label>
-<input type="email" name="email" id="email" required placeholder="tua@email.com">
-</div>
-</div>
-
-<div class="form-row">
-<div class="form-group">
-<label>Telefono <span class="required">*</span></label>
-<input type="tel" name="telefono" id="telefono" required placeholder="+39 3XX XXX XXXX">
-</div>
-<div class="form-group">
-<label>Come preferisci essere contattato?</label>
-<select name="preferenza_contatto" id="preferenza_contatto">
-<option value="telefono">Telefono</option>
-<option value="whatsapp">WhatsApp</option>
-<option value="email">Email</option>
-</select>
-</div>
-</div>
-
-<div class="form-group">
-<label>Quando vorresti la consulenza?</label>
-<select name="orario_preferito" id="orario_preferito">
-<option value="mattina">Mattina (9:00 - 12:00)</option>
-<option value="pomeriggio">Pomeriggio (14:00 - 18:00)</option>
-<option value="sera">Sera (18:00 - 21:30)</option>
-<option value="indifferente">Indifferente</option>
-</select>
-</div>
-
-<div class="form-group">
-<label>Hai gia valutato il tuo profilo sul nostro questionario?</label>
-<select name="ha_fatto_questionario" id="ha_fatto_questionario" required>
-<option value="">Seleziona...</option>
-<option value="no">No, non l'ho fatto</option>
-<option value="si">Si, gia compilato</option>
-</select>
-</div>
-
-<div id="questionario-nolink-box" class="result-box" style="display:none; margin-top: 20px;">
-<h3>Valuta prima il tuo profilo</h3>
-<p>Per offrirti una consulenza più mirata, ti chiediamo di compilare prima il questionario. Ti richiedera solo 2 minuti.</p>
-<a href="../qualifier-clienti/" target="_blank" class="submit-btn" style="display:inline-block; text-align:center;">VAI AL QUESTIONARIO</a>
-<p style="font-size:0.85rem; margin-top:15px; color:#666;">Dopo averlo compilato, torna qui e invia la richiesta di consulenza.</p>
-</div>
-
-<div class="form-group">
-<label>Domande o informazioni specifiche (opzionale)</label>
-<textarea name="note" id="note" placeholder="Scrivi qui eventuali domande o informazioni che vuoi condividere prima della consulenza..."></textarea>
-</div>
-
-<div class="form-row" style="margin-top: 20px;">
-<div class="form-group" style="margin-bottom: 0;">
-<label>Telegram (opzionale)</label>
-<input type="text" name="telegram_username" id="telegram" placeholder="@username">
-</div>
-<div class="form-group" style="margin-bottom: 0;">
-<label>Città</label>
-<input type="text" name="citta" id="citta" placeholder="La tua città">
-</div>
-</div>
-
-<div class="privacy">
-<label><input type="checkbox" name="privacy" id="privacy" required> Dichiaro di aver letto l'informativa privacy e acconsento al trattamento dei dati personali ai sensi del GDPR. <span class="required">*</span></label>
-</div>
-
-<button type="submit" class="submit-btn">PRENOTA CONSULENZA</button>
-</form>
-
-<div id="result-box" class="result-box">
-<h3 id="result-title"></h3>
-<p id="result-message"></p>
-</div>
-</div>
-
-<div class="footer">
-<p>© 2026 Babilonia — Careisgold Network. Tutti i diritti riservati.</p>
-</div>
-</div>
-
-<script>
-const LEAD_CAPTURE_URL = 'https://esgjushznmidzdhqsyyx.supabase.co/functions/v1/lead-capture';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
-
-async function submitBooking(data) {
-  const honeypot = document.getElementById('website_url');
-  if (honeypot && honeypot.value) {
-    console.log('Honeypot triggered — bot detected');
-    return { success: false, message: 'Invio non elaborato.' };
-  }
-
-  const payload = {
-    name: `${data.nome} ${data.cognome}`,
-    email: data.email,
-    phone: data.telefono,
-    telegram_username: data.telegram_username || null,
-    city: data.citta || null,
-    lead_type: 'cliente',
-    score: 0,
-    category: 'booking',
-    answers: {
-      preferenza_contatto: data.preferenza_contatto,
-      orario_preferito: data.orario_preferito,
-      ha_fatto_questionario: data.ha_fatto_questionario,
-      note: data.note || ''
-    },
-    source: 'booking-v2',
-    honeypot: honeypot ? honeypot.value : ''
-  };
-
-  try {
-    const response = await fetch(LEAD_CAPTURE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-      },
-      body: JSON.stringify(payload)
-    });
-
-    if (response.ok) {
-      return { success: true };
-    } else {
-      const errorData = await response.json().catch(() => ({}));
-      return { success: false, message: errorData.message || 'Errore durante l\'invio. Riprova.' };
-    }
-  } catch (e) {
-    console.error('Booking submission error:', e);
-    return { success: false, message: 'Connessione fallita. Riprova più tardi.' };
-  }
-}
-
-document.getElementById('booking-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-
-  const form = e.target;
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    return;
-  }
-
-  const submitBtn = form.querySelector('.submit-btn');
-  const originalText = submitBtn.textContent;
-  // Check questionario
-  const questionarioBox = document.getElementById('questionario-nolink-box');
-  if (data.ha_fatto_questionario === 'no') {
-    questionarioBox.style.display = 'block';
-    questionarioBox.scrollIntoView({ behavior: 'smooth' });
-    submitBtn.textContent = originalText;
-    submitBtn.disabled = false;
-    return;
-  }
-
-  // Proceed with submission
-  submitBtn.textContent = 'Invio in corso...';
-  submitBtn.disabled = true;
-
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData.entries());
-
-  const result = await submitBooking(data);
-
-  const resultBox = document.getElementById('result-box');
-  const resultTitle = document.getElementById('result-title');
-  const resultMessage = document.getElementById('result-message');
-
-  if (result.success) {
-    resultBox.className = 'result-box success';
-    resultTitle.textContent = '✅ Richiesta inviata!';
-    resultMessage.textContent = `Grazie ${data.nome}. Ti contatteremo presto via ${data.preferenza_contatto === 'email' ? 'email' : 'telefono'} per confermare la consulenza.`;
-    form.reset();
-  } else {
-    resultBox.className = 'result-box error';
-    resultTitle.textContent = '❌ Errore';
-    resultMessage.textContent = result.message || 'Si è verificato un errore. Riprova.';
-  }
-
-  resultBox.style.display = 'block';
-  resultBox.scrollIntoView({ behavior: 'smooth' });
-
-  submitBtn.textContent = originalText;
-  submitBtn.disabled = false;
-});
-</script>
+<script src="../assets/careisgold-script.js"></script>
 </body>
 </html>
