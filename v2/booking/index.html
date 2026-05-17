@@ -136,10 +136,18 @@ body {
 
 <div class="form-group">
 <label>Hai gia valutato il tuo profilo sul nostro questionario?</label>
-<select name="ha_fatto_questionario" id="ha_fatto_questionario">
+<select name="ha_fatto_questionario" id="ha_fatto_questionario" required>
+<option value="">Seleziona...</option>
 <option value="no">No, non l'ho fatto</option>
 <option value="si">Si, gia compilato</option>
 </select>
+</div>
+
+<div id="questionario-nolink-box" class="result-box" style="display:none; margin-top: 20px;">
+<h3>Valuta prima il tuo profilo</h3>
+<p>Per offrirti una consulenza più mirata, ti chiediamo di compilare prima il questionario. Ti richiedera solo 2 minuti.</p>
+<a href="../qualifier-clienti/" target="_blank" class="submit-btn" style="display:inline-block; text-align:center;">VAI AL QUESTIONARIO</a>
+<p style="font-size:0.85rem; margin-top:15px; color:#666;">Dopo averlo compilato, torna qui e invia la richiesta di consulenza.</p>
 </div>
 
 <div class="form-group">
@@ -235,6 +243,17 @@ document.getElementById('booking-form').addEventListener('submit', async functio
 
   const submitBtn = form.querySelector('.submit-btn');
   const originalText = submitBtn.textContent;
+  // Check questionario
+  const questionarioBox = document.getElementById('questionario-nolink-box');
+  if (data.ha_fatto_questionario === 'no') {
+    questionarioBox.style.display = 'block';
+    questionarioBox.scrollIntoView({ behavior: 'smooth' });
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+    return;
+  }
+
+  // Proceed with submission
   submitBtn.textContent = 'Invio in corso...';
   submitBtn.disabled = true;
 
