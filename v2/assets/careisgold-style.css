@@ -439,11 +439,3 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     transition-duration: 0.01ms !important;
   }
 }
-
-/* Mobile fix: contatto umano bg focus on people */
-@media (max-width: 768px) {
-  #contatto .bg-image {
-    background-position: center 20%;
-    background-size: cover;
-  }
-}
