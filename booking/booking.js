@@ -378,7 +378,7 @@ async function notifyTelegram(name, email, phone) {
 ✅ Confermato via web`;
 
     try {
-        await fetch(`https://api.telegram.org/bot8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk/sendMessage`, {
+        await fetch(`https://api.telegram.org/bot8847416923:AAEcWKU3M4L0NguzYaaOclNRZTUdKO1GSX8/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

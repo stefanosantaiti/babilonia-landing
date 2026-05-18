@@ -291,7 +291,7 @@ async function notifyTelegram(message) {
 📧 ${appointmentData.client_email}`;
 
     try {
-        await fetch(`https://api.telegram.org/bot8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk/sendMessage`, {
+        await fetch(`https://api.telegram.org/bot8847416923:AAEcWKU3M4L0NguzYaaOclNRZTUdKO1GSX8/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ chat_id: '354943189', text: text })

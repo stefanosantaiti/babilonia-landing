@@ -5,7 +5,7 @@
 
 const config = {
   telegram: {
-    botToken: process.env.TELEGRAM_BOT_TOKEN || '8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk',
+    botToken: process.env.TELEGRAM_BOT_TOKEN || '8847416923:AAEcWKU3M4L0NguzYaaOclNRZTUdKO1GSX8',
     chatId: process.env.TELEGRAM_CHAT_ID || '354943189'
   }
 };

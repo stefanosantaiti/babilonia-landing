@@ -20,7 +20,7 @@ const CONFIG = {
     supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs',
     
     // Telegram Bot
-    botToken: '8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk',
+    botToken: '8847416923:AAEcWKU3M4L0NguzYaaOclNRZTUdKO1GSX8',
     adminChatId: '354943189', // Stefano
     
     // Brevo API (da configurare)

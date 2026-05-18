@@ -32,7 +32,7 @@ async function saveLead(data) {
 
 // Notifica Telegram (funzione esistente, estratta per chiarezza)
 async function notifyTelegram(data) {
-    const BOT_TOKEN = '8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk';
+    const BOT_TOKEN = '8847416923:AAEcWKU3M4L0NguzYaaOclNRZTUdKO1GSX8';
     const CHAT_ID = '354943189';
     
     const text = data.lead_type === 'cliente' 
