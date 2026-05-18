@@ -1,11 +1,8 @@
-// Admin Interface v2.1 - Supabase Direct, Config Locale
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/+esm';
-
+// Admin Interface v2.2 - Supabase Direct, no ES module
 const SUPABASE_URL = 'https://esgjushznmidzdhqsyyx.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
+let supabase;
 let currentSeller = null;
 let sellerConfig = {
   days: [1, 2, 3, 4, 5],
@@ -13,9 +10,20 @@ let sellerConfig = {
   afternoon: ['14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00']
 };
 
+// Carica Supabase SDK
+function initSupabase() {
+  if (window.supabase && window.supabase.createClient) {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    loadSellers();
+  } else {
+    // Aspetta che lo SDK sia caricato
+    setTimeout(initSupabase, 100);
+  }
+}
+
 // Carica config da localStorage
 function loadConfig() {
-  const saved = localStorage.getItem('babilonia_config');
+  const saved = localStorage.getItem('babilonia_config_' + currentSeller);
   if (saved) {
     sellerConfig = JSON.parse(saved);
   }
@@ -23,29 +31,33 @@ function loadConfig() {
 
 // Salva config in localStorage
 function saveConfigLocal() {
-  localStorage.setItem('babilonia_config', JSON.stringify(sellerConfig));
+  localStorage.setItem('babilonia_config_' + currentSeller, JSON.stringify(sellerConfig));
 }
 
 // Carica seller
 async function loadSellers() {
-  const { data: sellers, error } = await supabase
-    .from('sellers')
-    .select('*')
-    .eq('active', true);
+  try {
+    const { data: sellers, error } = await supabase
+      .from('sellers')
+      .select('*')
+      .eq('active', true);
+      
+    if (error) {
+      showStatus('login-status', 'Errore caricamento: ' + error.message, false);
+      return;
+    }
     
-  if (error) {
-    showStatus('login-status', 'Errore caricamento: ' + error.message, false);
-    return;
+    const select = document.getElementById('seller-select');
+    select.innerHTML = '<option value="">-- Seleziona --</option>';
+    sellers.forEach(seller => {
+      const option = document.createElement('option');
+      option.value = seller.id;
+      option.textContent = seller.name;
+      select.appendChild(option);
+    });
+  } catch (e) {
+    showStatus('login-status', 'Errore connessione: ' + e.message, false);
   }
-  
-  const select = document.getElementById('seller-select');
-  select.innerHTML = '<option value="">-- Seleziona --</option>';
-  sellers.forEach(seller => {
-    const option = document.createElement('option');
-    option.value = seller.id;
-    option.textContent = seller.name;
-    select.appendChild(option);
-  });
 }
 
 // Login
@@ -98,7 +110,7 @@ function renderConfigForm() {
     </div>
     
     <div class="config-section">
-      <h3>🕐 Mattina</h3>
+      <h3>🌅 Mattina</h3>
       <div class="time-grid">
         ${morningTimes.map(t => `
           <label class="checkbox-label">
@@ -111,7 +123,7 @@ function renderConfigForm() {
     </div>
     
     <div class="config-section">
-      <h3>🕐 Pomeriggio e Sera</h3>
+      <h3>🌆 Pomeriggio e Sera</h3>
       <div class="time-grid">
         ${afternoonTimes.map(t => `
           <label class="checkbox-label">
@@ -123,8 +135,11 @@ function renderConfigForm() {
       </div>
     </div>
     
-    <button class="btn" onclick="saveConfig()">💾 Salva Configurazione</button>
+    <button class="btn" id="btn-save-config">💾 Salva Configurazione</button>
   `;
+  
+  // Aggancia evento dopo render
+  document.getElementById('btn-save-config').addEventListener('click', saveConfig);
 }
 
 // Salva configurazione
@@ -152,16 +167,13 @@ function saveConfig() {
 async function generateSlots() {
   showStatus('action-status', 'Generazione slot in corso...', true);
   
-  // FIX: Ottieni data e ora reali
   const now = new Date();
   const todayStr = now.toISOString().split('T')[0];
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
-  
-  // FIX: Calcola ora minima (adesso + 1 ora)
   const minTimeMinutes = (currentHour * 60 + currentMinute) + 60;
   
-  // FIX: Cancella TUTTI i slot esistenti del seller
+  // Cancella slot esistenti del seller
   const { error: deleteError } = await supabase
     .from('slots')
     .delete()
@@ -173,7 +185,6 @@ async function generateSlots() {
   
   const slots = [];
   
-  // Genera slot da oggi per 14 giorni
   for (let i = 0; i < 14; i++) {
     const date = new Date(now);
     date.setDate(now.getDate() + i);
@@ -184,12 +195,11 @@ async function generateSlots() {
     const dateStr = date.toISOString().split('T')[0];
     const isToday = (i === 0);
     
-    // FIX: Filtra orari per oggi (solo dopo +1 ora)
     sellerConfig.morning.forEach(time => {
       if (isToday) {
         const [h, m] = time.split(':').map(Number);
         const slotMinutes = h * 60 + m;
-        if (slotMinutes < minTimeMinutes) return; // Salta slot passati
+        if (slotMinutes < minTimeMinutes) return;
       }
       slots.push({
         id: `${currentSeller}_${dateStr}_${time}`,
@@ -205,7 +215,7 @@ async function generateSlots() {
       if (isToday) {
         const [h, m] = time.split(':').map(Number);
         const slotMinutes = h * 60 + m;
-        if (slotMinutes < minTimeMinutes) return; // Salta slot passati
+        if (slotMinutes < minTimeMinutes) return;
       }
       slots.push({
         id: `${currentSeller}_${dateStr}_${time}`,
@@ -224,7 +234,7 @@ async function generateSlots() {
     if (error) {
       showStatus('action-status', 'Errore: ' + error.message, false);
     } else {
-      showStatus('action-status', `${slots.length} slot generati!`, true);
+      showStatus('action-status', slots.length + ' slot generati!', true);
       loadSlots();
     }
   } else {
@@ -254,7 +264,6 @@ async function loadSlots() {
     return;
   }
   
-  // Raggruppa per data
   const byDate = {};
   slots.forEach(slot => {
     if (!byDate[slot.date]) byDate[slot.date] = [];
@@ -263,16 +272,25 @@ async function loadSlots() {
   
   let html = '';
   Object.keys(byDate).sort().forEach(date => {
-    html += `<h3 style="margin: 20px 0 10px 0; color: #1a1a2e;">${formatDate(date)}</h3>`;
+    html += '<h3 style="margin: 20px 0 10px 0; color: #1a1a2e;">' + formatDate(date) + '</h3>';
     html += '<div class="slots-grid">';
     byDate[date].forEach(slot => {
       const className = slot.available ? 'slot-available' : 'slot-unavailable';
-      html += `<div class="slot ${className}" onclick="toggleSlot('${slot.id}', ${!slot.available})">${slot.time}</div>`;
+      html += '<div class="slot ' + className + '" data-slot-id="' + slot.id + '" data-available="' + (!slot.available) + '">' + slot.time + '</div>';
     });
     html += '</div>';
   });
   
   container.innerHTML = html;
+  
+  // Aggancia eventi click sugli slot
+  container.querySelectorAll('.slot').forEach(el => {
+    el.addEventListener('click', function() {
+      const slotId = this.dataset.slotId;
+      const available = this.dataset.available === 'true';
+      toggleSlot(slotId, available);
+    });
+  });
 }
 
 // Carica appuntamenti
@@ -294,9 +312,11 @@ async function loadAppointments() {
   
   let html = '<div class="appointments-list">';
   appointments.forEach(apt => {
+    const aptType = apt.type || 'cliente';
+    const typeBadge = aptType === 'collaboratore' ? '🎯 Collaboratore' : '👤 Cliente';
     html += `
       <div class="appointment">
-        <div class="appointment-header">${apt.client_name}</div>
+        <div class="appointment-header">${apt.client_name} <small style="color:#d4af37;">${typeBadge}</small></div>
         <div class="appointment-details">
           📅 ${formatDate(apt.slots?.date)} ⏰ ${apt.slots?.time}<br>
           📧 ${apt.client_email}${apt.client_phone ? ' | 📱 ' + apt.client_phone : ''}
@@ -338,12 +358,11 @@ function showStatus(elementId, message, isSuccess) {
   setTimeout(() => el.style.display = 'none', 5000);
 }
 
-// Esporta funzioni globali
-window.loadSellers = loadSellers;
-window.login = login;
-window.saveConfig = saveConfig;
-window.generateSlots = generateSlots;
-window.toggleSlot = toggleSlot;
-
-// Inizializza
-loadSellers();
+// Inizializza quando DOM è pronto
+document.addEventListener('DOMContentLoaded', function() {
+  initSupabase();
+  
+  // Aggancia eventi (niente onclick inline)
+  document.getElementById('btn-login').addEventListener('click', login);
+  document.getElementById('btn-generate').addEventListener('click', generateSlots);
+});
