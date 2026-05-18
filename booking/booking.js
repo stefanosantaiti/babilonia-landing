@@ -82,13 +82,10 @@ async function loadAvailableSlots() {
 function renderCalendar() {
     const container = document.getElementById('calendar-container');
     
-    // Orario minimo per oggi: 2 ore da adesso
+    // Orario minimo per oggi: 2 ore da adesso (in fuso orario locale)
     const now = new Date();
     const minTimeToday = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-    
-    // Raggruppa per data
-    const byDate = {};
-    const todayStr = now.toISOString().split('T')[0];
+    const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
     
     availableSlots.forEach(slot => {
         const slotDate = new Date(slot.date + 'T00:00:00');
@@ -162,9 +159,9 @@ function loadTimeSlots() {
     
     let slots = availableSlots.filter(s => s.date === selectedDate);
     
-    // Se è oggi, mostra solo slot a 2+ ore da adesso
+    // Se è oggi, mostra solo slot a 2+ ore da adesso (fuso orario locale)
     const now = new Date();
-    const todayStr = now.toISOString().split('T')[0];
+    const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
     if (selectedDate === todayStr) {
         const minTimeToday = new Date(now.getTime() + 2 * 60 * 60 * 1000);
         slots = slots.filter(s => {
