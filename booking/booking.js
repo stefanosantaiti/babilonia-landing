@@ -82,14 +82,28 @@ async function loadAvailableSlots() {
 function renderCalendar() {
     const container = document.getElementById('calendar-container');
     
+    // Orario minimo per oggi: 2 ore da adesso
+    const now = new Date();
+    const minTimeToday = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+    
     // Raggruppa per data
     const byDate = {};
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset ora per confronto solo data
+    const todayStr = now.toISOString().split('T')[0];
     
     availableSlots.forEach(slot => {
         const slotDate = new Date(slot.date + 'T00:00:00');
-        if (slotDate > today) { // Solo date da domani in poi (esclude oggi)
+        
+        // Se è oggi, filtra solo slot a 2+ ore da adesso
+        if (slot.date === todayStr) {
+            const slotTime = slot.time ? slot.time.substring(0, 5) : '00:00';
+            const [hours, minutes] = slotTime.split(':').map(Number);
+            const slotDateTime = new Date(slot.date + 'T' + slotTime.padStart(5, '0') + ':00');
+            if (slotDateTime >= minTimeToday) {
+                if (!byDate[slot.date]) byDate[slot.date] = [];
+                byDate[slot.date].push(slot);
+            }
+        } else if (slotDate > new Date(todayStr + 'T00:00:00')) {
+            // Date future: tutti gli slot
             if (!byDate[slot.date]) byDate[slot.date] = [];
             byDate[slot.date].push(slot);
         }
@@ -146,10 +160,22 @@ function loadTimeSlots() {
         month: 'long' 
     });
     
-    const slots = availableSlots.filter(s => s.date === selectedDate);
+    let slots = availableSlots.filter(s => s.date === selectedDate);
+    
+    // Se è oggi, mostra solo slot a 2+ ore da adesso
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    if (selectedDate === todayStr) {
+        const minTimeToday = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+        slots = slots.filter(s => {
+            const slotTime = s.time ? s.time.substring(0, 5) : '00:00';
+            const slotDateTime = new Date(s.date + 'T' + slotTime.padStart(5, '0') + ':00');
+            return slotDateTime >= minTimeToday;
+        });
+    }
     
     if (slots.length === 0) {
-        container.innerHTML = '<div class="loading">Nessun orario disponibile</div>';
+        container.innerHTML = '<div class="loading">Nessun orario disponibile per oggi</div>';
         return;
     }
     
