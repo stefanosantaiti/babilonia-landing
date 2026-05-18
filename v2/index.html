@@ -124,17 +124,63 @@
   </section>
 
   <!-- ==================== CONTATTO UMANO ==================== -->
-  <section id="contatto" class="section-full" aria-label="Contatto umano">
-    <div class="bg-image" style="background-image: url('./assets/img/contatto-umano.jpg');"></div>
-    <div class="overlay" style="background: rgba(0,0,0,0.55);"></div>
-    <div class="content" style="text-align: center;">
-      <h2 class="hero-title io-fade-up" style="max-width: 800px; margin: 0 auto;">
-        Per noi il <span class="text-gold">contatto umano</span> è fondamentale
-      </h2>
-      <p class="hero-subtitle io-fade-up delay-1" style="margin: 24px auto 0;">
+  <section id="contatto" class="section-dark" aria-label="Contatto umano">
+    <div class="content" style="max-width: 900px; margin: 0 auto;">
+      <h2 class="section-title text-white io-fade-up" style="text-align: center;">Per noi il <span class="text-gold">contatto umano</span> è fondamentale</h2>
+      <p class="section-text text-light io-fade-up delay-1" style="text-align: center; max-width: 700px; margin: 16px auto 40px;">
         I nostri consulenti dedicati ti guidano passo dopo passo. Nessun call center, nessun bot. Solo persone reali che capiscono le tue esigenze e costruiscono un percorso su misura per te e la tua famiglia.
       </p>
-      <a href="qualifier-clienti/" class="progress-btn io-fade-up delay-2" style="margin-top: 40px;">Scopri di più</a>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;">
+        <!-- Form di contatto -->
+        <div class="io-fade-up delay-2">
+          <h3 style="color: #d4af37; font-size: 1.1rem; margin-bottom: 24px; letter-spacing: 1px;">SCRIVICI</h3>
+          <form id="contact-form" onsubmit="handleContactForm(event)">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">Nome *</label>
+                <input type="text" name="nome" required placeholder="Il tuo nome" style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem;">
+              </div>
+              <div>
+                <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">Cognome *</label>
+                <input type="text" name="cognome" required placeholder="Il tuo cognome" style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem;">
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+              <div>
+                <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">Città</label>
+                <input type="text" name="citta" placeholder="La tua città" style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem;">
+              </div>
+              <div>
+                <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">Telefono</label>
+                <input type="tel" name="telefono" placeholder="+39 3XX XXX XXXX" style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem;">
+              </div>
+            </div>
+            <div style="margin-top: 12px;">
+              <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">E-mail *</label>
+              <input type="email" name="email" required placeholder="tua@email.com" style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem;">
+            </div>
+            <div style="margin-top: 12px;">
+              <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">Cosa vuoi chiederci *</label>
+              <textarea name="messaggio" required rows="4" placeholder="Scrivi la tua domanda..." style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem; resize: vertical;"></textarea>
+            </div>
+            <button type="submit" id="contact-submit-btn" style="width: 100%; margin-top: 16px; padding: 14px; background: linear-gradient(135deg, #d4af37, #c5a028); color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; letter-spacing: 1px;">INVIA MESSAGGIO</button>
+          </form>
+          <div id="contact-status" style="margin-top: 12px; text-align: center; display: none;"></div>
+        </div>
+
+        <!-- Prenota consulenza -->
+        <div class="io-fade-up delay-3" style="text-align: center; padding-top: 20px;">
+          <div style="background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2); border-radius: 16px; padding: 40px 30px;">
+            <div style="font-size: 3rem; margin-bottom: 16px;">📞</div>
+            <h3 style="color: #d4af37; font-size: 1.2rem; margin-bottom: 16px;">PREFERISCI PARLARE?</h3>
+            <p style="color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 30px; font-size: 0.95rem;">
+              Prenota una consulenza gratuita con un nostro esperto. Zero impegni, zero pressione. Solo una conversazione vera per capire se e come l'oro può essere utile per te.
+            </p>
+            <a href="qualifier-clienti/" class="progress-btn" style="display: inline-block; text-decoration: none;">Prenota consulenza gratuita</a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -266,8 +312,7 @@
       <div class="footer-col">
         <h4>Contatti</h4>
         <a href="../booking/">Prenota consulenza</a>
-        <a href="mailto:stefano.santaiti@gmail.com">stefano.santaiti@gmail.com</a>
-        <a href="tel:+393XXXXXXXXX">+39 3XX XXX XXXX</a>
+        <a href="#contatto">Scrivici</a>
       </div>
 
       <div class="footer-col">
@@ -299,5 +344,55 @@
   </div>
 
   <script src="assets/careisgold-script.js"></script>
+  <script>
+  // Contact form handler
+  async function handleContactForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = document.getElementById('contact-submit-btn');
+    const status = document.getElementById('contact-status');
+    
+    const data = {
+      nome: form.nome.value.trim(),
+      cognome: form.cognome.value.trim(),
+      citta: form.citta.value.trim(),
+      telefono: form.telefono.value.trim(),
+      email: form.email.value.trim(),
+      messaggio: form.messaggio.value.trim()
+    };
+    
+    btn.disabled = true;
+    btn.textContent = 'Invio in corso...';
+    
+    try {
+      // Usa Netlify Function per inviare
+      const resp = await fetch('/.netlify/functions/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      if (resp.ok) {
+        status.style.display = 'block';
+        status.style.color = '#d4af37';
+        status.textContent = 'Messaggio inviato! Ti contatteremo presto.';
+        form.reset();
+      } else {
+        // Fallback: mailto
+        const subject = encodeURIComponent('Messaggio dal sito Babilonia');
+        const body = encodeURIComponent(`Nome: ${data.nome} ${data.cognome}\nCittà: ${data.citta}\nTelefono: ${data.telefono}\nEmail: ${data.email}\n\n${data.messaggio}`);
+        window.location.href = `mailto:stefano.santaiti@gmail.com?subject=${subject}&body=${body}`;
+      }
+    } catch (err) {
+      // Fallback: mailto
+      const subject = encodeURIComponent('Messaggio dal sito Babilonia');
+      const body = encodeURIComponent(`Nome: ${data.nome} ${data.cognome}\nCittà: ${data.citta}\nTelefono: ${data.telefono}\nEmail: ${data.email}\n\n${data.messaggio}`);
+      window.location.href = `mailto:stefano.santaiti@gmail.com?subject=${subject}&body=${body}`;
+    }
+    
+    btn.disabled = false;
+    btn.textContent = 'INVIA MESSAGGIO';
+  }
+  </script>
 </body>
 </html>
