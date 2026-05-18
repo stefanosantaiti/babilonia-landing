@@ -325,7 +325,8 @@ window.confirmBooking = async function() {
                 'Content-Type': 'application/json',
                 'Prefer': 'return=minimal'
             },
-        await notifyTelegram(name, email, phone);
+            body: JSON.stringify({ available: false })
+        });
         
         // Aggiorna success con link Zoom e gestione
         document.getElementById('success-message').innerHTML = `
