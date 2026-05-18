@@ -273,6 +273,13 @@ window.confirmBooking = async function() {
         
         if (!response.ok) throw new Error('Errore creazione appuntamento');
         
+        // Notifica Telegram (SUBITO, indipendentemente dal resto)
+        try {
+            await notifyTelegram(name, email, phone);
+        } catch (e) {
+            console.error('Errore notifica Telegram:', e);
+        }
+        
         // Carica dettagli seller PRIMA di inviare email
         const sellerRes = await fetch(`${SUPABASE_URL}/rest/v1/sellers?id=eq.${selectedSeller}&select=name,zoom_link`, {
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
@@ -318,10 +325,6 @@ window.confirmBooking = async function() {
                 'Content-Type': 'application/json',
                 'Prefer': 'return=minimal'
             },
-            body: JSON.stringify({ available: false })
-        });
-        
-        // Notifica Telegram
         await notifyTelegram(name, email, phone);
         
         // Aggiorna success con link Zoom e gestione
