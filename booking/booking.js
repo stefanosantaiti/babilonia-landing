@@ -87,6 +87,9 @@ function renderCalendar() {
     const minTimeToday = new Date(now.getTime() + 2 * 60 * 60 * 1000);
     const todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
     
+    // Raggruppa per data
+    const byDate = {};
+    
     availableSlots.forEach(slot => {
         const slotDate = new Date(slot.date + 'T00:00:00');
         
