@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prenota Call di Selezione — Diventa Consulente BABILONIA</title>
+<meta name="description" content="Prenota la tua call di selezione per diventare consulente nella rete Babilonia. Formazione professionale, prodotto reale, guadagni sui risultati.">
+<meta name="author" content="Stefano Santaiti">
+<link rel="canonical" href="https://stefanosantaiti.github.io/babilonia-landing/booking-collaboratori/">
+<meta property="og:title" content="Prenota Call di Selezione — Diventa Consulente BABILONIA">
+<meta property="og:description" content="Prenota la tua call di selezione. Formazione, prodotto reale, guadagni sui risultati.">
+
+<meta property="og:url" content="https://stefanosantaiti.github.io/babilonia-landing/booking-collaboratori/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-dark: #c5a028;
+            --navy: #1a1a2e;
+            --navy-light: #16213e;
+            --white: #ffffff;
+            --gray-50: #f8f9fa;
+            --gray-100: #f0f0f0;
+            --gray-200: #e0e0e0;
+            --gray-400: #888;
+            --gray-600: #666;
+            --gray-800: #333;
+            --success: #28a745;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.25);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); 
+            min-height: 100vh; 
+            padding: 20px; 
+            color: var(--gray-800);
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: 680px; margin: 0 auto; }
+        
+        /* HEADER */
+        .header { 
+            text-align: center; 
+            padding: 48px 20px 32px; 
+            color: #fff; 
+        }
+        .header .logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+        .header h1 { 
+            font-size: 1.9rem; 
+            font-weight: 300; 
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+        }
+        .header p { 
+            opacity: 0.85; 
+            font-weight: 300;
+            font-size: 1rem;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        
+        /* STEP INDICATOR */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding: 0 20px;
+        }
+        .step-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+        }
+        .step-dot.active {
+            background: var(--gold);
+            color: var(--navy);
+            border-color: var(--gold);
+        }
+        .step-dot.completed {
+            background: var(--success);
+            color: #fff;
+            border-color: var(--success);
+        }
+        .step-line {
+            flex: 1;
+            max-width: 40px;
+            height: 2px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 1px;
+        }
+        .step-line.completed {
+            background: var(--success);
+        }
+        
+        /* INTRO */
+        .intro-booking {
+            background: var(--white); 
+            border-left: 4px solid var(--gold);
+            padding: 24px; 
+            margin-bottom: 24px; 
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            box-shadow: var(--shadow-sm);
+        }
+        .intro-booking p {
+            color: var(--gray-600);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+        .intro-booking strong {
+            color: var(--navy);
+            font-weight: 600;
+        }
+        
+        /* CARDS */
+        .card { 
+            background: var(--white); 
+            border-radius: var(--radius-lg); 
+            padding: 32px; 
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .card h2 { 
+            color: var(--navy); 
+            margin-bottom: 24px; 
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 24px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+        
+        /* STEPS */
+        .step { display: none; animation: fadeIn 0.3s ease; }
+        .step.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* SELECT */
+        .seller-select { 
+            width: 100%; 
+            padding: 16px; 
+            font-size: 1rem; 
+            border: 2px solid var(--gray-200); 
+            border-radius: var(--radius-md); 
+            margin-bottom: 20px;
+            background: var(--gray-50);
+            color: var(--navy);
+            cursor: pointer;
+            transition: var(--transition);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 44px;
+        }
+        .seller-select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+        }
+        
+        /* CALENDAR */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin: 24px 0;
+        }
+        .calendar-header {
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 0;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            border: 2px solid transparent;
+        }
+        .calendar-day.disabled {
+            background: var(--gray-100);
+            color: var(--gray-200);
+            cursor: not-allowed;
+        }
+        .calendar-day.available {
+            background: var(--white);
+            color: var(--navy);
+            border-color: var(--gray-200);
+        }
+        .calendar-day.available:hover {
+            background: var(--gold);
+            color: var(--white);
+            border-color: var(--gold);
+            transform: scale(1.08);
+            box-shadow: var(--shadow-md);
+        }
+        .calendar-day.selected {
+            background: var(--gold);
+            color: var(--white);
+            border-color: var(--gold);
+            box-shadow: var(--shadow-md);
+        }
+        .calendar-day .day-name {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.7;
+        }
+        .calendar-day .day-number {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        /* TIME SLOTS */
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 24px 0;
+        }
+        .time-slot {
+            padding: 14px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid var(--gray-200);
+            background: var(--white);
+            font-weight: 500;
+            color: var(--navy);
+        }
+        .time-slot:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        .time-slot.selected {
+            background: var(--gold);
+            color: var(--white);
+            border-color: var(--gold);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* FORM */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gray-800);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            background: var(--gray-50);
+            transition: var(--transition);
+            color: var(--navy);
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+        }
+        .form-group input::placeholder {
+            color: var(--gray-400);
+        }
+        
+        /* BUTTONS */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .btn:disabled {
+            background: var(--gray-200);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .back-btn {
+            background: transparent;
+            color: var(--gray-600);
+            border: 2px solid var(--gray-200);
+            margin-top: 12px;
+        }
+        .back-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            color: var(--navy);
+            box-shadow: none;
+        }
+        
+        /* SUMMARY */
+        .summary {
+            background: var(--gray-50);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin: 20px 0 28px;
+            border: 1px solid var(--gray-200);
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--gray-200);
+        }
+        .summary-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .summary-label {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+        .summary-value {
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 0.95rem;
+        }
+        
+        /* SUCCESS */
+        .success-message {
+            text-align: center;
+            padding: 48px 32px;
+        }
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: scaleIn 0.4s ease;
+        }
+        .success-icon::after {
+            content: '';
+            width: 28px;
+            height: 14px;
+            border-left: 4px solid #fff;
+            border-bottom: 4px solid #fff;
+            transform: rotate(-45deg) translate(2px, -2px);
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+        .success-message h3 {
+            color: var(--success);
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .success-message p {
+            color: var(--gray-600);
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        /* LOADING */
+        .loading {
+            text-align: center;
+            color: var(--gray-400);
+            padding: 48px;
+            font-size: 0.95rem;
+        }
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-200);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            margin-left: 12px;
+            vertical-align: middle;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* MONTH NAV */
+        .month-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .month-nav button {
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        .month-nav button:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+        }
+        .month-nav h3 {
+            font-size: 1rem;
+            color: var(--navy);
+            font-weight: 600;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            .header { padding: 32px 16px 24px; }
+            .header h1 { font-size: 1.5rem; }
+            .card { padding: 24px; border-radius: var(--radius-md); }
+            .calendar-grid { gap: 4px; }
+            .calendar-day { font-size: 0.7rem; border-radius: var(--radius-sm); }
+            .step-dot { width: 28px; height: 28px; font-size: 0.7rem; }
+            .step-line { max-width: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-badge">BABILONIA</div>
+            <h1>Prenota la tua call di selezione</h1>
+            <p>Seleziona data e ora per il colloquio conoscitivo con il nostro team.</p>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator" id="step-indicator">
+            <div class="step-dot active" data-step="1">1</div>
+            <div class="step-line" data-line="1"></div>
+            <div class="step-dot" data-step="2">2</div>
+            <div class="step-line" data-line="2"></div>
+            <div class="step-dot" data-step="3">3</div>
+            <div class="step-line" data-line="3"></div>
+            <div class="step-dot" data-step="4">4</div>
+            <div class="step-line" data-line="4"></div>
+            <div class="step-dot" data-step="5">5</div>
+        </div>
+
+        <div class="intro-booking" style="background: #f8f9fa; border-left: 4px solid #d4af37; padding: 20px; margin-bottom: 20px; border-radius: 0 8px 8px 0;">
+            <p style="color: #555; line-height: 1.6; font-size: 0.95rem;"><strong>Prenota la tua call di selezione con un referente Babilonia.</strong> Durante il colloquio di 30 minuti capiremo insieme se questo percorso professionale fa per te. Ti spiegheremo come funziona la rete, la formazione e i guadagni reali. Nessuna pressione, solo informazioni trasparenti. Scegli data e ora, riceverai il link Zoom nella conferma.</p>
+        </div>
+
+        <!-- Step 1: Selezione Consulente -->
+        <div class="card step active" id="step-1">
+            <h2>Scegli il Referente</h2>
+            <p style="color: var(--gray-600); margin-bottom: 20px; font-size: 0.9rem;">Seleziona il referente con cui vuoi parlare</p>
+            <select id="seller-select" class="seller-select">
+                <option value="">-- Seleziona referente --</option>
+            </select>
+            <button class="btn" onclick="goToStep(2)">Continua →</button>
+        </div>
+
+        <!-- Step 2: Selezione Data -->
+        <div class="card step" id="step-2">
+            <h2>Seleziona la Data</h2>
+            <p style="color: var(--gray-600); margin-bottom: 20px; font-size: 0.9rem;">Giorni disponibili evidenziati in oro</p>
+            <div id="calendar-container">
+                <div class="loading">Caricamento calendario...</div>
+            </div>
+            <button class="btn back-btn" onclick="goToStep(1)">← Indietro</button>
+        </div>
+
+        <!-- Step 3: Selezione Orario -->
+        <div class="card step" id="step-3">
+            <h2>Seleziona l'Orario</h2>
+            <p id="selected-date-display" style="color: var(--gray-600); margin-bottom: 20px; font-size: 0.9rem;"></p>
+            <div id="time-container">
+                <div class="loading">Caricamento orari...</div>
+            </div>
+            <button class="btn back-btn" onclick="goToStep(2)">← Indietro</button>
+        </div>
+
+        <!-- Step 4: Dati Personali -->
+        <div class="card step" id="step-4">
+            <h2>I tuoi Dati</h2>
+            <p style="color: var(--gray-600); margin-bottom: 20px; font-size: 0.9rem;">Completa i dati per confermare il colloquio di selezione</p>
+            
+            <div class="summary">
+                <div class="summary-item">
+                    <span class="summary-label">Data</span>
+                    <span class="summary-value" id="summary-date">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Ora</span>
+                    <span class="summary-value" id="summary-time">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Referente</span>
+                    <span class="summary-value" id="summary-seller">--</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Nome e Cognome *</label>
+                <input type="text" id="client-name" placeholder="Mario Rossi" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" id="client-email" placeholder="mario@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label>Telefono *</label>
+                <input type="tel" id="client-phone" placeholder="+39 333 123 4567" required>
+            </div>
+
+            <div class="form-group">
+                <label>Telegram Username (opzionale)</label>
+                <input type="text" id="client-telegram" placeholder="@tuousername">
+            </div>
+
+            <button class="btn" onclick="confirmBooking()">✓ Conferma Colloquio</button>
+            <button class="btn back-btn" onclick="goToStep(3)">← Indietro</button>
+        </div>
+
+        <!-- Step 5: Conferma -->
+        <div class="card step" id="step-5">
+            <div class="success-message" id="success-message">
+                <div class="success-icon"></div>
+                <h3>Colloquio Confermato!</h3>
+                <p>Riceverai una conferma via email con tutti i dettagli.</p>
+                <p>Il referente ti contatterà prima dell'incontro.</p>
+                <br>
+                <a href="/collabora.html" class="btn">Torna a Collabora</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="./booking-auto-slots.js?v=2"></script>
+    <script type="module" src="./booking.js?v=2"></script>
+</body>
+</html>
