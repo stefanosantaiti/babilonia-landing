@@ -230,6 +230,22 @@ window.confirmBooking = async function() {
     btn.textContent = 'Conferma in corso...';
     
     try {
+        // VERIFICA SLOT ANCORA DISPONIBILE (race condition protection)
+        const slotCheck = await fetch(`${SUPABASE_URL}/rest/v1/slots?id=eq.${selectedSlot}&available=eq.true`, {
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+        });
+        const slotData = await slotCheck.json();
+        if (slotData.length === 0) {
+            alert('Questo slot è stato appena prenotato da un altro utente. Torna indietro e seleziona un altro orario.');
+            btn.disabled = false;
+            btn.textContent = '✓ Conferma Appuntamento';
+            goToStep(3);
+            return;
+        }
+        
         // Genera ID appuntamento
         const appointmentId = `apt_${Date.now()}`;
         
