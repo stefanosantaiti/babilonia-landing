@@ -9,12 +9,14 @@ const SELLER_CONFIGS = {
   1: { // Stefano
     days: [1, 2, 3, 4, 5], // Lun-Ven
     morning: ['09:00', '10:00', '11:00'],
-    afternoon: ['14:00', '15:00', '16:00', '17:00']
+    afternoon: ['14:00', '15:00', '16:00', '17:00'],
+    evening: ['18:00', '19:00', '20:00']
   },
   3: { // Luca
     days: [1, 2, 3, 4, 5],
     morning: ['09:30', '10:30', '11:30'],
-    afternoon: ['14:30', '15:30', '16:30']
+    afternoon: ['14:30', '15:30', '16:30'],
+    evening: ['18:00', '19:00', '20:00']
   }
 };
 
@@ -86,6 +88,18 @@ async function generateSlotsForAllSellers() {
       
       // Slot pomeriggio
       config.afternoon.forEach(time => {
+        slots.push({
+          id: generateSlotId(sellerId, dateStr, time),
+          seller_id: parseInt(sellerId),
+          date: dateStr,
+          time: time + ':00',
+          available: true,
+          type: 'conoscitivo'
+        });
+      });
+      
+      // Slot serali
+      config.evening.forEach(time => {
         slots.push({
           id: generateSlotId(sellerId, dateStr, time),
           seller_id: parseInt(sellerId),
