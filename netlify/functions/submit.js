@@ -33,7 +33,7 @@ exports.handler = async (event, context) => {
     const message = formatTelegramMessage(data, score, category);
 
     // Invia a Telegram
-    const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8619224941:AAFRV8prDTn58MseqNKKBbEUEBbsNZnu9wk';
+    const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8847416923:AAEcWKU3M4L0NguzYaaOclNRZTUdKO1GSX8';
     const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '354943189';
 
     const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;

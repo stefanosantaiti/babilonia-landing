@@ -416,6 +416,7 @@ button { font-family: inherit; cursor: pointer; }
   .section-light, .section-dark { padding: 60px 20px; }
   .footer-v2 .footer-content { grid-template-columns: 1fr; gap: 30px; }
   .footer-v2 .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  #contatto .content > div { grid-template-columns: 1fr !important; }
   .gold-widget { bottom: 16px; right: 16px; left: 16px; max-width: none; }
 }
 

@@ -3,70 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prenota Consulenza — BABILONIA V2</title>
-<meta name="description" content="Prenota la tua consulenza gratuita con un consulente Babilonia.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Prenota Consulenza — BABILONIA</title>
+<meta name="description" content="Prenota la tua consulenza gratuita con un esperto Babilonia.">
+<link rel="canonical" href="https://stefanosantaiti.github.io/babilonia-landing/v2/booking/">
 <link rel="stylesheet" href="../assets/careisgold-style.css">
 <style>
-.booking-wrapper {
-  padding-top: 100px; min-height: 100vh;
-  background: var(--black);
-  display: flex; align-items: center; justify-content: center;
+body { background: var(--black); }
+.booking-page { min-height: 100vh; padding: 120px 20px 60px; display: flex; flex-direction: column; align-items: center; }
+.booking-header { text-align: center; color: var(--white); margin-bottom: 40px; }
+.booking-header h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: 2px; margin-bottom: 10px; }
+.booking-header h1 span { color: var(--gold); }
+.booking-header p { color: var(--text-light); font-size: 1rem; }
+.booking-card { background: var(--white); border-radius: 16px; padding: 30px; width: 100%; max-width: 500px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.booking-card h2 { font-size: 1.1rem; color: var(--dark); margin-bottom: 20px; border-bottom: 2px solid var(--gold); padding-bottom: 10px; }
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; margin-bottom: 6px; color: var(--dark); font-weight: 500; font-size: 0.9rem; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 10px; font-size: 1rem; font-family: inherit;
+  box-sizing: border-box;
 }
-.booking-iframe {
-  width: 100%; max-width: 800px; height: 85vh;
-  border: none; border-radius: 16px;
-  margin: 20px;
-}
-.booking-fallback {
-  text-align: center; padding: 100px 24px; color: var(--white);
-}
-.booking-fallback h1 { font-size: 2rem; margin-bottom: 20px; color: var(--gold); }
-.booking-fallback p { color: var(--text-light); margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--gold); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.privacy { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 8px; font-size: 0.8rem; color: #666; }
+.privacy input { margin-right: 8px; accent-color: var(--gold); }
+.submit-btn { width: 100%; padding: 18px; background: var(--gold); color: var(--white); border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+.submit-btn:hover { opacity: 0.9; }
+.result-box { display: none; margin-top: 20px; padding: 25px; border-radius: 12px; text-align: center; }
+.result-box.success { background: #d4edda; border: 2px solid #28a745; }
+.result-box.error { background: #f8d7da; border: 2px solid #dc3545; }
+.result-box h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--dark); }
+.result-box p { font-size: 0.95rem; color: #555; }
+@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-<a href="#main-content" class="skip-link">Salta al contenuto principale</a>
-
-<nav id="navbar" class="navbar" role="navigation" aria-label="Navigazione principale">
+<nav id="navbar" class="navbar">
   <div class="navbar-brand">
-    <a href="../" aria-label="BABILONIA Home">BABILO<span class="gold">NIA</span></a>
+    <a href="../">BABILO<span class="gold">NIA</span></a>
   </div>
-  <div class="nav-menu-pill" role="menubar">
-    <a href="../#la-scelta" role="menuitem">Prodotti</a>
-    <a href="../#contatto" role="menuitem">Consulenza</a>
-    <a href="../qualifier-clienti/" role="menuitem">Valuta Profilo</a>
-    <a href="../#collabora" role="menuitem">Collabora</a>
-    <a href="./" role="menuitem" class="underline-pill" style="background:rgba(0,0,0,0.15);">Prenota</a>
+  <div class="nav-menu-pill">
+    <a href="../#la-scelta">Prodotti</a>
+    <a href="../#contatto">Consulenza</a>
+    <a href="../#chi-siamo">Chi siamo</a>
+    <a href="../#collabora">Collabora</a>
+    <a href="./" class="underline-pill" style="background:rgba(0,0,0,0.15);">Prenota</a>
   </div>
-  <button id="hamburger" class="hamburger" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-menu">
+  <button id="hamburger" class="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<div id="mobile-menu" class="mobile-menu-overlay" role="dialog" aria-label="Menu mobile">
+<div class="mobile-menu-overlay" id="mobile-menu">
   <a href="../#la-scelta">Prodotti</a>
   <a href="../#contatto">Consulenza</a>
-  <a href="../qualifier-clienti/">Valuta Profilo</a>
+  <a href="../#chi-siamo">Chi siamo</a>
   <a href="../#collabora">Collabora</a>
   <a href="./">Prenota</a>
 </div>
 
-<main id="main-content" class="booking-wrapper">
-  <iframe src="../../booking/" class="booking-iframe" title="Prenota appuntamento" loading="lazy"
-    onerror="this.style.display='none'; document.getElementById('booking-fallback').style.display='block';">
-  </iframe>
-  <div id="booking-fallback" class="booking-fallback" style="display:none;">
-    <h1>Prenota la tua consulenza</h1>
-    <p>Non siamo riusciti a caricare il calendario. Clicca sotto per accedere direttamente alla prenotazione.</p>
-    <a href="../../booking/" class="progress-btn">Vai al booking</a>
+<div class="booking-page">
+  <div class="booking-header">
+    <h1>PRENOTA <span>CONSULENZA</span></h1>
+    <p>Gratuita e senza impegno</p>
   </div>
-</main>
 
-<div class="gold-widget" role="region" aria-label="Quotazione oro">
-  <div class="widget-header"><span style="font-size:1.1rem;">&#9670;</span><span>FIXING ORO</span></div>
+  <div class="booking-card">
+    <h2>I tuoi dati</h2>
+
+    <form id="booking-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nome *</label>
+          <input type="text" name="nome" required placeholder="Mario">
+        </div>
+        <div class="form-group">
+          <label>Cognome *</label>
+          <input type="text" name="cognome" required placeholder="Rossi">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" name="email" required placeholder="mario@email.com">
+      </div>
+
+      <div class="form-group">
+        <label>Telefono *</label>
+        <input type="tel" name="telefono" required placeholder="+39 3XX XXX XXXX">
+      </div>
+
+      <div class="form-group">
+        <label>Hai gia compilato il questionario?</label>
+        <select name="questionario" id="questionario">
+          <option value="no">No, non l'ho fatto</option>
+          <option value="si">Si, gia compilato</option>
+        </select>
+      </div>
+
+      <div id="questionario-nolink" class="result-box" style="display:none; background:#fff3cd; border-color:#ffc107;">
+        <h3 style="color:#856404;">Compila prima il questionario</h3>
+        <p style="color:#856404;">Per una consulenza più mirata, ti chiediamo di rispondere ad alcune domande. Ti richiedera solo 2 minuti.</p>
+        <a href="../qualifier-clienti/" target="_blank" class="submit-btn" style="display:inline-block; margin-top:10px; text-decoration:none;">VAI AL QUESTIONARIO</a>
+      </div>
+
+      <div class="form-group">
+        <label>Quando preferisci essere contattato?</label>
+        <select name="orario">
+          <option value="mattina">Mattina (9-12)</option>
+          <option value="pomeriggio">Pomeriggio (14-18)</option>
+          <option value="sera">Sera (18-21:30)</option>
+          <option value="indifferente">Indifferente</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Note (opzionale)</label>
+        <textarea name="note" placeholder="Domande o informazioni..."></textarea>
+      </div>
+
+      <div class="privacy">
+        <label><input type="checkbox" name="privacy" required> Acconsento al trattamento dei dati personali ai sensi del GDPR. *</label>
+      </div>
+
+      <button type="submit" class="submit-btn">PRENOTA CONSULENZA</button>
+    </form>
+
+    <div id="result-box" class="result-box"></div>
+  </div>
+</div>
+
+<div class="gold-widget">
+  <div class="widget-header"><span>&#9670;</span><span>FIXING ORO</span></div>
   <div class="widget-body">
     <div class="fixing-value" id="fixing-value">&mdash;</div>
     <div class="fixing-change" id="fixing-change">&mdash;</div>
@@ -74,5 +141,79 @@
 </div>
 
 <script src="../assets/careisgold-script.js"></script>
+<script>
+const API_URL = 'https://esgjushznmidzdhqsyyx.supabase.co/functions/v1/lead-capture';
+const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
+
+document.getElementById('questionario').addEventListener('change', function() {
+  const box = document.getElementById('questionario-nolink');
+  if (this.value === 'no') {
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    box.style.display = 'none';
+  }
+});
+
+document.getElementById('booking-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const questionario = document.getElementById('questionario').value;
+  if (questionario === 'no') {
+    const box = document.getElementById('questionario-nolink');
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+
+  const form = e.target;
+  const submitBtn = form.querySelector('.submit-btn');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = 'Invio...';
+  submitBtn.disabled = true;
+
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  const payload = {
+    name: `${data.nome} ${data.cognome}`,
+    email: data.email,
+    phone: data.telefono,
+    lead_type: 'cliente',
+    score: 0,
+    category: 'booking-v2',
+    answers: { orario: data.orario, note: data.note || '', questionario: data.questionario },
+    source: 'booking-v2-direct'
+  };
+
+  const resultBox = document.getElementById('result-box');
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      resultBox.className = 'result-box success';
+      resultBox.innerHTML = '<h3>✅ Richiesta inviata!</h3><p>Ti contatteremo presto per confermare la consulenza.</p>';
+      form.reset();
+    } else {
+      throw new Error(result.message || 'Errore');
+    }
+  } catch (err) {
+    resultBox.className = 'result-box error';
+    resultBox.innerHTML = '<h3>❌ Errore</h3><p>Riprova piu tardi.</p>';
+  }
+
+  resultBox.style.display = 'block';
+  resultBox.scrollIntoView({ behavior: 'smooth' });
+  submitBtn.textContent = originalText;
+  submitBtn.disabled = false;
+});
+</script>
 </body>
 </html>

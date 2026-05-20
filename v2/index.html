@@ -32,7 +32,7 @@
       <a href="#contatto" role="menuitem">Consulenza</a>
       <a href="qualifier-clienti/" role="menuitem">Valuta Profilo</a>
       <a href="#collabora" role="menuitem">Collabora</a>
-      <a href="booking/" role="menuitem" class="underline-pill">Prenota</a>
+      <a href="../booking/" role="menuitem" class="underline-pill">Prenota</a>
     </div>
     <button id="hamburger" class="hamburger" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span><span></span>
@@ -45,13 +45,13 @@
     <a href="#contatto">Consulenza</a>
     <a href="qualifier-clienti/">Valuta Profilo</a>
     <a href="#collabora">Collabora</a>
-    <a href="booking/">Prenota</a>
+    <a href="../booking/">Prenota</a>
     <a href="qualifier-collaboratori/">Diventa Consulente</a>
   </div>
 
   <!-- ==================== HERO ==================== -->
   <section id="main-content" class="section-full" aria-label="Hero">
-    <div class="bg-image" style="background-image: url('https://images.unsplash.com/photo-1610375461246-83df859d849d?w=1920&q=80');"></div>
+    <div class="bg-image" style="background-image: url('./assets/img/hero-gold.jpg');"></div>
     <div class="overlay" style="background: rgba(0,0,0,0.55);"></div>
     <div class="content" style="text-align: center;">
       <h1 class="hero-title anim-fade-up" style="max-width: 900px; margin: 0 auto;">
@@ -61,7 +61,7 @@
         Babilonia: la rete di consulenti Careisgold che rende l'investimento in oro alla portata di ogni famiglia italiana.
       </p>
       <div style="margin-top: 40px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-        <a href="booking/" class="progress-btn anim-fade-up" style="animation-delay: 0.2s;">Prenota consulenza gratuita</a>
+        <a href="../booking/" class="progress-btn anim-fade-up" style="animation-delay: 0.2s;">Prenota consulenza gratuita</a>
         <a href="#perche-oro" class="progress-btn anim-fade-up" style="animation-delay: 0.3s;">Perché l'oro?</a>
       </div>
     </div>
@@ -81,7 +81,7 @@
         </div>
       </div>
       <div class="io-fade-zoom">
-        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80" 
+        <img src="./assets/img/choice-gold.jpg" 
              alt="Lingotti d'oro su superficie riflettente" 
              style="border-radius: 16px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.4);"
              loading="lazy">
@@ -124,17 +124,63 @@
   </section>
 
   <!-- ==================== CONTATTO UMANO ==================== -->
-  <section id="contatto" class="section-full" aria-label="Contatto umano">
-    <div class="bg-image" style="background-image: url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1920&q=80');"></div>
-    <div class="overlay" style="background: rgba(0,0,0,0.55);"></div>
-    <div class="content" style="text-align: center;">
-      <h2 class="hero-title io-fade-up" style="max-width: 800px; margin: 0 auto;">
-        Per noi il <span class="text-gold">contatto umano</span> è fondamentale
-      </h2>
-      <p class="hero-subtitle io-fade-up delay-1" style="margin: 24px auto 0;">
+  <section id="contatto" class="section-dark" aria-label="Contatto umano">
+    <div class="content" style="max-width: 900px; margin: 0 auto;">
+      <h2 class="section-title text-white io-fade-up" style="text-align: center;">Per noi il <span class="text-gold">contatto umano</span> è fondamentale</h2>
+      <p class="section-text text-light io-fade-up delay-1" style="text-align: center; max-width: 700px; margin: 16px auto 40px;">
         I nostri consulenti dedicati ti guidano passo dopo passo. Nessun call center, nessun bot. Solo persone reali che capiscono le tue esigenze e costruiscono un percorso su misura per te e la tua famiglia.
       </p>
-      <a href="qualifier-clienti/" class="progress-btn io-fade-up delay-2" style="margin-top: 40px;">Scopri di più</a>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;">
+        <!-- Form di contatto -->
+        <div class="io-fade-up delay-2">
+          <h3 style="color: #d4af37; font-size: 1.1rem; margin-bottom: 24px; letter-spacing: 1px;">SCRIVICI</h3>
+          <form id="contact-form" onsubmit="handleContactForm(event)">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">Nome *</label>
+                <input type="text" name="nome" required placeholder="Il tuo nome" style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem;">
+              </div>
+              <div>
+                <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">Cognome *</label>
+                <input type="text" name="cognome" required placeholder="Il tuo cognome" style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem;">
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+              <div>
+                <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">Città</label>
+                <input type="text" name="citta" placeholder="La tua città" style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem;">
+              </div>
+              <div>
+                <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">Telefono</label>
+                <input type="tel" name="telefono" placeholder="+39 3XX XXX XXXX" style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem;">
+              </div>
+            </div>
+            <div style="margin-top: 12px;">
+              <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">E-mail *</label>
+              <input type="email" name="email" required placeholder="tua@email.com" style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem;">
+            </div>
+            <div style="margin-top: 12px;">
+              <label style="display: block; color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 4px;">Cosa vuoi chiederci *</label>
+              <textarea name="messaggio" required rows="4" placeholder="Scrivi la tua domanda..." style="width: 100%; padding: 12px; border: 1px solid rgba(212,175,55,0.3); border-radius: 8px; background: rgba(255,255,255,0.05); color: #fff; font-size: 0.95rem; resize: vertical;"></textarea>
+            </div>
+            <button type="submit" id="contact-submit-btn" style="width: 100%; margin-top: 16px; padding: 14px; background: linear-gradient(135deg, #d4af37, #c5a028); color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; letter-spacing: 1px;">INVIA MESSAGGIO</button>
+          </form>
+          <div id="contact-status" style="margin-top: 12px; text-align: center; display: none;"></div>
+        </div>
+
+        <!-- Prenota consulenza -->
+        <div class="io-fade-up delay-3" style="text-align: center; padding-top: 20px;">
+          <div style="background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2); border-radius: 16px; padding: 40px 30px;">
+            <div style="font-size: 3rem; margin-bottom: 16px;">📞</div>
+            <h3 style="color: #d4af37; font-size: 1.2rem; margin-bottom: 16px;">PREFERISCI PARLARE?</h3>
+            <p style="color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 30px; font-size: 0.95rem;">
+              Prenota una consulenza gratuita con un nostro esperto. Zero impegni, zero pressione. Solo una conversazione vera per capire se e come l'oro può essere utile per te.
+            </p>
+            <a href="qualifier-clienti/" class="progress-btn" style="display: inline-block; text-decoration: none;">Prenota consulenza gratuita</a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -142,7 +188,7 @@
   <section id="banco-metalli" class="section-light" aria-label="Banco Metalli">
     <div class="content grid-2">
       <div class="io-fade-zoom">
-        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80" 
+        <img src="./assets/img/bars-gold.jpg" 
              alt="Dettaglio di lingotti d'oro certificati" 
              style="border-radius: 16px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.15);"
              loading="lazy">
@@ -197,6 +243,37 @@
     </div>
   </section>
 
+  <!-- ==================== CHI SIAMO ==================== -->
+  <section id="chi-siamo" class="section-dark" aria-label="Chi siamo">
+    <div class="content" style="max-width: 800px; margin: 0 auto; text-align: center;">
+      <h2 class="section-title text-white io-fade-up">Chi <span class="text-gold">siamo</span></h2>
+      <p class="section-text text-light io-fade-up delay-1" style="max-width: 700px; margin: 20px auto; line-height: 1.8;">
+        Non siamo dipendenti di una banca. Non siamo promotori finanziari. Non lavoriamo per un fondo d'investimento.
+      </p>
+      <p class="section-text text-light io-fade-up delay-1" style="max-width: 700px; margin: 20px auto; line-height: 1.8;">
+        Siamo consulenti indipendenti che operano attraverso <strong>Careisgold</strong>, Banco Metalli autorizzato e <strong>Operatore Professionale in Oro (OPO6)</strong> iscritto all'OAM con licenza della Questura. Il nostro compito è aiutare le famiglie italiane a capire se e come l'oro fisico può essere uno strumento utile per proteggere i propri risparmi. Lo facciamo con consulenze personalizzate, senza call center, senza obblighi, senza pressione commerciale.
+      </p>
+      <div style="margin: 50px 0; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 40px;">
+        <h3 class="text-gold io-fade-up delay-2" style="font-size: 1.3rem; margin-bottom: 30px; letter-spacing: 1px;">I NOSTRI VALORI</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; text-align: left;">
+          <div class="io-fade-up delay-2" style="padding: 20px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(212,175,55,0.2);">
+            <p style="color: #d4af37; font-weight: 600; font-size: 0.95rem; margin-bottom: 10px;">TRASPARENZA E AFFIDABILITÀ</p>
+            <p style="color: rgba(255,255,255,0.8); line-height: 1.7; font-size: 0.9rem;">Crediamo che siano l'unica base possibile per qualsiasi relazione di fiducia. Ogni grammo d'oro che proponiamo è certificato 999,9/1000, tracciato e custodito in caveau di alta sicurezza in Italia. Non vendiamo promesse: vendiamo prodotto reale.</p>
+          </div>
+          <div class="io-fade-up delay-3" style="padding: 20px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(212,175,55,0.2);">
+            <p style="color: #d4af37; font-weight: 600; font-size: 0.95rem; margin-bottom: 10px;">MISSIONE</p>
+            <p style="color: rgba(255,255,255,0.8); line-height: 1.7; font-size: 0.9rem;">La nostra mission è prenderci cura delle persone, soprattutto delle famiglie. Per questo ogni percorso parte da una consulenza vera, fatta per capire la tua situazione e non per venderti qualcosa.</p>
+          </div>
+          <div class="io-fade-up delay-4" style="padding: 20px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(212,175,55,0.2);">
+            <p style="color: #d4af37; font-weight: 600; font-size: 0.95rem; margin-bottom: 10px;">FORMAZIONE E SUPPORTO</p>
+            <p style="color: rgba(255,255,255,0.8); line-height: 1.7; font-size: 0.9rem;">Crediamo nella formazione continua e nel supporto dedicato. Ogni consulente Babilonia è formato, supportato e libero di costruire il proprio percorso professionale secondo i propri ritmi.</p>
+          </div>
+        </div>
+        <p class="io-fade-up delay-4" style="margin-top: 40px; color: #d4af37; font-style: italic; font-size: 1rem;">"L'Unione è Forza: insieme, trasformiamo ogni opportunità in valore condiviso."</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ==================== NOVITÀ E APPROFONDIMENTI ==================== -->
   <section id="novita" class="section-light" aria-label="Novità e approfondimenti">
     <div class="content" style="text-align: center;">
@@ -226,7 +303,7 @@
 
       <div class="footer-col">
         <h4>Azienda</h4>
-        <a href="qualifier-clienti/">Chi siamo</a>
+        <a href="#chi-siamo">Chi siamo</a>
         <a href="qualifier-clienti/">Prodotti</a>
         <a href="qualifier-collaboratori/">Lavora con noi</a>
         <a href="../blog-home.html" target="_blank" rel="noopener">Blog</a>
@@ -234,9 +311,8 @@
 
       <div class="footer-col">
         <h4>Contatti</h4>
-        <a href="booking/">Prenota consulenza</a>
-        <a href="mailto:stefano.santaiti@gmail.com">stefano.santaiti@gmail.com</a>
-        <a href="tel:+393XXXXXXXXX">+39 3XX XXX XXXX</a>
+        <a href="../booking/">Prenota consulenza</a>
+        <a href="#contatto">Scrivici</a>
       </div>
 
       <div class="footer-col">
@@ -268,5 +344,55 @@
   </div>
 
   <script src="assets/careisgold-script.js"></script>
+  <script>
+  // Contact form handler
+  async function handleContactForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = document.getElementById('contact-submit-btn');
+    const status = document.getElementById('contact-status');
+    
+    const data = {
+      nome: form.nome.value.trim(),
+      cognome: form.cognome.value.trim(),
+      citta: form.citta.value.trim(),
+      telefono: form.telefono.value.trim(),
+      email: form.email.value.trim(),
+      messaggio: form.messaggio.value.trim()
+    };
+    
+    btn.disabled = true;
+    btn.textContent = 'Invio in corso...';
+    
+    try {
+      // Usa Netlify Function per inviare
+      const resp = await fetch('/.netlify/functions/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      if (resp.ok) {
+        status.style.display = 'block';
+        status.style.color = '#d4af37';
+        status.textContent = 'Messaggio inviato! Ti contatteremo presto.';
+        form.reset();
+      } else {
+        // Fallback: mailto
+        const subject = encodeURIComponent('Messaggio dal sito Babilonia');
+        const body = encodeURIComponent(`Nome: ${data.nome} ${data.cognome}\nCittà: ${data.citta}\nTelefono: ${data.telefono}\nEmail: ${data.email}\n\n${data.messaggio}`);
+        window.location.href = `mailto:stefano.santaiti@gmail.com?subject=${subject}&body=${body}`;
+      }
+    } catch (err) {
+      // Fallback: mailto
+      const subject = encodeURIComponent('Messaggio dal sito Babilonia');
+      const body = encodeURIComponent(`Nome: ${data.nome} ${data.cognome}\nCittà: ${data.citta}\nTelefono: ${data.telefono}\nEmail: ${data.email}\n\n${data.messaggio}`);
+      window.location.href = `mailto:stefano.santaiti@gmail.com?subject=${subject}&body=${body}`;
+    }
+    
+    btn.disabled = false;
+    btn.textContent = 'INVIA MESSAGGIO';
+  }
+  </script>
 </body>
 </html>

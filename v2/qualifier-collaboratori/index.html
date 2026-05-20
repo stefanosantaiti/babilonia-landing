@@ -77,7 +77,7 @@
     <a href="../#contatto" role="menuitem">Consulenza</a>
     <a href="../qualifier-clienti/" role="menuitem">Valuta Profilo</a>
     <a href="./" role="menuitem" style="background:rgba(0,0,0,0.15);">Collabora</a>
-    <a href="../booking/" role="menuitem" class="underline-pill">Prenota</a>
+    <a href="../booking-collaboratori/" role="menuitem" class="underline-pill">Prenota colloquio</a>
   </div>
   <button id="hamburger" class="hamburger" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-menu">
     <span></span><span></span><span></span>
@@ -89,7 +89,7 @@
   <a href="../#contatto">Consulenza</a>
   <a href="../qualifier-clienti/">Valuta Profilo</a>
   <a href="./">Collabora</a>
-  <a href="../booking/">Prenota</a>
+  <a href="../booking-collaboratori/">Prenota colloquio</a>
 </div>
 
 <main id="main-content" class="qualifier-main">
@@ -115,62 +115,73 @@
 
       <div class="question-block-qual">
         <span class="question-number">1</span>
-        <span class="question-text">Hai gia esperienza nel settore vendite / network? <span class="required">*</span></span>
+        <span class="question-text">Ci descriva la sua attuale occupazione <span class="required">*</span></span>
         <div class="options">
-          <label class="option"><input type="radio" name="q1" value="3.00" required> <span class="option-label">Si, lavoro nel settore da anni</span></label>
-          <label class="option"><input type="radio" name="q1" value="2.00"> <span class="option-label">Ho qualche esperienza</span></label>
-          <label class="option"><input type="radio" name="q1" value="1.00"> <span class="option-label">No, ma sono motivato/a</span></label>
+          <label class="option"><input type="radio" name="q1" value="2.00" required> <span class="option-label">Lavoro dipendente (soddisfatto)</span></label>
+          <label class="option"><input type="radio" name="q1" value="2.50"> <span class="option-label">Lavoro dipendente (insoddisfatto)</span></label>
+          <label class="option"><input type="radio" name="q1" value="3.00"> <span class="option-label">Libero professionista</span></label>
+          <label class="option"><input type="radio" name="q1" value="3.00"> <span class="option-label">Imprenditore / Attività propria</span></label>
+          <label class="option"><input type="radio" name="q1" value="2.00"> <span class="option-label">Cerco lavoro / Stagista</span></label>
+          <label class="option"><input type="radio" name="q1" value="2.50"> <span class="option-label">Pensionato</span></label>
         </div>
       </div>
 
       <div class="question-block-qual">
         <span class="question-number">2</span>
-        <span class="question-text">Quanto tempo puoi dedicare settimanalmente? <span class="required">*</span></span>
+        <span class="question-text">Se immagina la sua vita tra 5 anni... <span class="required">*</span></span>
         <div class="options">
-          <label class="option"><input type="radio" name="q2" value="3.00" required> <span class="option-label">Piu di 20 ore</span></label>
-          <label class="option"><input type="radio" name="q2" value="2.00"> <span class="option-label">10-20 ore</span></label>
-          <label class="option"><input type="radio" name="q2" value="1.00"> <span class="option-label">Meno di 10 ore</span></label>
+          <label class="option"><input type="radio" name="q2" value="3.00" required> <span class="option-label">Ho un progetto chiaro e lavoro per realizzarlo</span></label>
+          <label class="option"><input type="radio" name="q2" value="2.50"> <span class="option-label">Vorrei più libertà economica e temporale</span></label>
+          <label class="option"><input type="radio" name="q2" value="2.00"> <span class="option-label">Cerco stabilità e sicurezza</span></label>
+          <label class="option"><input type="radio" name="q2" value="1.00"> <span class="option-label">Non ho ancora idee chiare</span></label>
         </div>
       </div>
 
       <div class="question-block-qual">
         <span class="question-number">3</span>
-        <span class="question-text">Cosa cerchi principalmente? <span class="required">*</span></span>
+        <span class="question-text">Tempo libero disponibile? <span class="required">*</span></span>
         <div class="options">
-          <label class="option"><input type="radio" name="q3" value="3.00" required> <span class="option-label">Reddito extra serio</span></label>
-          <label class="option"><input type="radio" name="q3" value="2.00"> <span class="option-label">Liberta finanziaria a lungo termine</span></label>
-          <label class="option"><input type="radio" name="q3" value="2.00"> <span class="option-label">Crescita personale e professionale</span></label>
-          <label class="option"><input type="radio" name="q3" value="1.00"> <span class="option-label">Voglio solo informarmi</span></label>
+          <label class="option"><input type="radio" name="q3" value="3.00" required> <span class="option-label">Sì, 10+ ore settimanali</span></label>
+          <label class="option"><input type="radio" name="q3" value="2.50"> <span class="option-label">Sì, 5-10 ore settimanali</span></label>
+          <label class="option"><input type="radio" name="q3" value="2.00"> <span class="option-label">Sì, 3-4 ore settimanali</span></label>
+          <label class="option"><input type="radio" name="q3" value="0.50"> <span class="option-label">No, zero tempo disponibile</span></label>
+          <label class="option"><input type="radio" name="q3" value="1.00"> <span class="option-label">Non lo so, dipende</span></label>
         </div>
       </div>
 
       <div class="question-block-qual">
         <span class="question-number">4</span>
-        <span class="question-text">Hai una rete di contatti (famiglia, amici, colleghi) che potrebbero essere interessati? <span class="required">*</span></span>
+        <span class="question-text">Caratteristiche lavoro ideale? (seleziona tutte) <span class="required">*</span></span>
+        <p class="checkbox-hint">Sarà calcolata la media delle selezioni</p>
         <div class="options">
-          <label class="option"><input type="radio" name="q4" value="3.00" required> <span class="option-label">Si, una rete ampia</span></label>
-          <label class="option"><input type="radio" name="q4" value="2.00"> <span class="option-label">Alcuni contatti potenziali</span></label>
-          <label class="option"><input type="radio" name="q4" value="1.00"> <span class="option-label">Devo ancora costruirla</span></label>
+          <label class="option"><input type="checkbox" name="q4" value="2.50"> <span class="option-label">Libertà di gestire i miei orari</span></label>
+          <label class="option"><input type="checkbox" name="q4" value="2.50"> <span class="option-label">Potenziale di crescita economica illimitata</span></label>
+          <label class="option"><input type="checkbox" name="q4" value="2.00"> <span class="option-label">Formazione professionale strutturata</span></label>
+          <label class="option"><input type="checkbox" name="q4" value="1.50"> <span class="option-label">Lavorare in team con persone motivate</span></label>
+          <label class="option"><input type="checkbox" name="q4" value="2.00"> <span class="option-label">Indipendenza da un capo</span></label>
+          <label class="option"><input type="checkbox" name="q4" value="1.50"> <span class="option-label">Prodotto/servizio di qualità</span></label>
         </div>
       </div>
 
       <div class="question-block-qual">
         <span class="question-number">5</span>
-        <span class="question-text">In che tempi vorresti iniziare? <span class="required">*</span></span>
+        <span class="question-text">Perché un'opportunità diversa? <span class="required">*</span></span>
         <div class="options">
-          <label class="option"><input type="radio" name="q5" value="3.00" required> <span class="option-label">Subito</span></label>
-          <label class="option"><input type="radio" name="q5" value="2.00"> <span class="option-label">Nel prossimo mese</span></label>
-          <label class="option"><input type="radio" name="q5" value="1.00"> <span class="option-label">Sto solo valutando</span></label>
+          <label class="option"><input type="radio" name="q5" value="3.00" required> <span class="option-label">Voglio costruire qualcosa di mio</span></label>
+          <label class="option"><input type="radio" name="q5" value="2.50"> <span class="option-label">Cerco libertà economica e temporale</span></label>
+          <label class="option"><input type="radio" name="q5" value="2.00"> <span class="option-label">Non sono soddisfatto della situazione attuale</span></label>
+          <label class="option"><input type="radio" name="q5" value="1.00"> <span class="option-label">Voglio solo informarmi</span></label>
         </div>
       </div>
 
       <div class="question-block-qual">
         <span class="question-number">6</span>
-        <span class="question-text">Hai disponibilita a investire in formazione iniziale (costo irrisorio)? <span class="required">*</span></span>
+        <span class="question-text">Ha deciso di avere successo? <span class="required">*</span></span>
         <div class="options">
-          <label class="option"><input type="radio" name="q6" value="3.00" required> <span class="option-label">Si, senza problemi</span></label>
-          <label class="option"><input type="radio" name="q6" value="2.00"> <span class="option-label">Dipende dall'importo</span></label>
-          <label class="option"><input type="radio" name="q6" value="0.00"> <span class="option-label">No, non ho budget</span></label>
+          <label class="option"><input type="radio" name="q6" value="3.00" required> <span class="option-label">Sì, sono pronto a impegnarmi</span></label>
+          <label class="option"><input type="radio" name="q6" value="2.50"> <span class="option-label">Sono molto motivato</span></label>
+          <label class="option"><input type="radio" name="q6" value="1.50"> <span class="option-label">Sono curioso di capire</span></label>
+          <label class="option"><input type="radio" name="q6" value="0.50"> <span class="option-label">Non ancora</span></label>
         </div>
       </div>
 
@@ -200,7 +211,7 @@
     <div id="result-box" class="result-box">
       <h3 id="result-title"></h3>
       <p id="result-message"></p>
-      <a id="booking-link" href="../booking/" class="booking-link" style="display: none;">PRENOTA CHIAMATA CONOSCITIVA</a>
+      <a id="booking-link" href="../booking-collaboratori/" class="booking-link" style="display: none;">PRENOTA COLLOQUIO DI SELEZIONE</a>
       <button type="button" class="btn-secondary" onclick="submitAnyway()" style="margin-top: 10px;">INVIA RICHIESTA COMUNQUE</button>
     </div>
   </div>
@@ -220,7 +231,7 @@
     </div>
     <div class="footer-col">
       <h4>Contatti</h4>
-      <a href="../booking/">Prenota</a>
+      <a href="../booking-collaboratori/">Prenota colloquio</a>
       <a href="mailto:stefano.santaiti@gmail.com">Email</a>
     </div>
     <div class="footer-col">
@@ -248,8 +259,18 @@
 function calculateScore() {
   let total = 0;
   for (let i = 1; i <= 6; i++) {
-    const selected = document.querySelector('input[name="q' + i + '"]:checked');
-    if (selected) total += parseFloat(selected.value);
+    if (i === 4) {
+      // Domanda 4: checkbox → media delle selezioni
+      const checked = document.querySelectorAll('input[name="q4"]:checked');
+      if (checked.length > 0) {
+        let sum = 0;
+        checked.forEach(cb => sum += parseFloat(cb.value));
+        total += sum / checked.length;
+      }
+    } else {
+      const selected = document.querySelector('input[name="q' + i + '"]:checked');
+      if (selected) total += parseFloat(selected.value);
+    }
   }
   return parseFloat(total.toFixed(2));
 }
@@ -271,7 +292,7 @@ function calculateAndShowResult() {
   resultBox.style.display = 'block';
   document.getElementById('result-title').textContent = 'Punteggio: ' + score + ' / 18 — ' + category.name;
   if (category.bookable) {
-    document.getElementById('result-message').textContent = 'Ottimo! Il tuo profilo e promettente. Prenota una chiamata conoscitiva gratuita.';
+    document.getElementById('result-message').textContent = 'Ottimo! Il tuo profilo è promettente. Prenota un colloquio di selezione gratuito.';
     document.getElementById('booking-link').style.display = 'inline-block';
   } else {
     document.getElementById('result-message').textContent = 'Grazie per la tua richiesta. Ti contatteremo via email con informazioni utili.';
@@ -286,6 +307,13 @@ async function submitLead(data) {
     const sel = document.querySelector('input[name="q' + i + '"]:checked');
     answers.push(sel ? sel.closest('.option').querySelector('.option-label').textContent : 'N/D');
   }
+  // Domanda 4: checkbox multiple
+  const q4checked = document.querySelectorAll('input[name="q4"]:checked');
+  const q4answers = [];
+  q4checked.forEach(cb => {
+    const label = cb.closest('.option').querySelector('.option-label');
+    if (label) q4answers.push(label.textContent);
+  });
   const payload = {
     name: `${data.nome} ${data.cognome}`,
     email: data.email,
@@ -296,12 +324,12 @@ async function submitLead(data) {
     score: parseFloat(data.punteggio) || 0,
     category: data.categoria,
     answers: {
-      esperienza: answers[0],
-      tempo: answers[1],
-      obiettivo: answers[2],
-      rete: answers[3],
-      tempi: answers[4],
-      formazione: answers[5]
+      occupazione: answers[0],
+      visione_5_anni: answers[1],
+      tempo_libero: answers[2],
+      lavoro_ideale: q4answers.join(', ') || 'N/D',
+      perche_opportunita: answers[4],
+      deciso_successo: answers[5]
     },
     source: 'v2-qualifier-collaboratori'
   };
