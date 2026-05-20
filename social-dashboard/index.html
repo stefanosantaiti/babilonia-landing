@@ -148,6 +148,7 @@
     <div style="text-align: center; margin-bottom: 20px;">
         <button class="btn" onclick="setTarget('clienti')" id="btn-clienti" style="background: #d4af37; color: #000;">Per Clienti</button>
         <button class="btn" onclick="setTarget('collaboratori')" id="btn-collaboratori" style="background: transparent; color: #d4af37; border: 1px solid #d4af37;">Per Collaboratori</button>
+        <button class="btn" onclick="setTarget('blog')" id="btn-blog" style="background: transparent; color: #d4af37; border: 1px solid #d4af37;">📰 Blog</button>
     </div>
 
     <div id="loading"><div class="loading">⏳ Caricamento post...</div></div>
@@ -165,7 +166,131 @@ function setTarget(target) {
     document.getElementById('btn-clienti').style.color = target === 'clienti' ? '#000' : '#d4af37';
     document.getElementById('btn-collaboratori').style.background = target === 'collaboratori' ? '#d4af37' : 'transparent';
     document.getElementById('btn-collaboratori').style.color = target === 'collaboratori' ? '#000' : '#d4af37';
-    loadPosts();
+    document.getElementById('btn-blog').style.background = target === 'blog' ? '#d4af37' : 'transparent';
+    document.getElementById('btn-blog').style.color = target === 'blog' ? '#000' : '#d4af37';
+    
+    if (target === 'blog') {
+        loadBlogArticles();
+    } else {
+        loadPosts();
+    }
+}
+
+async function loadBlogArticles() {
+    const loading = document.getElementById('loading');
+    const content = document.getElementById('content');
+    
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/blog_articles?select=*&order=created_at.desc`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        
+        const articles = await res.json();
+        
+        const pending = articles.filter(p => p.status === 'pending');
+        const approved = articles.filter(p => p.status === 'approved');
+        const published = articles.filter(p => p.status === 'published');
+        
+        document.getElementById('pending-count').textContent = pending.length;
+        document.getElementById('approved-count').textContent = approved.length;
+        
+        loading.innerHTML = '';
+        let html = '';
+        
+        if (pending.length > 0) {
+            html += '<h2>⏳ Articoli in Attesa di Approvazione</h2>';
+            pending.forEach(p => {
+                html += `<div class="post post-pending">`;
+                html += `<div class="post-header"><span>#${p.id}</span><span>${p.status}</span></div>`;
+                html += `<div class="source">📝 Articolo Blog <span class="target-badge" style="background: #d4af37; color: #000;">${p.category}</span></div>`;
+                html += `<div class="post-title">${p.title}</div>`;
+                html += `<div class="post-content">${escapeHtml(p.excerpt || p.body.substring(0, 500) + '...')}</div>`;
+                html += `<button class="btn btn-edit" onclick="toggleBlogEdit(${p.id})">✏️ Modifica</button>`;
+                html += `<button class="btn btn-approve" onclick="approveBlogArticle(${p.id})">✅ Approva</button>`;
+                html += `<button class="btn btn-reject" onclick="rejectBlogArticle(${p.id})">❌ Rifiuta</button>`;
+                html += `<div id="blog-edit-${p.id}" style="display:none;"></div>`;
+                html += `</div>`;
+            });
+        } else {
+            html += '<div style="text-align:center;padding:40px;color:#888;"><h2>🎉 Nessun articolo in attesa!</h2><p>Prossima generazione: domattina alle 8:00</p></div>';
+        }
+        
+        if (approved.length > 0) {
+            html += '<h2>✅ Articoli Approvati (da Pubblicare)</h2>';
+            approved.forEach(p => {
+                html += `<div class="post post-approved">`;
+                html += `<div class="post-header"><span>#${p.id}</span><span style="color:#28a745;">✅ ${p.status}</span></div>`;
+                html += `<div class="post-title">${p.title}</div>`;
+                html += `<div class="post-content">${escapeHtml(p.excerpt || p.body.substring(0, 300) + '...')}</div>`;
+                html += `<button class="btn btn-approve" onclick="publishBlogArticle(${p.id})">🚀 Pubblica su Blog</button>`;
+                html += `</div>`;
+            });
+        }
+        
+        if (published.length > 0) {
+            html += '<h2>🚀 Articoli Pubblicati</h2>';
+            published.forEach(p => {
+                html += `<div class="post" style="border-left: 4px solid #1877f2;">`;
+                html += `<div class="post-header"><span>#${p.id}</span><span style="color:#1877f2;">🚀 ${p.status}</span></div>`;
+                html += `<div class="post-title">${p.title}</div>`;
+                html += `<div class="post-content">${escapeHtml(p.excerpt || p.body.substring(0, 200) + '...')}</div>`;
+                html += `</div>`;
+            });
+        }
+        
+        content.innerHTML = html;
+        
+    } catch (err) {
+        loading.innerHTML = `<div class="error">❌ Errore: ${err.message}</div>`;
+    }
+}
+
+async function approveBlogArticle(id) {
+    if (!confirm('Approvare questo articolo?')) return;
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/blog_articles?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ status: 'approved', approved_at: new Date().toISOString() })
+        });
+        if (res.ok) { alert('✅ Approvato! Ora puoi pubblicarlo.'); loadBlogArticles(); }
+        else alert('❌ Errore');
+    } catch (e) { alert('❌ Errore: ' + e.message); }
+}
+
+async function rejectBlogArticle(id) {
+    if (!confirm('Rifiutare questo articolo?')) return;
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/blog_articles?id=eq.${id}`, {
+            method: 'DELETE',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        if (res.ok) { alert('🗑️ Rimosso'); loadBlogArticles(); }
+        else alert('❌ Errore');
+    } catch (e) { alert('❌ Errore: ' + e.message); }
+}
+
+async function publishBlogArticle(id) {
+    if (!confirm('Pubblicare questo articolo sul blog? Verrà generato il file HTML e pushato su GitHub.')) return;
+    alert('🚀 Pubblicazione in corso... Questo processo richiede qualche minuto.');
+    // Qui verrà implementata la logica di generazione HTML e push GitHub
+}
+
+function toggleBlogEdit(id) {
+    const div = document.getElementById('blog-edit-' + id);
+    if (div.style.display === 'block') {
+        div.style.display = 'none';
+        return;
+    }
+    div.innerHTML = '<div class="edit-form"><label>Modifica articolo in arrivo...</label></div>';
+    div.style.display = 'block';
 }
 
 async function loadPosts() {
@@ -393,7 +518,10 @@ async function saveEdit(id) {
 }
 
 loadPosts();
-setInterval(loadPosts, 300000); // Refresh ogni 5 minuti
+setInterval(() => {
+    if (currentTarget === 'blog') loadBlogArticles();
+    else loadPosts();
+}, 300000); // Refresh ogni 5 minuti
 </script>
 </body>
 </html>// v1776455001
