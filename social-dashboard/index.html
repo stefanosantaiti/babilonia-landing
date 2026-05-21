@@ -137,11 +137,15 @@
     <div class="stats">
         <div class="stat-box">
             <div class="stat-number" id="pending-count">0</div>
-            <div class="stat-label">In Attesa</div>
+            <div class="stat-label" id="pending-label">In Attesa</div>
         </div>
         <div class="stat-box">
             <div class="stat-number" id="approved-count">0</div>
-            <div class="stat-label">Approvati</div>
+            <div class="stat-label" id="approved-label">Approvati</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" id="published-count" style="display:none;">0</div>
+            <div class="stat-label" id="published-label" style="display:none;">Pubblicati</div>
         </div>
     </div>
 
@@ -195,6 +199,9 @@ async function loadBlogArticles() {
         
         document.getElementById('pending-count').textContent = pending.length;
         document.getElementById('approved-count').textContent = approved.length;
+        document.getElementById('published-count').textContent = published.length;
+        document.getElementById('published-count').style.display = published.length > 0 ? 'block' : 'none';
+        document.getElementById('published-label').style.display = published.length > 0 ? 'block' : 'none';
         
         loading.innerHTML = '';
         let html = '';
@@ -278,19 +285,80 @@ async function rejectBlogArticle(id) {
 }
 
 async function publishBlogArticle(id) {
-    if (!confirm('Pubblicare questo articolo sul blog? Verrà generato il file HTML e pushato su GitHub.')) return;
-    alert('🚀 Pubblicazione in corso... Questo processo richiede qualche minuto.');
-    // Qui verrà implementata la logica di generazione HTML e push GitHub
+    if (!confirm('Pubblicare questo articolo sul blog? Verrà generato il file HTML e pushato su GitHub Pages.')) return;
+    
+    try {
+        // Aggiorna status a published
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/blog_articles?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ status: 'published', published_at: new Date().toISOString() })
+        });
+        if (res.ok) { alert('✅ Articolo pubblicato! Il file HTML verrà generato e pushato a breve.'); loadBlogArticles(); }
+        else alert('❌ Errore nella pubblicazione');
+    } catch (e) { alert('❌ Errore: ' + e.message); }
 }
 
-function toggleBlogEdit(id) {
+async function toggleBlogEdit(id) {
     const div = document.getElementById('blog-edit-' + id);
     if (div.style.display === 'block') {
         div.style.display = 'none';
         return;
     }
-    div.innerHTML = '<div class="edit-form"><label>Modifica articolo in arrivo...</label></div>';
-    div.style.display = 'block';
+    // Fetch full article data
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/blog_articles?id=eq.${id}&select=*`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        const data = await res.json();
+        const article = data[0];
+        
+        div.innerHTML = 
+            '<div class="edit-form">' +
+                '<label>Titolo:</label>' +
+                '<textarea id="blog-edit-title-' + id + '" rows="2">' + escapeHtml(article.title) + '</textarea>' +
+                '<label style="margin-top:15px;">Excerpt:</label>' +
+                '<textarea id="blog-edit-excerpt-' + id + '" rows="3">' + escapeHtml(article.excerpt || '') + '</textarea>' +
+                '<label style="margin-top:15px;">Contenuto (HTML):</label>' +
+                '<textarea id="blog-edit-body-' + id + '" rows="10">' + escapeHtml(article.body) + '</textarea>' +
+                '<label style="margin-top:15px;">Meta Description:</label>' +
+                '<textarea id="blog-edit-meta-' + id + '" rows="2">' + escapeHtml(article.meta_description || '') + '</textarea>' +
+                '<div style="margin-top:15px;">' +
+                    '<button class="btn btn-approve" onclick="saveBlogEdit(' + id + ')">💾 Salva modifiche</button>' +
+                    '<button class="btn btn-reject" onclick="toggleBlogEdit(' + id + ')">Annulla</button>' +
+                '</div>' +
+            '</div>';
+        div.style.display = 'block';
+    } catch (e) {
+        alert('Errore caricamento articolo: ' + e.message);
+    }
+}
+
+async function saveBlogEdit(id) {
+    const newTitle = document.getElementById('blog-edit-title-' + id).value;
+    const newExcerpt = document.getElementById('blog-edit-excerpt-' + id).value;
+    const newBody = document.getElementById('blog-edit-body-' + id).value;
+    const newMeta = document.getElementById('blog-edit-meta-' + id).value;
+    
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/blog_articles?id=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ title: newTitle, excerpt: newExcerpt, body: newBody, meta_description: newMeta, updated_at: new Date().toISOString() })
+        });
+        if (res.ok) { alert('✅ Salvato!'); loadBlogArticles(); }
+        else alert('❌ Errore nel salvataggio');
+    } catch (e) { alert('❌ Errore: ' + e.message); }
 }
 
 async function loadPosts() {
