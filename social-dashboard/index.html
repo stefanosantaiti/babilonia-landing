@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>BABILONIA - Social Dashboard v2</title>
     <style>
         * { box-sizing: border-box; }
+        .skip-link { position: absolute; top: -40px; left: 0; background: #d4af37; color: #000; padding: 8px 16px; z-index: 10000; font-weight: 600; transition: top 0.3s; }
+        .skip-link:focus { top: 0; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
             padding: 15px; 
@@ -131,7 +134,8 @@
     </style>
 </head>
 <body>
-    <h1>🎸 BABILONIA</h1>
+    <a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+    <h1 tabindex="-1" id="main-content">🎸 BABILONIA</h1>
     <div class="subtitle">Social Dashboard - Approvazione Post</div>
 
     <div class="stats">
@@ -507,7 +511,7 @@ function togglePreview(id) {
             '<div class="preview-header">' +
                 '<div class="preview-avatar">🎸</div>' +
                 '<div>' +
-                    '<div class="preview-name">Babilonia - Investimenti in Oro</div>' +
+                    '<div class="preview-name">Babilonia - Oro Fisico per Tutti</div>' +
                     '<div class="preview-time">' + now + ' · 🌐 Pubblico</div>' +
                 '</div>' +
             '</div>' +
