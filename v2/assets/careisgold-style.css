@@ -256,6 +256,174 @@ button { font-family: inherit; cursor: pointer; }
 }
 .card-glass:hover { transform: translateY(-6px); }
 
+/* Card variants with white background (used in 'perche-oro' section) */
+.card-white {
+  background: #fff;
+  border: 1px solid #eee;
+}
+.card-white h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+.card-white p {
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.card-icon {
+  font-size: 2.2rem;
+  margin-bottom: 16px;
+}
+
+/* ---- Section helpers ---- */
+.section-centered {
+  text-align: center;
+}
+.section-subtitle {
+  color: #555;
+  max-width: 600px;
+  margin: 16px auto 0;
+  line-height: 1.7;
+}
+
+/* ---- Spacing helpers ---- */
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+.mt-40 { margin-top: 40px; }
+.mt-50 { margin-top: 50px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.mb-30 { margin-bottom: 30px; }
+.mb-40 { margin-bottom: 40px; }
+.mb-60 { margin-bottom: 60px; }
+
+/* ---- Flex/Grid helpers ---- */
+.flex-center {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.grid-2-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ---- Form styles ---- */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(212,175,55,0.3);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+.form-input::placeholder { color: rgba(255,255,255,0.4); }
+.form-input:focus { outline: none; border-color: var(--gold); }
+
+.form-label {
+  display: block;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.btn-submit {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  background: linear-gradient(135deg, #d4af37, #c5a028);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 1px;
+  font-family: inherit;
+  transition: opacity 0.3s;
+}
+.btn-submit:hover { opacity: 0.9; }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ---- Image helpers ---- */
+.img-rounded {
+  border-radius: 16px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.img-rounded-light {
+  border-radius: 16px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* ---- Contact card ---- */
+.contact-card {
+  background: rgba(212,175,55,0.08);
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 16px;
+  padding: 40px 30px;
+  text-align: center;
+}
+.contact-card-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+.contact-card h3 {
+  color: #d4af37;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+.contact-card p {
+  color: rgba(255,255,255,0.8);
+  line-height: 1.7;
+  margin-bottom: 30px;
+  font-size: 0.95rem;
+}
+
+/* ---- Section: Chi siamo values ---- */
+.value-card {
+  padding: 20px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(212,175,55,0.2);
+}
+.value-card .value-label {
+  color: #d4af37;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+.value-card .value-text {
+  color: rgba(255,255,255,0.8);
+  line-height: 1.7;
+  font-size: 0.9rem;
+}
+.value-quote {
+  margin-top: 40px;
+  color: #d4af37;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+/* ---- Values grid ---- */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  text-align: left;
+}
+
 /* ---- Gold Widget (Fixing) ---- */
 .gold-widget {
   position: fixed; bottom: 24px; right: 24px;
