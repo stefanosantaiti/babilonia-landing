@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>Gestione Appuntamento - BABILONIA</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,12 +24,15 @@
         .status-message { padding: 20px; border-radius: 10px; margin: 20px 0; display: none; }
         .status-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .status-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .skip-link { position: absolute; top: -40px; left: 0; background: #d4af37; color: #000; padding: 8px 16px; z-index: 10000; font-weight: 600; transition: top 0.3s; }
+        .skip-link:focus { top: 0; }
         .loading { text-align: center; color: #888; padding: 40px; }
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Salta al contenuto principale</a>
     <div class="container">
-        <div class="header">
+        <div class="header" tabindex="-1" id="main-content">
             <h1>📅 Gestione Appuntamento</h1>
             <p>Conferma, sposta o annulla il tuo colloquio</p>
         </div>
