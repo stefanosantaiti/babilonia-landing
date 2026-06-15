@@ -372,13 +372,14 @@ async function toggleBlogPreview(id, section) {
         const article = data[0];
         
         // Mostra l'articolo renderizzato come HTML
-        div.innerHTML = 
-            '<div style="background:#fff;color:#1c1e21;border-radius:8px;padding:20px;margin:15px 0;font-family:Georgia,serif;line-height:1.8;max-height:600px;overflow-y:auto;">' +
-                '<h2 style="color:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:10px;">' + escapeHtml(article.title) + '</h2>' +
-                (article.excerpt ? '<p style="color:#65676b;font-style:italic;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:20px;font-size:0.95rem;">' + escapeHtml(article.excerpt) + '</p>' : '') +
-                '<div style="font-size:1.05rem;">' + article.body + '</div>' +
-            '</div>' +
-            '<button class="btn btn-reject" onclick="document.getElementById(\'blog-preview-' + id + suffix + '\').style.display=\'none\'">Chiudi anteprima</button>';
+                const previewId = 'blog-preview-' + id + suffix;
+                div.innerHTML = 
+                    '<div style="background:#fff;color:#1c1e21;border-radius:8px;padding:20px;margin:15px 0;font-family:Georgia,serif;line-height:1.8;max-height:600px;overflow-y:auto;">' +
+                        '<h2 style="color:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:10px;">' + escapeHtml(article.title) + '</h2>' +
+                        (article.excerpt ? '<p style="color:#65676b;font-style:italic;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:20px;font-size:0.95rem;">' + escapeHtml(article.excerpt) + '</p>' : '') +
+                        '<div style="font-size:1.05rem;">' + article.body + '</div>' +
+                    '</div>' +
+                    '<button class="btn btn-reject" onclick="document.getElementById(\'' + previewId + '\').style.display=\'none\'">Chiudi anteprima</button>';
         
         // Aggiorna anche il body visibile nel post-content
         const bodyDiv = document.getElementById('blog-body' + suffix + '-' + id);
