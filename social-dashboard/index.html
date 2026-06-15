@@ -217,10 +217,12 @@ async function loadBlogArticles() {
                 html += `<div class="post-header"><span>#${p.id}</span><span>${p.status}</span></div>`;
                 html += `<div class="source">📝 Articolo Blog <span class="target-badge" style="background: #d4af37; color: #000;">${p.category}</span></div>`;
                 html += `<div class="post-title">${p.title}</div>`;
-                html += `<div class="post-content">${escapeHtml(p.excerpt || p.body.substring(0, 500) + '...')}</div>`;
+                html += `<div class="post-content" id="blog-body-${p.id}">${escapeHtml(p.excerpt || p.body.substring(0, 500) + '...')}</div>`;
+                html += `<button class="btn btn-preview" onclick="toggleBlogPreview(${p.id})">👁️ Anteprima HTML</button>`;
                 html += `<button class="btn btn-edit" onclick="toggleBlogEdit(${p.id})">✏️ Modifica</button>`;
                 html += `<button class="btn btn-approve" onclick="approveBlogArticle(${p.id})">✅ Approva</button>`;
                 html += `<button class="btn btn-reject" onclick="rejectBlogArticle(${p.id})">❌ Rifiuta</button>`;
+                html += `<div id="blog-preview-${p.id}" style="display:none;"></div>`;
                 html += `<div id="blog-edit-${p.id}" style="display:none;"></div>`;
                 html += `</div>`;
             });
@@ -234,8 +236,10 @@ async function loadBlogArticles() {
                 html += `<div class="post post-approved">`;
                 html += `<div class="post-header"><span>#${p.id}</span><span style="color:#28a745;">✅ ${p.status}</span></div>`;
                 html += `<div class="post-title">${p.title}</div>`;
-                html += `<div class="post-content">${escapeHtml(p.excerpt || p.body.substring(0, 300) + '...')}</div>`;
+                html += `<div class="post-content" id="blog-body-approved-${p.id}">${escapeHtml(p.excerpt || p.body.substring(0, 300) + '...')}</div>`;
+                html += `<button class="btn btn-preview" onclick="toggleBlogPreview(${p.id}, 'approved')">👁️ Anteprima HTML</button>`;
                 html += `<button class="btn btn-approve" onclick="publishBlogArticle(${p.id})">🚀 Pubblica su Blog</button>`;
+                html += `<div id="blog-preview-${p.id}-approved" style="display:none;"></div>`;
                 html += `</div>`;
             });
         }
@@ -340,6 +344,49 @@ async function toggleBlogEdit(id) {
         div.style.display = 'block';
     } catch (e) {
         alert('Errore caricamento articolo: ' + e.message);
+    }
+}
+
+async function toggleBlogPreview(id, section) {
+    const suffix = section ? '-' + section : '';
+    const div = document.getElementById('blog-preview-' + id + suffix);
+    const editDiv = document.getElementById('blog-edit-' + id);
+    
+    // Nascondi edit se aperto
+    if (editDiv) editDiv.style.display = 'none';
+    
+    if (div.style.display === 'block') {
+        div.style.display = 'none';
+        return;
+    }
+    
+    // Carica l'articolo completo da Supabase
+    try {
+        div.innerHTML = '<div style="text-align:center;padding:20px;color:#d4af37;">⏳ Caricamento articolo...</div>';
+        div.style.display = 'block';
+        
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/blog_articles?id=eq.${id}&select=*`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const data = await res.json();
+        const article = data[0];
+        
+        // Mostra l'articolo renderizzato come HTML
+        div.innerHTML = 
+            '<div style="background:#fff;color:#1c1e21;border-radius:8px;padding:20px;margin:15px 0;font-family:Georgia,serif;line-height:1.8;max-height:600px;overflow-y:auto;">' +
+                '<h2 style="color:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:10px;">' + escapeHtml(article.title) + '</h2>' +
+                (article.excerpt ? '<p style="color:#65676b;font-style:italic;font-family:-apple-system,BlinkMacSystemFont,sans-serif;margin-bottom:20px;font-size:0.95rem;">' + escapeHtml(article.excerpt) + '</p>' : '') +
+                '<div style="font-size:1.05rem;">' + article.body + '</div>' +
+            '</div>' +
+            '<button class="btn btn-reject" onclick="document.getElementById(\'blog-preview-' + id + suffix + '\').style.display=\'none\'">Chiudi anteprima</button>';
+        
+        // Aggiorna anche il body visibile nel post-content
+        const bodyDiv = document.getElementById('blog-body' + suffix + '-' + id);
+        if (bodyDiv) {
+            bodyDiv.textContent = article.body.substring(0, 500) + '...';
+        }
+    } catch (e) {
+        div.innerHTML = '<div class="error">❌ Errore caricamento: ' + e.message + '</div>';
     }
 }
 
