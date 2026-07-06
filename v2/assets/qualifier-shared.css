@@ -198,6 +198,157 @@
   box-shadow: 0 6px 20px rgba(183, 149, 90, 0.4);
 }
 
+/* ============================================
+   QUALIFIER V2 — Layout classes used by qualifier-clienti
+   Maps HTML class names to shared styles
+   ============================================ */
+
+.qualifier-main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 100px 24px 60px;
+  background: #fafafa;
+  min-height: 100vh;
+}
+
+.qualifier-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 36px;
+  box-shadow: 0 10px 60px rgba(0, 0, 0, 0.08);
+}
+
+/* Question block variant used in V2 */
+.question-block-qual {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #eee;
+}
+.question-block-qual:last-of-type {
+  border-bottom: none;
+}
+
+/* Personal info box */
+.personal-info-box {
+  background: #f5f0e8;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 30px 0 20px;
+}
+.personal-info-box h3 {
+  color: #1a1a1a;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+.personal-info-box .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.personal-info-box .form-group {
+  margin-bottom: 0;
+}
+.personal-info-box .form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #333;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+.personal-info-box .form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: #fff;
+  color: #1a1a1a;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.personal-info-box .form-group input:focus {
+  outline: none;
+  border-color: #b7955a;
+  box-shadow: 0 0 0 3px rgba(183, 149, 90, 0.12);
+}
+
+/* Privacy box */
+.privacy-box {
+  margin: 20px 0;
+  padding: 16px 18px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: #555;
+}
+.privacy-box input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: #b7955a;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+.privacy-box label {
+  cursor: pointer;
+  line-height: 1.6;
+}
+
+/* Secondary button */
+.btn-secondary {
+  background: transparent;
+  color: #b7955a;
+  border: 2px solid #b7955a;
+  padding: 12px 32px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-secondary:hover {
+  background: #b7955a;
+  color: #fff;
+}
+
+/* Result box variants */
+.result-box.hot {
+  border: 2px solid #e11d48;
+  background: #fff5f7;
+}
+.result-box.warm {
+  border: 2px solid #f59e0b;
+  background: #fffbeb;
+}
+.result-box.tepid {
+  border: 2px solid #3b82f6;
+  background: #eff6ff;
+}
+.result-box.cold {
+  border: 2px solid #9ca3af;
+  background: #f9fafb;
+}
+
+/* Responsive for qualifier V2 */
+@media (max-width: 640px) {
+  .qualifier-main {
+    padding: 80px 16px 40px;
+  }
+  .qualifier-card {
+    padding: 24px 20px;
+  }
+  .personal-info-box .form-row {
+    grid-template-columns: 1fr;
+  }
+  .question-block-qual {
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+  }
+}
+
 /* ---- Responsive ---- */
 @media (max-width: 640px) {
   .qualifier-container {

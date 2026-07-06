@@ -275,7 +275,7 @@ async function submitLead(data) {
   try {
     const resp = await fetch(window.BABILONIA_CONFIG.LEAD_CAPTURE_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + window.BABILONIA_CONFIG.ANON_KEY },
       body: JSON.stringify(payload)
     });
     return resp.ok;

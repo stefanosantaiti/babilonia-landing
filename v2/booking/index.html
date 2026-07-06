@@ -37,26 +37,27 @@ body { background: var(--black); }
 </style>
 </head>
 <body>
-<nav id="navbar" class="navbar">
+<nav id="navbar" class="navbar" role="navigation" aria-label="Navigazione principale">
   <div class="navbar-brand">
-    <a href="../">BABILO<span class="gold">NIA</span></a>
+    <a href="../" aria-label="BABILONIA Home"><span class="gold">BABILONIA</span></a>
   </div>
-  <div class="nav-menu-pill">
-    <a href="../#la-scelta">Prodotti</a>
-    <a href="../#contatto">Consulenza</a>
-    <a href="../#chi-siamo">Chi siamo</a>
-    <a href="../#collabora">Collabora</a>
-    <a href="./" class="underline-pill" style="background:rgba(0,0,0,0.15);">Prenota</a>
+  <div class="nav-menu-pill" role="menubar">
+    <a href="../#la-scelta" role="menuitem">Prodotti</a>
+    <a href="../#contatto" role="menuitem">Consulenza</a>
+    <a href="../qualifier-clienti/" role="menuitem">Valuta Profilo</a>
+    <a href="../#collabora" role="menuitem">Collabora</a>
+    <a href="./" role="menuitem" class="underline-pill" style="background:rgba(0,0,0,0.15);">Prenota</a>
   </div>
-  <button id="hamburger" class="hamburger" aria-label="Menu">
+  <button id="hamburger" class="hamburger" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<div class="mobile-menu-overlay" id="mobile-menu">
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="mobile-menu-overlay" role="dialog" aria-label="Menu mobile">
   <a href="../#la-scelta">Prodotti</a>
   <a href="../#contatto">Consulenza</a>
-  <a href="../#chi-siamo">Chi siamo</a>
+  <a href="../qualifier-clienti/">Valuta Profilo</a>
   <a href="../#collabora">Collabora</a>
   <a href="./">Prenota</a>
 </div>
@@ -141,9 +142,10 @@ body { background: var(--black); }
 </div>
 
 <script src="../assets/careisgold-script.js"></script>
+<script src="../assets/config.js"></script>
 <script>
-const API_URL = 'https://esgjushznmidzdhqsyyx.supabase.co/functions/v1/lead-capture';
-const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzZ2p1c2h6bm1pZHpkaHFzeXl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTYwMTcsImV4cCI6MjA5MTIzMjAxN30.cKWfWEkgRTtPKbUduGgNxX6gF18Gqkjg2bWn6twQTbs';
+const API_URL = window.BABILONIA_CONFIG.LEAD_CAPTURE_URL;
+const API_KEY = window.BABILONIA_CONFIG.ANON_KEY;
 
 document.getElementById('questionario').addEventListener('change', function() {
   const box = document.getElementById('questionario-nolink');
