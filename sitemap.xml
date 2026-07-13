@@ -46,7 +46,7 @@
     <loc>https://stefanosantaiti.github.io/babilonia-landing/blog/home.html</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://stefanosantaiti.github.io/babilonia-landing/blog/illusione-risparmio-btp-vs-oro.html</loc>
@@ -97,13 +97,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://stefanosantaiti.github.io/babilonia-landing/booking/</loc>
+    <loc>https://stefanosantaiti.github.io/babilonia-landing/booking-collaboratori/</loc>
     <lastmod>2026-06-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://stefanosantaiti.github.io/babilonia-landing/booking-collaboratori/</loc>
+    <loc>https://stefanosantaiti.github.io/babilonia-landing/booking/</loc>
     <lastmod>2026-06-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -146,7 +146,7 @@
   </url>
   <url>
     <loc>https://stefanosantaiti.github.io/babilonia-landing/v2/booking/</loc>
-    <lastmod>2026-05-17</lastmod>
+    <lastmod>2026-07-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
@@ -170,7 +170,7 @@
   </url>
   <url>
     <loc>https://stefanosantaiti.github.io/babilonia-landing/v2/qualifier-clienti/</loc>
-    <lastmod>2026-06-10</lastmod>
+    <lastmod>2026-07-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
